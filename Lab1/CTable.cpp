@@ -1,0 +1,68 @@
+//
+// Created by ufabi on 04.10.2023.
+//
+
+#include "CTable.h"
+#include <iostream>
+
+const int DEFAULT_LENGTH = 10;
+const std::string DEFAULT_NAME = "Default name";
+
+CTable::CTable() {
+    std::cout << "bezp: '" << DEFAULT_NAME << "'" << std::endl;
+    s_name = DEFAULT_NAME;
+    i_table_length = DEFAULT_LENGTH;
+    pi_table = new int[i_table_length];
+}
+
+CTable::CTable(std::string sName, int iTableLen) {
+    s_name = sName;
+    i_table_length = iTableLen;
+    pi_table = new int[i_table_length];
+    std::cout << "parametr: '" << s_name << "'" << std::endl;
+}
+
+CTable::CTable(CTable &pcOther) {
+    s_name = pcOther.s_name + "_copy";
+    i_table_length = pcOther.i_table_length;
+    pi_table = new int[i_table_length];
+    for (int i = 0; i < i_table_length; i++) {
+        pi_table[i] = pcOther.pi_table[i];
+    }
+    std::cout << "kopiuj: '" << s_name << "'" << std::endl;
+}
+
+CTable::~CTable() {
+    delete pi_table;
+    std::cout << "usuwam: '" << s_name << "'" << std::endl;
+}
+
+void CTable::vSetName(std::string sName) {
+    s_name = sName;
+}
+
+bool CTable::bSetNewSize(int iTableLen) {
+    if (iTableLen > 0) {
+        int *newPiTable = new int [iTableLen];
+        delete pi_table;
+        pi_table = newPiTable;
+        i_table_length = iTableLen;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+CTable *CTable::pcClone() {
+    return new CTable(s_name, i_table_length);
+}
+
+void v_mod_tab(CTable *pcTab, int iNewSize) {
+    pcTab->bSetNewSize(iNewSize);
+    std::cout<<"In object: "<<pcTab->getTableLength()<<std::endl;
+}
+
+void v_mod_tab(CTable cTab, int iNewSize) {
+    cTab.bSetNewSize(iNewSize);
+    std::cout<<"In object: "<<cTab.getTableLength()<<std::endl;
+}

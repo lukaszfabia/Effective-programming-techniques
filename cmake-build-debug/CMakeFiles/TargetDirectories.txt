@@ -1,0 +1,3 @@
+C:/Users/ufabi/CLionProjects/Effective-programming-techniques/cmake-build-debug/CMakeFiles/Effective_programming_techniques.dir
+C:/Users/ufabi/CLionProjects/Effective-programming-techniques/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ufabi/CLionProjects/Effective-programming-techniques/cmake-build-debug/CMakeFiles/rebuild_cache.dir

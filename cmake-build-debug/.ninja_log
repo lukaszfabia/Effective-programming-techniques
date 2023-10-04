@@ -1,0 +1,6 @@
+# ninja log v5
+2	222	7181237883513763	build.ninja	4a526d09a4eb5369
+3	502	7181237148679078	CMakeFiles/Effective_programming_techniques.dir/Lab1/CTable.cpp.obj	b91c5b285f9a09bc
+0	292	7181236723533894	CMakeFiles/Effective_programming_techniques.dir/Lab1/main.cpp.obj	f063c0aeb0e562b
+9	488	7181237148549424	CMakeFiles/Effective_programming_techniques.dir/Lab1/CTableFunctions.cpp.obj	b35b26a30d78020a
+503	686	7181237150476657	Effective_programming_techniques.exe	3acb8b942e101392
