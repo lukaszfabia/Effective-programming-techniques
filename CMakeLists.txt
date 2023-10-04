@@ -7,4 +7,4 @@ add_executable(Effective_programming_techniques
         Lab1/main.cpp Lab1/CTable.cpp
         Lab1/CTable.h
         Lab1/CTableFunctions.cpp
-        Lab1/CTableFunctions.h)
+        Lab1/CTableFunctions.h Lab1/CTableTest.cpp Lab1/CTableTest.h)

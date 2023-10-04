@@ -1,6 +1,6 @@
 #include <iostream>
 #include "CTableFunctions.h"
-#include "CTable.h"
+#include "CTableTest.h"
 
 //cmake executable code
 //add_executable(Effective_programming_techniques
@@ -10,32 +10,38 @@
 //        Lab1/CTableFunctions.h)
 
 
-void ex1(){
+void v_test_for_alloc_functions() {
     CTableFunctions::v_alloc_table_fill_34(5);
+    CTableFunctions::v_alloc_table_fill_34(0);
+    CTableFunctions::v_alloc_table_fill_34(-5);
+
     int **pi_table;
-    std::cout<<CTableFunctions::b_alloc_table_2_dim(&pi_table, 5, 5)<<std::endl;
-    std::cout<<CTableFunctions::b_dealloc_table_2_dim(pi_table, 5)<<std::endl;
-
-    delete pi_table;
+    std::cout << CTableFunctions::b_alloc_table_2_dim(&pi_table, 5, 5) << std::endl;
+    std::cout << CTableFunctions::b_dealloc_table_2_dim(pi_table, 5) << std::endl;
 }
 
-void ex2(){
-    CTable *pcTab = new CTable();
-    pcTab->vSetName("Dynamic object");
-    v_mod_tab(pcTab, 20);
-    std::cout<<"In main: "<<pcTab->getTableLength()<<std::endl;
-    delete pcTab;
-
-
-//    creating static object
-//    CTable tab;
-//    v_mod_tab(tab, 20);
-//    std::cout<<"In main: "<<tab.getTableLength()<<std::endl;
+void v_set_of_tests_for_CTable() {
+    CTableTest::v_test_for_default_constructor();
+    std::cout << std::endl;
+    CTableTest::v_test_for_parametrized_constructor();
+    std::cout << std::endl;
+    CTableTest::v_test_for_copy_constructor();
+    std::cout << std::endl;
+    CTableTest::v_test_for_destructor();
+    std::cout << std::endl;
+    CTableTest::v_test_for_set_name();
+    std::cout << std::endl;
+    CTableTest::v_test_for_set_new_size();
+    std::cout << std::endl;
+    CTableTest::v_test_for_clone();
+    std::cout << std::endl;
 }
 
-int main()
-{
-    ex2();
+int main() {
+    v_test_for_alloc_functions();
+    std::cout << std::endl;
+    v_set_of_tests_for_CTable();
+
     return 0;
 }
 

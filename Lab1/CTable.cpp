@@ -59,10 +59,8 @@ CTable *CTable::pcClone() {
 
 void v_mod_tab(CTable *pcTab, int iNewSize) {
     pcTab->bSetNewSize(iNewSize);
-    std::cout<<"In object: "<<pcTab->getTableLength()<<std::endl;
 }
 
 void v_mod_tab(CTable cTab, int iNewSize) {
     cTab.bSetNewSize(iNewSize);
-    std::cout<<"In object: "<<cTab.getTableLength()<<std::endl;
 }
