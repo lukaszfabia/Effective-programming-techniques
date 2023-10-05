@@ -17,8 +17,12 @@ public:
     ~CNumber();
 
     CNumber &operator=(const CNumber &cOther);
+    CNumber &operator+(const CNumber &cOther);
+    CNumber &operator-(const CNumber &cOther);
+    CNumber &operator/(const CNumber &cOther);
+    CNumber &operator*(const CNumber &cOther);
 
-    CNumber &operator=(long iValue);
+    CNumber &operator=(int iValue);
 
     void v_show_array();
 

@@ -36,20 +36,13 @@ CNumber &CNumber::operator=(const CNumber &cOther) {
     return *this;
 }
 
-CNumber &CNumber::operator=(long iValue) {
-    long tmp = iValue;
+CNumber &CNumber::operator=(int iValue) {
+    int tmp = iValue;
     int digits = 0;
 
     while (tmp != 0) {
         tmp /= 10;
         digits++;
-    }
-
-    if (digits > i_size) {
-        delete[] i_numbers;
-        i_size = digits;
-        i_numbers = new int[i_size];
-        v_fill_array(0);
     }
 
     for (int i = digits - 1; i >= 0; i--) {
@@ -74,4 +67,16 @@ void CNumber::v_fill_array(int iValue) {
 
 int CNumber::get_size() const {
     return i_size;
+}
+
+CNumber &CNumber::operator+(const CNumber &cOther) {
+    int iSize = i_size > cOther.i_size ? i_size : cOther.i_size;
+    CNumber *cResult = new CNumber(iSize);
+    int i_carry = 0;
+    for (int i = iSize - 1; i >= 0; i--) {
+        int iSum = i_numbers[i] + cOther.i_numbers[i] + i_carry;
+        cResult->i_numbers[i] = iSum % 10;
+        i_carry = iSum / 10;
+    }
+    return *cResult;
 }
