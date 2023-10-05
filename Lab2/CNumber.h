@@ -30,9 +30,17 @@ public:
 
     int get_size() const;
 
+    bool get_is_negative() const;
+
 private:
     int *i_numbers;
     int i_size;
+    bool is_negative;
+
+    bool b_is_bigger(const CNumber &cOther);
+
+    void v_set_values(int iValue, int i_index);
+
 };
 
 
