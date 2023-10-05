@@ -16,7 +16,7 @@ CNumber::CNumber() {
 CNumber::CNumber(int iSize) {
     i_size = iSize;
     i_numbers = new int[i_size];
-    v_fill_array(-1);
+    v_fill_array(0);
 }
 
 CNumber::~CNumber() {
@@ -37,24 +37,17 @@ CNumber &CNumber::operator=(const CNumber &cOther) {
 }
 
 CNumber &CNumber::operator=(int iValue) {
-    int tmp = iValue;
-    int digits = 0;
-
-    while (tmp != 0) {
-        tmp /= 10;
-        digits++;
-    }
-
-    for (int i = digits - 1; i >= 0; i--) {
+    for (int i = i_size - 1; i >= 0; i--) {
         i_numbers[i] = iValue % 10;
         iValue /= 10;
     }
+
     return *this;
 }
 
 void CNumber::v_show_array() {
     for (int i = 0; i < i_size; i++) {
-        std::cout << i_numbers[i] << " ";
+        std::cout << i_numbers[i] << "\t";
     }
     std::cout << std::endl;
 }
@@ -70,13 +63,23 @@ int CNumber::get_size() const {
 }
 
 CNumber &CNumber::operator+(const CNumber &cOther) {
-    int iSize = i_size > cOther.i_size ? i_size : cOther.i_size;
-    CNumber *cResult = new CNumber(iSize);
-    int i_carry = 0;
-    for (int i = iSize - 1; i >= 0; i--) {
-        int iSum = i_numbers[i] + cOther.i_numbers[i] + i_carry;
-        cResult->i_numbers[i] = iSum % 10;
-        i_carry = iSum / 10;
+    CNumber *cResult = new CNumber(i_size);
+    int iCarry = 0;
+    for (int i = i_size - 1; i >= 0; i--) {
+        cResult->i_numbers[i] = i_numbers[i] + cOther.i_numbers[i] + iCarry;
+        iCarry = cResult->i_numbers[i] / 10;
+        cResult->i_numbers[i] %= 10;
+    }
+    return *cResult;
+}
+
+CNumber &CNumber::operator-(const CNumber &cOther) {
+    CNumber *cResult = new CNumber(i_size);
+    int iCarry = 0;
+    for (int i = i_size - 1; i >= 0; i--) {
+        cResult->i_numbers[i] = i_numbers[i] - cOther.i_numbers[i] + iCarry;
+        iCarry = cResult->i_numbers[i] / 10;
+        cResult->i_numbers[i] %= 10;
     }
     return *cResult;
 }
