@@ -16,6 +16,8 @@ public:
 
     bool b_test_for_is_bigger();
 
+    bool b_test_for_multiplication();
+
 private:
     CNumber c_num_0, c_num_1, c_res;
 };

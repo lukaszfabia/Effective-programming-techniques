@@ -27,7 +27,11 @@ public:
 
     CNumber &operator-(const CNumber &cOther) const;
 
-    static void v_substraction(const CNumber &cOther, CNumber *cResult, const CNumber &cThisObject) ;
+    CNumber &operator*(const CNumber &cOther) const;
+
+    CNumber &operator/(const CNumber &cOther) const;
+
+    static void v_substraction(const CNumber &cOther, CNumber *cResult, const CNumber &cThisObject);
 
     void v_add(const CNumber &cOther, CNumber *cResult) const;
 
@@ -46,6 +50,8 @@ public:
     int *get_i_numbers() const;
 
     bool b_get_sign_of_bigger_abs_number(const CNumber &cOther) const;
+
+    bool b_is_zero(const CNumber &number) const;
 };
 
 

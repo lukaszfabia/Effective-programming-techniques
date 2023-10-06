@@ -65,7 +65,7 @@ void CNumber::v_show_array() {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "array: " << std::endl;
     for (int i = 0; i < i_size; i++) {
-        std::cout << i_numbers[i] << "\t";
+        std::cout << i_numbers[i] << " ";
     }
     std::cout << std::endl << "b_is_negative: ";
     if (b_is_negative) {
@@ -117,12 +117,11 @@ CNumber &CNumber::operator+(const CNumber &cOther) const {
 CNumber &CNumber::operator-(const CNumber &cOther) const {
     CNumber *cResult;
     cResult = new CNumber();
-    /// dziala na kolejno + - i - +
+
     if (b_is_negative && !cOther.b_is_negative || !b_is_negative && cOther.b_is_negative) {
         cResult->b_is_negative = b_is_negative;
         v_add(cOther, cResult);
     } else if (!b_is_negative && !cOther.b_is_negative) {
-        // jesli this jest wiekszy od othera
         bool b_sign;
         if (b_get_sign_of_bigger_abs_number(cOther)) {
             b_sign = b_is_negative;
@@ -146,8 +145,30 @@ CNumber &CNumber::operator-(const CNumber &cOther) const {
     return *cResult;
 }
 
+CNumber &CNumber::operator*(const CNumber &cOther) const {
+    CNumber *cResult;
+    if (b_is_zero(cOther)){
+        cResult = new CNumber();
+    }else{
+        cResult = new CNumber(i_size + cOther.i_size);
+        int i_carry, i_product;
+        for (int i = i_size - 1; i >= 0; i--) {
+            i_carry = 0;
+            for (int j = cOther.i_size - 1; j >= 0; j--) {
+                i_product = i_numbers[i] * cOther.i_numbers[j] + i_carry + cResult->i_numbers[i + j + 1];
+                i_carry = i_product / 10;
+                cResult->i_numbers[i + j + 1] = i_product % 10;
+            }
+            cResult->i_numbers[i] += i_carry;
+        }
 
-/// this - other
+        cResult->b_is_negative = b_is_negative != cOther.b_is_negative;
+    }
+
+    return *cResult;
+}
+
+
 void CNumber::v_substraction(const CNumber &cOther, CNumber *cResult, const CNumber &cThisObject) {
     int i_borrow = 0;
     for (int i = cThisObject.i_size - 1; i >= 0; i--) {
@@ -216,3 +237,6 @@ bool CNumber::b_get_sign_of_bigger_abs_number(const CNumber &cOther) const {
     return false; // when they're equal
 }
 
+bool CNumber::b_is_zero(const CNumber &cOther) const {
+    return cOther.i_numbers[cOther.i_size-1] == 0 || i_numbers[i_size-1] == 0;
+}
