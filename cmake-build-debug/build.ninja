@@ -61,6 +61,12 @@ build CMakeFiles/Effective_programming_techniques.dir/Lab2/main.cpp.obj: CXX_COM
   OBJECT_DIR = CMakeFiles\Effective_programming_techniques.dir
   OBJECT_FILE_DIR = CMakeFiles\Effective_programming_techniques.dir\Lab2
 
+build CMakeFiles/Effective_programming_techniques.dir/Lab2/CTestsForOperators.cpp.obj: CXX_COMPILER__Effective_programming_techniques_Debug C$:/Users/ufabi/CLionProjects/Effective-programming-techniques/Lab2/CTestsForOperators.cpp || cmake_object_order_depends_target_Effective_programming_techniques
+  DEP_FILE = CMakeFiles\Effective_programming_techniques.dir\Lab2\CTestsForOperators.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++98
+  OBJECT_DIR = CMakeFiles\Effective_programming_techniques.dir
+  OBJECT_FILE_DIR = CMakeFiles\Effective_programming_techniques.dir\Lab2
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Effective_programming_techniques
@@ -69,7 +75,7 @@ build CMakeFiles/Effective_programming_techniques.dir/Lab2/main.cpp.obj: CXX_COM
 #############################################
 # Link the executable Effective_programming_techniques.exe
 
-build Effective_programming_techniques.exe: CXX_EXECUTABLE_LINKER__Effective_programming_techniques_Debug CMakeFiles/Effective_programming_techniques.dir/Lab2/CNumber.cpp.obj CMakeFiles/Effective_programming_techniques.dir/Lab2/main.cpp.obj
+build Effective_programming_techniques.exe: CXX_EXECUTABLE_LINKER__Effective_programming_techniques_Debug CMakeFiles/Effective_programming_techniques.dir/Lab2/CNumber.cpp.obj CMakeFiles/Effective_programming_techniques.dir/Lab2/main.cpp.obj CMakeFiles/Effective_programming_techniques.dir/Lab2/CTestsForOperators.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Effective_programming_techniques.dir

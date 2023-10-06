@@ -32,6 +32,8 @@ public:
 
     bool get_is_negative() const;
 
+    int *get_i_numbers() const;
+
 private:
     int *i_numbers;
     int i_size;
@@ -41,6 +43,9 @@ private:
 
     void v_set_values(int iValue, int i_index);
 
+    static void v_substraction(const CNumber &cOther, CNumber *cResult, const CNumber &cThisObject);
+
+    void v_add(const CNumber &cOther, CNumber *cResult);
 };
 
 
