@@ -14,6 +14,8 @@ public:
 
     bool b_test_for_adding();
 
+    bool b_test_for_is_bigger();
+
 private:
     CNumber c_num_0, c_num_1, c_res;
 };

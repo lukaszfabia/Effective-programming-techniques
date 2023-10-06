@@ -85,52 +85,61 @@ int CNumber::get_size() const {
     return i_size;
 }
 
-CNumber &CNumber::operator+(const CNumber &cOther) {
-    CNumber *cResult = new CNumber(i_size);
+CNumber CNumber::operator+(const CNumber &cOther) const {
+    CNumber result(i_size);
 
-    if (!cOther.is_negative && !is_negative) {
-        // Both numbers are positive, perform addition
-        v_add(cOther, cResult);
-    } else if (cOther.is_negative && is_negative) {
-        // Both numbers are negative, perform addition and result is negative
-        cResult->is_negative = true;
-        v_add(cOther, cResult);
+    if (is_negative && !cOther.is_negative) {
+        CNumber thisCopy(*this);
+        thisCopy.is_negative = false;
+        result = cOther - thisCopy;
+    } else if (!is_negative && cOther.is_negative) {
+        CNumber otherCopy(cOther);
+        otherCopy.is_negative = false;
+        result = *this - otherCopy;
+    } else if (is_negative && cOther.is_negative) {
+        result.is_negative = true;
+        result.v_add(cOther, &result);
     } else {
-        cResult->is_negative = b_is_bigger(cOther);
-        v_substraction(*this, cResult, cOther);
+        result.v_add(cOther, &result);
     }
-    return *cResult;
+
+    return result;
 }
 
+CNumber CNumber::operator-(const CNumber &cOther) const {
+    CNumber result(i_size);
 
-
-
-
-CNumber &CNumber::operator-(const CNumber &cOther) {
-    CNumber *cResult = new CNumber(i_size);
-
-    if (b_is_bigger(cOther)) {
-        cResult->is_negative = is_negative;
-        if (is_negative == cOther.is_negative)
-            v_substraction(cOther, cResult, *this);
-        else
-            v_add(cOther, cResult);
+    if (is_negative && !cOther.is_negative) {
+        CNumber thisCopy(*this);
+        thisCopy.is_negative = false;
+        result = cOther + thisCopy;
+        result.is_negative = true;
+    } else if (!is_negative && cOther.is_negative) {
+        CNumber otherCopy(cOther);
+        otherCopy.is_negative = false;
+        result = *this + otherCopy;
+    } else if (is_negative && cOther.is_negative) {
+        CNumber thisCopy(*this);
+        CNumber otherCopy(cOther);
+        thisCopy.is_negative = false;
+        otherCopy.is_negative = false;
+        result = otherCopy - thisCopy;
     } else {
-        if (is_negative == cOther.is_negative) {
-            cResult->is_negative = !is_negative;
-            v_substraction(*this, cResult, cOther);
+        if (b_is_bigger(cOther)) {
+            result.is_negative = false;
+            v_substraction(cOther, &result, *this);
         } else {
-            cResult->is_negative = is_negative;
-            v_add(cOther, cResult);
+            result = cOther - *this;
+            result.is_negative = true;
         }
     }
 
-    return *cResult;
+    return result;
 }
 
 
 /// this - other
-void CNumber::v_substraction(const CNumber &cOther, CNumber *cResult, const CNumber &cThisObject) {
+void CNumber::v_substraction(const CNumber &cOther, CNumber *cResult, const CNumber &cThisObject) const {
     int i_borrow = 0;
     for (int i = cThisObject.i_size - 1; i >= 0; i--) {
         cResult->i_numbers[i] = cThisObject.i_numbers[i] - cOther.i_numbers[i] - i_borrow;
@@ -143,7 +152,7 @@ void CNumber::v_substraction(const CNumber &cOther, CNumber *cResult, const CNum
     }
 }
 
-void CNumber::v_add(const CNumber &cOther, CNumber *cResult) {
+void CNumber::v_add(const CNumber &cOther, CNumber *cResult) const {
     int i_carry = 0;
     for (int i = i_size - 1; i >= 0; i--) {
         cResult->i_numbers[i] = i_numbers[i] + cOther.i_numbers[i] + i_carry;
@@ -153,11 +162,11 @@ void CNumber::v_add(const CNumber &cOther, CNumber *cResult) {
 }
 
 
-bool CNumber::b_is_bigger(const CNumber &cOther) {
+bool CNumber::b_is_bigger(const CNumber &cOther) const{
     bool thisIsNegative = is_negative;
     bool otherIsNegative = cOther.is_negative;
 
-    if (thisIsNegative && otherIsNegative) {
+    if (!thisIsNegative && !otherIsNegative) {
         for (int i = 0; i < i_size; i++) {
             if (i_numbers[i] < cOther.i_numbers[i]) {
                 return false;
@@ -165,8 +174,16 @@ bool CNumber::b_is_bigger(const CNumber &cOther) {
                 return true;
             }
         }
-        return false;
+    } else if (thisIsNegative && otherIsNegative) {
+        for (int i = 0; i < i_size; i++) {
+            if (i_numbers[i] < cOther.i_numbers[i]) {
+                return true;
+            } else if (i_numbers[i] > cOther.i_numbers[i]) {
+                return false;
+            }
+        }
     }
+
 
     if (thisIsNegative) {
         return false;
@@ -176,13 +193,6 @@ bool CNumber::b_is_bigger(const CNumber &cOther) {
         return true;
     }
 
-    for (int i = 0; i < i_size; i++) {
-        if (i_numbers[i] < cOther.i_numbers[i]) {
-            return false;
-        } else if (i_numbers[i] > cOther.i_numbers[i]) {
-            return true;
-        }
-    }
     return false;
 }
 
@@ -193,4 +203,13 @@ bool CNumber::get_is_negative() const {
 
 int *CNumber::get_i_numbers() const {
     return i_numbers;
+}
+
+CNumber::CNumber(const CNumber &other) {
+    i_size = other.i_size;
+    i_numbers = new int[i_size];
+    for (int i = 0; i < i_size; i++) {
+        i_numbers[i] = other.i_numbers[i];
+    }
+    is_negative = other.is_negative;
 }
