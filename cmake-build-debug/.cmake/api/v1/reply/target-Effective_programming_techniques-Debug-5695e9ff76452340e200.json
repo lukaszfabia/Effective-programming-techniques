@@ -2,10 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Effective_programming_techniques.exe"
-		},
-		{
-			"path" : "Effective_programming_techniques.pdb"
+			"path" : "Effective_programming_techniques"
 		}
 	],
 	"backtrace" : 1,
@@ -38,10 +35,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -fdiagnostics-color=always"
-				},
-				{
-					"fragment" : "-std=gnu++98"
+					"fragment" : "-g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -fcolor-diagnostics"
 				}
 			],
 			"language" : "CXX",
@@ -73,16 +67,12 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
-			},
-			{
-				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
-				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
 	},
 	"name" : "Effective_programming_techniques",
-	"nameOnDisk" : "Effective_programming_techniques.exe",
+	"nameOnDisk" : "Effective_programming_techniques",
 	"paths" : 
 	{
 		"build" : ".",

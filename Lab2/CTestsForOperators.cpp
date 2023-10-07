@@ -235,16 +235,16 @@ bool CTestsForOperators::b_test_for_multiplication() {
     bool b_result_for_multiplication_test2 = b_sign_result && b_value;
 //    std::cout<<b_result_for_multiplication_test2<<std::endl;
 
-    c_num_0 = 0;
+    c_num_0 = 123;
     c_num_1 = 456;
     c_res = c_num_0 * c_num_1;
-    int i = 0;
-    while (c_res.get_i_numbers()[i] == 0 || i < c_res.get_size()) {
-        i++;
-    }
+    b_sign_result = !c_res.get_is_negative();
+    b_value = c_res.get_i_numbers()[c_res.get_size() - 1] == 8 && c_res.get_i_numbers()[c_res.get_size() - 2] == 8 &&
+              c_res.get_i_numbers()[c_res.get_size() - 3] == 0 && c_res.get_i_numbers()[c_res.get_size() - 4] == 6 &&
+              c_res.get_i_numbers()[c_res.get_size() - 5] == 5 && c_res.get_i_numbers()[c_res.get_size() - 6] == 0 &&
+              c_res.get_i_numbers()[c_res.get_size() - 7] == 0;
 
-    bool b_result_for_multiplication_test3 = i == c_res.get_size();
-//    std::cout<<b_result_for_multiplication_test3<<std::endl;
+    bool b_result_for_multiplication_test3 = b_sign_result && b_value;
 
 
     return b_result_for_multiplication_test1 && b_result_for_multiplication_test2 && b_result_for_multiplication_test3;

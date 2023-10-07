@@ -15,7 +15,6 @@ void v_start_test(const char *c_name_of_test) {
     std::cout << "Test for bigger func: " << c_tests->b_test_for_is_bigger() << std::endl;
     std::cout << "Test for adding: " << c_tests->b_test_for_adding() << std::endl;
     std::cout << "Test for multiplication: " << c_tests->b_test_for_multiplication() << std::endl;
-
     delete c_tests;
 }
 
@@ -38,8 +37,8 @@ void v_effectivity_test(const char *c_name_of_test, const int i_iterations, cons
 }
 
 int main() {
-//    v_start_test("Test for lab2 operators");
-    v_effectivity_test("effectivity (xD)", 9999999, 1, 1);
+    v_start_test("Test for lab2 operators");
+//    v_effectivity_test("effectivity (xD)", 9999999, 1, 1);
 
     return 0;
 }
