@@ -12,6 +12,10 @@ private:
     int *i_numbers;
     bool b_is_negative;
 
+    bool b_copy_elements(const CNumber &cOther) const;
+
+    bool b_copy_variables(const CNumber &cOther);
+
 public:
     CNumber();
 
@@ -52,6 +56,8 @@ public:
     bool b_get_sign_of_bigger_abs_number(const CNumber &cOther) const;
 
     bool b_is_zero(const CNumber &number) const;
+
+    static int i_get_amount_of_digits(int iValue);
 };
 
 

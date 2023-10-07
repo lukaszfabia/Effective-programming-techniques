@@ -5,7 +5,7 @@
 #include <iostream>
 #include "CNumber.h"
 
-const int DEFAULT_SIZE = 10;
+const int DEFAULT_SIZE = 100;
 
 CNumber::CNumber() {
     i_size = DEFAULT_SIZE;
@@ -22,20 +22,17 @@ CNumber::CNumber(int iSize) {
 }
 
 CNumber::~CNumber() {
-    delete i_numbers;
+    delete[] i_numbers;
 }
 
 CNumber &CNumber::operator=(const CNumber &cOther) {
     if (this == &cOther) {
         return *this;
     }
-    delete[] i_numbers;
-    i_size = cOther.i_size;
-    i_numbers = new int[i_size];
-    for (int i = 0; i < i_size; i++) {
-        i_numbers[i] = cOther.i_numbers[i];
-    }
-    b_is_negative = cOther.b_is_negative;
+    b_copy_variables(cOther);
+
+    b_copy_elements(cOther);
+
     return *this;
 }
 
@@ -47,10 +44,16 @@ CNumber &CNumber::operator=(int iValue) {
         b_is_negative = false;
     }
 
-    v_set_values(iValue, i_size - 1);
+    if (i_get_amount_of_digits(iValue) > i_size) {
+        i_size = i_get_amount_of_digits(iValue);
+        v_set_values(iValue, i_size - 1);
+    }else{
+        v_set_values(iValue, i_size - 1);
+    }
 
     return *this;
 }
+
 
 void CNumber::v_set_values(int iValue, int i_index) {
     if (i_index >= 0) {
@@ -64,15 +67,24 @@ void CNumber::v_set_values(int iValue, int i_index) {
 void CNumber::v_show_array() {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "array: " << std::endl;
-    for (int i = 0; i < i_size; i++) {
+    int i_start_index = 0;
+    while (i_numbers[i_start_index] == 0) {
+        i_start_index++;
+    }
+
+    for (int i = i_start_index; i < i_size; i++) {
         std::cout << i_numbers[i] << " ";
     }
+
     std::cout << std::endl << "b_is_negative: ";
     if (b_is_negative) {
         std::cout << "true" << std::endl;
     } else {
         std::cout << "false" << std::endl;
     }
+
+//    std::cout<<"Amount non zero digits: "<<i_get_number_digit_amount()<<std::endl;
+
 }
 
 void CNumber::v_fill_array(int iValue) {
@@ -147,9 +159,9 @@ CNumber &CNumber::operator-(const CNumber &cOther) const {
 
 CNumber &CNumber::operator*(const CNumber &cOther) const {
     CNumber *cResult;
-    if (b_is_zero(cOther)){
-        cResult = new CNumber();
-    }else{
+    if (b_is_zero(cOther)) {
+        cResult = new CNumber(1);
+    } else {
         cResult = new CNumber(i_size + cOther.i_size);
         int i_carry, i_product;
         for (int i = i_size - 1; i >= 0; i--) {
@@ -164,6 +176,16 @@ CNumber &CNumber::operator*(const CNumber &cOther) const {
 
         cResult->b_is_negative = b_is_negative != cOther.b_is_negative;
     }
+
+    return *cResult;
+}
+
+CNumber &CNumber::operator/(const CNumber &cOther) const {
+    if (b_is_zero(cOther)) {
+        return *new CNumber();  // Return a default-initialized CNumber (presumably representing zero)
+    }
+
+    CNumber *cResult;
 
     return *cResult;
 }
@@ -238,5 +260,31 @@ bool CNumber::b_get_sign_of_bigger_abs_number(const CNumber &cOther) const {
 }
 
 bool CNumber::b_is_zero(const CNumber &cOther) const {
-    return cOther.i_numbers[cOther.i_size-1] == 0 || i_numbers[i_size-1] == 0;
+    return cOther.i_numbers[cOther.i_size - 1] == 0 || i_numbers[i_size - 1] == 0;
+}
+
+bool CNumber::b_copy_elements(const CNumber &cOther) const {
+    for (int i = 0; i < i_size; i++) {
+        i_numbers[i] = cOther.i_numbers[i];
+    }
+    return true;
+}
+
+bool CNumber::b_copy_variables(const CNumber &cOther) {
+    delete[] i_numbers;
+    i_size = cOther.i_size;
+    i_numbers = new int[i_size];
+    b_is_negative = cOther.b_is_negative;
+    return true;
+}
+
+int CNumber::i_get_amount_of_digits(int iValue) {
+    int i_digits = 0;
+    int i_temp = iValue;
+    while (i_temp != 0) {
+        i_temp /= 10;
+        i_digits++;
+    }
+
+    return i_digits;
 }

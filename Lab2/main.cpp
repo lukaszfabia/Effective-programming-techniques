@@ -4,6 +4,7 @@
 
 #include "CTestsForOperators.h"
 #include <iostream>
+#include <ctime>
 
 void v_start_test(const char *c_name_of_test) {
     std::cout << "Test for " << c_name_of_test << " started" << std::endl;
@@ -18,13 +19,28 @@ void v_start_test(const char *c_name_of_test) {
     delete c_tests;
 }
 
+void v_effectivity_test(const char *c_name_of_test, const int i_iterations, const int ui_value, const int i_start_sum) {
+    std::cout << "Test for " << c_name_of_test << " started" << std::endl;
+    std::clock_t start = std::clock();
+    CNumber *c_num_0 = new CNumber();
+    CNumber *c_res = new CNumber();
+    *c_num_0 = ui_value;
+    *c_res = i_start_sum;
+    for (int i = 0; i < i_iterations; i++) {
+        *c_res = *c_res + *c_num_0;
+    }
+
+    std::clock_t end = std::clock();
+    c_res->v_show_array();
+    delete c_num_0;
+    delete c_res;
+    std::cout << "Time: " << (end - start) / static_cast<double> (CLOCKS_PER_SEC / 1000) << " ms" << std::endl;
+}
+
 int main() {
-    v_start_test("Test for lab2 operators");
-//    CNumber c_num_0, c_num_1, c_res;
-//    c_num_0 = -123;
-//    c_num_1 = 456;
-//    c_res = c_num_0 * c_num_1;
-//    c_res.v_show_array();
+//    v_start_test("Test for lab2 operators");
+    v_effectivity_test("effectivity (xD)", 9999999, 1, 1);
+
     return 0;
 }
 
