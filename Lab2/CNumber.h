@@ -8,6 +8,7 @@
 
 class CNumber {
 private:
+    int i_modulo;
     int i_size;
     int *i_numbers;
     bool b_is_negative;
@@ -15,6 +16,18 @@ private:
     bool b_copy_elements(const CNumber &cOther) const;
 
     bool b_copy_variables(const CNumber &cOther);
+
+    bool b_get_sign_of_bigger_abs_number(const CNumber &cOther) const;
+
+    bool b_is_zero(const CNumber &number) const;
+
+    static void v_substraction(const CNumber &cOther, CNumber *cResult, const CNumber &cThisObject);
+
+    void v_add(const CNumber &cOther, CNumber *cResult) const;
+
+    void v_fill_array(int iValue);
+
+    void v_set_values(int iValue, int i_index);
 
 public:
     CNumber();
@@ -35,29 +48,28 @@ public:
 
     CNumber &operator/(const CNumber &cOther) const;
 
-    static void v_substraction(const CNumber &cOther, CNumber *cResult, const CNumber &cThisObject);
+    CNumber &operator/(int iDivider) const;
 
-    void v_add(const CNumber &cOther, CNumber *cResult) const;
+    CNumber &operator+(int iValue) const;
 
-    bool b_is_bigger(const CNumber &cOther) const;
-
-    bool get_is_negative() const;
-
-    void v_set_values(int iValue, int i_index);
+    CNumber &operator-(int iValue) const;
+    CNumber &operator*(int iValue) const;
 
     void v_show_array();
 
-    void v_fill_array(int iValue);
+    int i_get_size() const;
 
-    int get_size() const;
-
-    int *get_i_numbers() const;
-
-    bool b_get_sign_of_bigger_abs_number(const CNumber &cOther) const;
-
-    bool b_is_zero(const CNumber &number) const;
+    int *pi_get_i_numbers() const;
 
     static int i_get_amount_of_digits(int iValue);
+
+    int i_get_i_modulo() const;
+
+    void v_set_i_modulo(int iModulo);
+
+    bool b_get_is_negative() const;
+
+    bool b_is_bigger(const CNumber &cOther) const;
 };
 
 

@@ -8,6 +8,7 @@
 const int DEFAULT_SIZE = 100;
 
 CNumber::CNumber() {
+    i_modulo = 0;
     i_size = DEFAULT_SIZE;
     i_numbers = new int[i_size];
     b_is_negative = false;
@@ -15,6 +16,7 @@ CNumber::CNumber() {
 }
 
 CNumber::CNumber(int iSize) {
+    i_modulo = 0;
     i_size = iSize;
     i_numbers = new int[i_size];
     b_is_negative = false;
@@ -47,7 +49,7 @@ CNumber &CNumber::operator=(int iValue) {
     if (i_get_amount_of_digits(iValue) > i_size) {
         i_size = i_get_amount_of_digits(iValue);
         v_set_values(iValue, i_size - 1);
-    }else{
+    } else {
         v_set_values(iValue, i_size - 1);
     }
 
@@ -83,7 +85,7 @@ void CNumber::v_show_array() {
         std::cout << "false" << std::endl;
     }
 
-//    std::cout<<"Amount non zero digits: "<<i_get_number_digit_amount()<<std::endl;
+    std::cout << "Modulo: " << i_get_i_modulo() << std::endl;
 
 }
 
@@ -93,15 +95,15 @@ void CNumber::v_fill_array(int iValue) {
     }
 }
 
-int CNumber::get_size() const {
+int CNumber::i_get_size() const {
     return i_size;
 }
 
-bool CNumber::get_is_negative() const {
+bool CNumber::b_get_is_negative() const {
     return b_is_negative;
 }
 
-int *CNumber::get_i_numbers() const {
+int *CNumber::pi_get_i_numbers() const {
     return i_numbers;
 }
 
@@ -123,6 +125,14 @@ CNumber &CNumber::operator+(const CNumber &cOther) const {
         }
         cResult->b_is_negative = b_sign;
     }
+    return *cResult;
+}
+
+CNumber &CNumber::operator+(int iValue) const {
+    CNumber *cResult;
+    CNumber cOther;
+    cOther = iValue;
+    cResult = &(*this + cOther);
     return *cResult;
 }
 
@@ -157,6 +167,14 @@ CNumber &CNumber::operator-(const CNumber &cOther) const {
     return *cResult;
 }
 
+CNumber &CNumber::operator-(int iValue) const{
+    CNumber *cResult;
+    CNumber cOther;
+    cOther = iValue;
+    cResult = &(*this - cOther);
+    return *cResult;
+}
+
 CNumber &CNumber::operator*(const CNumber &cOther) const {
     CNumber *cResult;
     if (b_is_zero(cOther)) {
@@ -180,14 +198,38 @@ CNumber &CNumber::operator*(const CNumber &cOther) const {
     return *cResult;
 }
 
-CNumber &CNumber::operator/(const CNumber &cOther) const {
-    if (b_is_zero(cOther)) {
-        return *new CNumber();  // Return a default-initialized CNumber (presumably representing zero)
+CNumber &CNumber::operator*(int iValue) const {
+    CNumber *cResult;
+    CNumber cOther;
+    cOther = iValue;
+    cResult = &(*this * cOther);
+    return *cResult;
+}
+
+CNumber &CNumber::operator/(int iDivider) const {
+    if (iDivider == 0) {
+        std::cout << "Division by 0" << std::endl;
+        return *new CNumber();
+    } else {
+        CNumber *cResult = new CNumber(i_size);
+        if (iDivider < 0 && b_is_negative || iDivider > 0 && !b_is_negative) {
+            cResult->b_is_negative = false;
+        } else {
+            cResult->b_is_negative = true;
+        }
+        int i_carry = 0;
+
+        for (int i = 0; i < i_size; i++) {
+            i_carry = i_carry * 10 + i_numbers[i];
+            cResult->i_numbers[i] = i_carry / iDivider;
+            i_carry = i_carry % iDivider;
+        }
+
+        cResult->v_set_i_modulo(i_carry);
+
+        return *cResult;
     }
 
-    CNumber *cResult;
-
-    return *cResult;
 }
 
 
@@ -272,6 +314,7 @@ bool CNumber::b_copy_elements(const CNumber &cOther) const {
 
 bool CNumber::b_copy_variables(const CNumber &cOther) {
     delete[] i_numbers;
+    i_modulo = cOther.i_modulo;
     i_size = cOther.i_size;
     i_numbers = new int[i_size];
     b_is_negative = cOther.b_is_negative;
@@ -287,4 +330,12 @@ int CNumber::i_get_amount_of_digits(int iValue) {
     }
 
     return i_digits;
+}
+
+int CNumber::i_get_i_modulo() const {
+    return i_modulo;
+}
+
+void CNumber::v_set_i_modulo(int iModulo) {
+    i_modulo = iModulo;
 }

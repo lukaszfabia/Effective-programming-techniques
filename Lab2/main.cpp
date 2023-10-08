@@ -26,7 +26,7 @@ void v_effectivity_test(const char *c_name_of_test, const int i_iterations, cons
     *c_num_0 = ui_value;
     *c_res = i_start_sum;
     for (int i = 0; i < i_iterations; i++) {
-        *c_res = *c_res + *c_num_0;
+        *c_res = *c_res * *c_num_0;
     }
 
     std::clock_t end = std::clock();
@@ -38,8 +38,12 @@ void v_effectivity_test(const char *c_name_of_test, const int i_iterations, cons
 
 int main() {
     v_start_test("Test for lab2 operators");
-//    v_effectivity_test("effectivity (xD)", 9999999, 1, 1);
+//    v_effectivity_test("effectivity (xD)", 100, 123, 1);
 
+    CNumber c_num0, c_num1, c_res;
+    c_num0 = -13;
+    c_res = c_num0 * -3;
+    c_res.v_show_array();
     return 0;
 }
 
