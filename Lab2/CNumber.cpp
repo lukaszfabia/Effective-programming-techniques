@@ -8,7 +8,6 @@
 const int DEFAULT_SIZE = 100;
 
 CNumber::CNumber() {
-    i_modulo = 0;
     i_size = DEFAULT_SIZE;
     i_numbers = new int[i_size];
     b_is_negative = false;
@@ -16,7 +15,6 @@ CNumber::CNumber() {
 }
 
 CNumber::CNumber(int iSize) {
-    i_modulo = 0;
     i_size = iSize;
     i_numbers = new int[i_size];
     b_is_negative = false;
@@ -84,8 +82,6 @@ void CNumber::v_show_array() {
     } else {
         std::cout << "false" << std::endl;
     }
-
-    std::cout << "Modulo: " << i_get_i_modulo() << std::endl;
 
 }
 
@@ -167,7 +163,7 @@ CNumber &CNumber::operator-(const CNumber &cOther) const {
     return *cResult;
 }
 
-CNumber &CNumber::operator-(int iValue) const{
+CNumber &CNumber::operator-(int iValue) const {
     CNumber *cResult;
     CNumber cOther;
     cOther = iValue;
@@ -212,11 +208,16 @@ CNumber &CNumber::operator/(int iDivider) const {
         return *new CNumber();
     } else {
         CNumber *cResult = new CNumber(i_size);
-        if (iDivider < 0 && b_is_negative || iDivider > 0 && !b_is_negative) {
+        if (b_is_negative && iDivider < 0 || !b_is_negative && iDivider > 0) {
             cResult->b_is_negative = false;
         } else {
             cResult->b_is_negative = true;
         }
+
+        if (!b_is_negative && iDivider < 0) {
+            iDivider = -iDivider;
+        }
+
         int i_carry = 0;
 
         for (int i = 0; i < i_size; i++) {
@@ -224,8 +225,6 @@ CNumber &CNumber::operator/(int iDivider) const {
             cResult->i_numbers[i] = i_carry / iDivider;
             i_carry = i_carry % iDivider;
         }
-
-        cResult->v_set_i_modulo(i_carry);
 
         return *cResult;
     }
@@ -314,7 +313,6 @@ bool CNumber::b_copy_elements(const CNumber &cOther) const {
 
 bool CNumber::b_copy_variables(const CNumber &cOther) {
     delete[] i_numbers;
-    i_modulo = cOther.i_modulo;
     i_size = cOther.i_size;
     i_numbers = new int[i_size];
     b_is_negative = cOther.b_is_negative;
@@ -330,12 +328,4 @@ int CNumber::i_get_amount_of_digits(int iValue) {
     }
 
     return i_digits;
-}
-
-int CNumber::i_get_i_modulo() const {
-    return i_modulo;
-}
-
-void CNumber::v_set_i_modulo(int iModulo) {
-    i_modulo = iModulo;
 }

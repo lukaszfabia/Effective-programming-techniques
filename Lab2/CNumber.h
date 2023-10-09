@@ -8,7 +8,6 @@
 
 class CNumber {
 private:
-    int i_modulo;
     int i_size;
     int *i_numbers;
     bool b_is_negative;
@@ -53,6 +52,7 @@ public:
     CNumber &operator+(int iValue) const;
 
     CNumber &operator-(int iValue) const;
+
     CNumber &operator*(int iValue) const;
 
     void v_show_array();
@@ -62,8 +62,6 @@ public:
     int *pi_get_i_numbers() const;
 
     static int i_get_amount_of_digits(int iValue);
-
-    int i_get_i_modulo() const;
 
     void v_set_i_modulo(int iModulo);
 
