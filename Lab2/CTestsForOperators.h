@@ -18,6 +18,8 @@ public:
 
     bool b_test_for_multiplication();
 
+    bool b_test_for_dividing();
+
 private:
     CNumber c_num_0, c_num_1, c_res;
 };
