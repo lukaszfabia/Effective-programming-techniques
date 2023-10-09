@@ -18,8 +18,6 @@ private:
 
     bool b_get_sign_of_bigger_abs_number(const CNumber &cOther) const;
 
-    bool b_is_zero(const CNumber &number) const;
-
     static void v_substraction(const CNumber &cOther, CNumber *cResult, const CNumber &cThisObject);
 
     void v_add(const CNumber &cOther, CNumber *cResult) const;
@@ -63,11 +61,10 @@ public:
 
     static int i_get_amount_of_digits(int iValue);
 
-    void v_set_i_modulo(int iModulo);
-
     bool b_get_is_negative() const;
 
     bool b_is_bigger(const CNumber &cOther) const;
+
 };
 
 

@@ -173,23 +173,20 @@ CNumber &CNumber::operator-(int iValue) const {
 
 CNumber &CNumber::operator*(const CNumber &cOther) const {
     CNumber *cResult;
-    if (b_is_zero(cOther)) {
-        cResult = new CNumber(1);
-    } else {
-        cResult = new CNumber(i_size + cOther.i_size);
-        int i_carry, i_product;
-        for (int i = i_size - 1; i >= 0; i--) {
-            i_carry = 0;
-            for (int j = cOther.i_size - 1; j >= 0; j--) {
-                i_product = i_numbers[i] * cOther.i_numbers[j] + i_carry + cResult->i_numbers[i + j + 1];
-                i_carry = i_product / 10;
-                cResult->i_numbers[i + j + 1] = i_product % 10;
-            }
-            cResult->i_numbers[i] += i_carry;
-        }
 
-        cResult->b_is_negative = b_is_negative != cOther.b_is_negative;
+    cResult = new CNumber(i_size + cOther.i_size);
+    int i_carry, i_product;
+    for (int i = i_size - 1; i >= 0; i--) {
+        i_carry = 0;
+        for (int j = cOther.i_size - 1; j >= 0; j--) {
+            i_product = i_numbers[i] * cOther.i_numbers[j] + i_carry + cResult->i_numbers[i + j + 1];
+            i_carry = i_product / 10;
+            cResult->i_numbers[i + j + 1] = i_product % 10;
+        }
+        cResult->i_numbers[i] += i_carry;
     }
+
+    cResult->b_is_negative = b_is_negative != cOther.b_is_negative;
 
     return *cResult;
 }
@@ -223,6 +220,10 @@ CNumber &CNumber::operator/(int iDivider) const {
         for (int i = 0; i < i_size; i++) {
             i_carry = i_carry * 10 + i_numbers[i];
             cResult->i_numbers[i] = i_carry / iDivider;
+            // there was a problem when we had the same numbers in the array with different signs
+            if (cResult->i_numbers[i]<0){
+                cResult->i_numbers[i] = -cResult->i_numbers[i];
+            }
             i_carry = i_carry % iDivider;
         }
 
@@ -231,6 +232,25 @@ CNumber &CNumber::operator/(int iDivider) const {
 
 }
 
+CNumber &CNumber::operator/(const CNumber &cOther) const {
+    int i_divider = 0;
+
+    for (int i = 0; i<i_size; i++) {
+        i_divider = i_divider * 10 + cOther.i_numbers[i];
+    }
+
+    if (cOther.b_is_negative){
+        i_divider = -i_divider;
+    }
+
+    if (i_get_amount_of_digits(i_divider) > i_size) {
+        std::cout << "Too big number" << std::endl;
+        return *new CNumber();
+    }
+    std::cout<<i_divider<<std::endl;
+
+    return *&(*this / i_divider);
+}
 
 void CNumber::v_substraction(const CNumber &cOther, CNumber *cResult, const CNumber &cThisObject) {
     int i_borrow = 0;
@@ -298,10 +318,6 @@ bool CNumber::b_get_sign_of_bigger_abs_number(const CNumber &cOther) const {
         }
     }
     return false; // when they're equal
-}
-
-bool CNumber::b_is_zero(const CNumber &cOther) const {
-    return cOther.i_numbers[cOther.i_size - 1] == 0 || i_numbers[i_size - 1] == 0;
 }
 
 bool CNumber::b_copy_elements(const CNumber &cOther) const {
