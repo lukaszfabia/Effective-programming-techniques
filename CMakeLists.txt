@@ -3,10 +3,10 @@ project(Effective_programming_techniques)
 
 set(CMAKE_CXX_STANDARD 98)
 
-#add_executable(Effective_programming_techniques
-#        Lab1/main.cpp Lab1/CTable.cpp
-#        Lab1/CTable.h
-#        Lab1/CTableFunctions.cpp
-#        Lab1/CTableFunctions.h Lab1/CTableTest.cpp Lab1/CTableTest.h)
+add_executable(Effective_programming_techniques
+        Lab1/main.cpp Lab1/CTable.cpp
+        Lab1/CTable.h
+        Lab1/CTableFunctions.cpp
+        Lab1/CTableFunctions.h Lab1/CTableTest.cpp Lab1/CTableTest.h)
 
-add_executable(Effective_programming_techniques Lab2/CNumber.h Lab2/CNumber.cpp Lab2/main.cpp Lab2/CTestsForOperators.cpp Lab2/CTestsForOperators.h)
+#add_executable(Effective_programming_techniques Lab2/CNumber.h Lab2/CNumber.cpp Lab2/main.cpp Lab2/CTestsForOperators.cpp Lab2/CTestsForOperators.h)

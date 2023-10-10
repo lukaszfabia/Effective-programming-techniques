@@ -38,9 +38,11 @@ void v_set_of_tests_for_CTable() {
 }
 
 int main() {
-    v_test_for_alloc_functions();
+    //v_test_for_alloc_functions();
     std::cout << std::endl;
-    v_set_of_tests_for_CTable();
+    //v_set_of_tests_for_CTable();
+    int **pi_table;
+    CTableFunctions::b_alloc_table_2_dim_other_way(&pi_table, 5, 3);
 
     return 0;
 }
