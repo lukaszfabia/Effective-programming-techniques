@@ -33,7 +33,7 @@ CTable::CTable(CTable &pcOther) {
 }
 
 CTable::~CTable() {
-    delete pi_table;
+    delete []pi_table;
     std::cout << "usuwam: '" << s_name << "'" << std::endl;
 }
 
@@ -43,9 +43,9 @@ void CTable::vSetName(std::string sName) {
 
 bool CTable::bSetNewSize(int iTableLen) {
     if (iTableLen > 0) {
-        int *newPiTable = new int [iTableLen];
-        delete pi_table;
-        pi_table = newPiTable;
+        int *pi_new_table = new int [iTableLen];
+        delete []pi_table;
+        pi_table = pi_new_table;
         i_table_length = iTableLen;
         return true;
     } else {
