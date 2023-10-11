@@ -46,9 +46,9 @@ bool CTableFunctions::b_alloc_table_2_dim(int ***piTable, int iSizeX, int iSizeY
 bool CTableFunctions::b_dealloc_table_2_dim(int **piTable, int iSizeX) {
     if (iSizeX > 0) {
         for (int i = 0; i < iSizeX; i++) {
-            delete piTable[i];
+            delete[] piTable[i];
         }
-        delete piTable;
+        delete[] piTable;
         return true;
     } else {
         return false;
