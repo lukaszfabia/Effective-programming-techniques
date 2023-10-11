@@ -1,6 +1,9 @@
 #include <iostream>
+#include <sstream>
 #include "CTableFunctions.h"
 #include "CTableTest.h"
+#include "CTable.h"
+
 
 //cmake executable code
 //add_executable(Effective_programming_techniques
@@ -37,13 +40,34 @@ void v_set_of_tests_for_CTable() {
     std::cout << std::endl;
 }
 
-int main() {
-    //v_test_for_alloc_functions();
+void v_test_for_array_CTable(int i_size) {
+    CTable *pi_CTable = new CTable[i_size];
+    std::stringstream ss_my_num;
+
+    for (int i = 0; i < i_size; i++) {
+        ss_my_num.str("");  // Wyczyść strumień
+        ss_my_num << "CTable" << "_" << i + 1;
+        pi_CTable[i] = *new CTable(ss_my_num.str(), i + 1);
+    }
+
     std::cout << std::endl;
-    //v_set_of_tests_for_CTable();
+    for (int i = 0; i < i_size; i++) {
+        (pi_CTable + i)->vShow();
+    }
+
+    delete[] pi_CTable;
+}
+
+int main() {
+//    v_test_for_alloc_functions();
+//    std::cout << std::endl;
+//   v_set_of_tests_for_CTable();
     int **pi_table;
     CTableFunctions::b_alloc_table_2_dim_other_way(&pi_table, 5, 3);
+    CTableFunctions::b_dealloc_table_2_dim_other_way(pi_table, 5);
 
+
+//    v_test_for_array_CTable(5);
     return 0;
 }
 

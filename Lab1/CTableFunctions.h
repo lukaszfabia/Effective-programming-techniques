@@ -15,6 +15,8 @@ public:
 
     static bool b_alloc_table_2_dim_other_way(int ***piTable, int iSizeX, int iSizeY);
 
+    static bool b_dealloc_table_2_dim_other_way(int **piTable, int iSizeX);
+
 private:
     static void v_show_table(int *iArr, int iSize);
 };

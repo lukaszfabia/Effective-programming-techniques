@@ -57,6 +57,12 @@ CTable *CTable::pcClone() {
     return new CTable(s_name, i_table_length);
 }
 
+void CTable::vShow() {
+    std::cout << "Name: " << s_name << std::endl;
+    std::cout << "Length: " << i_table_length << std::endl;
+    std::cout << std::endl;
+}
+
 void v_mod_tab(CTable *pcTab, int iNewSize) {
     pcTab->bSetNewSize(iNewSize);
 }
