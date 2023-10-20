@@ -54,7 +54,7 @@ bool CTable::bSetNewSize(int iTableLen) {
 }
 
 CTable *CTable::pcClone() {
-    return new CTable(s_name, i_table_length);
+    return this;
 }
 
 void CTable::vShow() {
