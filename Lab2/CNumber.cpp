@@ -126,7 +126,6 @@ CNumber CNumber::operator/(const CNumber &cOther) const {
         cResult = 0;
         cTemp = *this;
 
-        // Ustalamy znaki dla obu operandów, żeby zachować spójność w obliczeniach
         cTemp.v_set_is_negative(false);
         absOther = cOther;
         absOther.v_set_is_negative(false);
