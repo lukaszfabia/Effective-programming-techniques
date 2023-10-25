@@ -120,26 +120,30 @@ CNumber CNumber::operator*(const CNumber &cOther) const {
 
 CNumber CNumber::operator/(const CNumber &cOther) const {
     CNumber cResult, cTemp, cTemp2, absOther;
-    cResult = 0;
-    cTemp = *this;
+    cResult = -1;
+    // Sprawdzamy czy dzielnik nie jest zerem bo jesli jest to zwracamy -1 jako wynik
+    if (!(cOther==0)){
+        cResult = 0;
+        cTemp = *this;
 
-    // Ustalamy znaki dla obu operandów, żeby zachować spójność w obliczeniach
-    cTemp.v_set_is_negative(false);
-    absOther = cOther;
-    absOther.v_set_is_negative(false);
+        // Ustalamy znaki dla obu operandów, żeby zachować spójność w obliczeniach
+        cTemp.v_set_is_negative(false);
+        absOther = cOther;
+        absOther.v_set_is_negative(false);
 
-    while (cTemp >= absOther) {
-        cTemp = cTemp - absOther;
-        cResult = ++cResult;
+        while (cTemp >= absOther) {
+            cTemp = cTemp - absOther;
+            cResult = ++cResult;
+        }
+
+        cResult.b_is_negative = (b_is_negative != cOther.b_get_is_negative());
+
     }
-
-    cResult.b_is_negative = (b_is_negative != cOther.b_get_is_negative());
-
     return cResult;
 }
 
 bool CNumber::operator>=(const CNumber &cOther) const {
-    for (int i = 0; i<i_size; i++) {
+    for (int i = 0; i < i_size; i++) {
         if (i_numbers[i] > cOther.i_numbers[i]) {
             return true;
         } else if (i_numbers[i] < cOther.i_numbers[i]) {
@@ -160,6 +164,15 @@ CNumber CNumber::operator++() const {
     CNumber cOne;
     cOne = 1;
     return *this + cOne;
+}
+
+bool CNumber::operator==(int iValue) const {
+    for (int i = 0; i < i_size; i++) {
+        if (i_numbers[i] != 0) {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool CNumber::b_copy_elements(const CNumber &cOther) const {

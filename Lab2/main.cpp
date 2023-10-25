@@ -40,8 +40,13 @@ void v_effectivity_test(const char *c_name_of_test, const int i_iterations, cons
 
 int main() {
     v_start_test("Test for lab2 operators");
-    std::cout << INT_MAX << std::endl;
-    v_effectivity_test("effectivity (xD)", 123, 1, 0);
+//    std::cout << INT_MAX << std::endl;
+//    v_effectivity_test("effectivity (xD)", 123, 1, 0);
+    CNumber c_num_0, c_num_1, c_res;
+    c_num_0 = 1;
+    c_num_1 = 0;
+    c_res = c_num_0 / c_num_1;
+    CHelpFunctions::v_show_array(c_res);
     return 0;
 }
 

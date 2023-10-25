@@ -41,6 +41,8 @@ public:
 
     bool operator>=(int iValue) const;
 
+    bool operator==(int iValue) const;
+
     CNumber operator++() const;
 
     int i_get_size() const;
