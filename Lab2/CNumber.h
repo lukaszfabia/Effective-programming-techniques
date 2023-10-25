@@ -39,15 +39,9 @@ public:
 
     bool operator>=(const CNumber &cOther) const;
 
-    bool operator>(const CNumber &cOther) const;
-
     bool operator>=(int iValue) const;
 
     CNumber operator++() const;
-
-    CNumber operator--() const;
-
-    bool operator!=(int iValue) const;
 
     int i_get_size() const;
 

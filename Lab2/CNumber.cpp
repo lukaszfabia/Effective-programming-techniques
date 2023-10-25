@@ -150,18 +150,6 @@ bool CNumber::operator>=(const CNumber &cOther) const {
     return true;
 }
 
-bool CNumber::operator>(const CNumber &cOther) const {
-    for (int i = i_size - 1; i >= 0; i--) {
-        if (i_numbers[i] > cOther.i_numbers[i]) {
-            return true;
-        } else if (i_numbers[i] < cOther.i_numbers[i]) {
-            return false;
-        }
-    }
-
-    return false;
-}
-
 bool CNumber::operator>=(int iValue) const {
     CNumber cOther;
     cOther = iValue;
@@ -172,21 +160,6 @@ CNumber CNumber::operator++() const {
     CNumber cOne;
     cOne = 1;
     return *this + cOne;
-}
-
-CNumber CNumber::operator--() const {
-    CNumber cOne;
-    cOne = 1;
-    return *this - cOne;
-}
-
-bool CNumber::operator!=(int iValue) const {
-    for (int i = 0; i < i_size; i++) {
-        if (i_numbers[i] != iValue) {
-            return true;
-        }
-    }
-    return false;
 }
 
 bool CNumber::b_copy_elements(const CNumber &cOther) const {
