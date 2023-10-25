@@ -214,27 +214,6 @@ bool CTestsForOperators::b_test_for_adding() {
            b_result_for_add_test5 && b_result_for_add_test6;
 }
 
-bool CTestsForOperators::b_test_for_is_bigger() {
-    c_num_0 = 123;
-    c_num_1 = 456;
-    bool b_result_for_is_bigger_test1 = !c_num_0.b_is_bigger(c_num_1);
-
-    c_num_0 = -123;
-    c_num_1 = 456;
-    bool b_result_for_is_bigger_test2 = !c_num_0.b_is_bigger(c_num_1);
-
-    c_num_0 = 123;
-    c_num_1 = -456;
-    bool b_result_for_is_bigger_test3 = c_num_0.b_is_bigger(c_num_1);
-
-    c_num_0 = -123;
-    c_num_1 = -456;
-    bool b_result_for_is_bigger_test4 = c_num_0.b_is_bigger(c_num_1);
-
-    return b_result_for_is_bigger_test1 && b_result_for_is_bigger_test2 && b_result_for_is_bigger_test3 &&
-           b_result_for_is_bigger_test4;
-}
-
 bool CTestsForOperators::b_test_for_multiplication() {
     /// when first number is bigger then second
     /// + -
@@ -289,8 +268,8 @@ bool CTestsForOperators::b_test_for_multiplication() {
 
 bool CTestsForOperators::b_test_for_dividing() {
     c_num_0 = 12813;
-    int i_divider = 453;
-    c_res = c_num_0 / i_divider;
+    c_num_1 = 453;
+    c_res = c_num_0 / c_num_1;
 
     bool b_sign_result = !c_res.b_get_is_negative();
     bool b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 8 &&
@@ -299,24 +278,24 @@ bool CTestsForOperators::b_test_for_dividing() {
     bool b_result_for_dividing_test1 = b_sign_result && b_value;
 
     c_num_0 = 12813;
-    i_divider = -453;
-    c_res = c_num_0 / i_divider;
+    c_num_1 = -453;
+    c_res = c_num_0 / c_num_1;
 
     b_sign_result = c_res.b_get_is_negative();
 
     bool b_result_for_dividing_test2 = b_sign_result;
 
     c_num_0 = -12813;
-    i_divider = 453;
-    c_res = c_num_0 / i_divider;
+    c_num_1 = 453;
+    c_res = c_num_0 / c_num_1;
 
     b_sign_result = c_res.b_get_is_negative();
 
     bool b_result_for_dividing_test3 = b_sign_result;
 
     c_num_0 = -12813;
-    i_divider = -453;
-    c_res = c_num_0 / i_divider;
+    c_num_1 = -453;
+    c_res = c_num_0 / c_num_1;
 
     b_sign_result = !c_res.b_get_is_negative();
 

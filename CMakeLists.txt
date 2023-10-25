@@ -3,10 +3,8 @@ project(Effective_programming_techniques)
 
 set(CMAKE_CXX_STANDARD 98)
 
-add_executable(Effective_programming_techniques
-        Lab1/main.cpp Lab1/CTable.cpp
-        Lab1/CTable.h
-        Lab1/CTableFunctions.cpp
-        Lab1/CTableFunctions.h Lab1/CTableTest.cpp Lab1/CTableTest.h)
+#add_executable(Effective_programming_techniques Lab3/CTree.cpp
+#        Lab3/CTree.h Lab3/main.cpp Lab3/CInterface.cpp Lab3/CInterface.h Lab3/Tools/CNode.cpp
+#        Lab3/Tools/CNode.h Lab3/Tools/CPreprocessExpression.cpp Lab3/Tools/CPreprocessExpression.h)
 
-#add_executable(Effective_programming_techniques Lab2/CNumber.h Lab2/CNumber.cpp Lab2/main.cpp Lab2/CTestsForOperators.cpp Lab2/CTestsForOperators.h)
+add_executable(Effective_programming_techniques Lab2/CNumber.h Lab2/CNumber.cpp Lab2/main.cpp Lab2/CTestsForOperators.cpp Lab2/CTestsForOperators.h Lab2/CHelpFunctions.h Lab2/CHelpFunctions.cpp)

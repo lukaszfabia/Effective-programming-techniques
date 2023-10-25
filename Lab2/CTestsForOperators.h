@@ -14,8 +14,6 @@ public:
 
     bool b_test_for_adding();
 
-    bool b_test_for_is_bigger();
-
     bool b_test_for_multiplication();
 
     bool b_test_for_dividing();

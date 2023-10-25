@@ -3,6 +3,7 @@
 //
 
 #include "CTestsForOperators.h"
+#include "CHelpFunctions.h"
 #include <iostream>
 #include <ctime>
 
@@ -12,7 +13,6 @@ void v_start_test(const char *c_name_of_test) {
     c_tests = new CTestsForOperators();
 
     std::cout << "Test for substraction: " << c_tests->b_test_for_substracting() << std::endl;
-    std::cout << "Test for bigger func: " << c_tests->b_test_for_is_bigger() << std::endl;
     std::cout << "Test for adding: " << c_tests->b_test_for_adding() << std::endl;
     std::cout << "Test for multiplication: " << c_tests->b_test_for_multiplication() << std::endl;
     std::cout << "Test for dividing: " << c_tests->b_test_for_dividing() << std::endl;
@@ -27,11 +27,11 @@ void v_effectivity_test(const char *c_name_of_test, const int i_iterations, cons
     *c_num_0 = ui_value;
     *c_res = i_start_sum;
     for (int i = 0; i < i_iterations; i++) {
-        *c_res = *c_res * *c_num_0;
+        *c_res = *c_res + *c_num_0;
     }
 
     std::clock_t end = std::clock();
-    c_res->v_show_array();
+    CHelpFunctions::v_show_array(*c_res);
     delete c_num_0;
     delete c_res;
     std::cout << "Time: " << static_cast<double>(end - start) / static_cast<double> (CLOCKS_PER_SEC / 1000) << " ms"
@@ -40,13 +40,8 @@ void v_effectivity_test(const char *c_name_of_test, const int i_iterations, cons
 
 int main() {
     v_start_test("Test for lab2 operators");
-//    v_effectivity_test("effectivity (xD)", 1000, 123, 1);
-
-//    CNumber c_num0, c_num1, c_res;
-//    c_num0 = -124512;
-////    c_num1 = -;
-//    c_res = c_num0 / -124512;
-//    c_res.v_show_array();
+    std::cout << INT_MAX << std::endl;
+    v_effectivity_test("effectivity (xD)", 123, 1, 0);
     return 0;
 }
 

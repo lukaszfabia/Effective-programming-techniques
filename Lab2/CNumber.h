@@ -16,14 +16,6 @@ private:
 
     bool b_copy_variables(const CNumber &cOther);
 
-    bool b_get_sign_of_bigger_abs_number(const CNumber &cOther) const;
-
-    static void v_substraction(const CNumber &cOther, CNumber *cResult, const CNumber &cThisObject);
-
-    void v_add(const CNumber &cOther, CNumber *cResult) const;
-
-    void v_fill_array(int iValue);
-
     void v_set_values(int iValue, int i_index);
 
 public:
@@ -37,33 +29,37 @@ public:
 
     CNumber &operator=(int iValue);
 
-    CNumber &operator+(const CNumber &cOther) const;
+    CNumber operator+(const CNumber &cOther) const;
 
-    CNumber &operator-(const CNumber &cOther) const;
+    CNumber operator-(const CNumber &cOther) const;
 
-    CNumber &operator*(const CNumber &cOther) const;
+    CNumber operator*(const CNumber &cOther) const;
 
-    CNumber &operator/(const CNumber &cOther) const;
+    CNumber operator/(const CNumber &cOther) const;
 
-    CNumber &operator/(int iDivider) const;
+    bool operator>=(const CNumber &cOther) const;
 
-    CNumber &operator+(int iValue) const;
+    bool operator>(const CNumber &cOther) const;
 
-    CNumber &operator-(int iValue) const;
+    bool operator>=(int iValue) const;
 
-    CNumber &operator*(int iValue) const;
+    CNumber operator++() const;
 
-    void v_show_array();
+    CNumber operator--() const;
+
+    bool operator!=(int iValue) const;
 
     int i_get_size() const;
 
     int *pi_get_i_numbers() const;
 
-    static int i_get_amount_of_digits(int iValue);
-
     bool b_get_is_negative() const;
 
-    bool b_is_bigger(const CNumber &cOther) const;
+    void v_set_is_negative(bool bIsNegative);
+
+    void v_set_size(int iSize);
+
+    void v_set_i_numbers(int *piNumbers);
 
 };
 
