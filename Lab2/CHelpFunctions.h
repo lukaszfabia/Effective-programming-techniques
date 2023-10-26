@@ -9,19 +9,17 @@
 
 class CHelpFunctions {
 public:
-    static void v_substraction(const CNumber &cOther, const CNumber &cResult, const CNumber &cThisObject);
-
-    static void v_add(const CNumber &cOther, const CNumber &cResult, const CNumber &cThisObject);
-
-    static int i_get_amount_of_digits(int iValue);
+    static CNumber c_substraction(const CNumber &cOther, const CNumber &cThisObject);
 
     static void v_show_array(const CNumber &cNumber);
 
     static void v_fill_array(int *piNumbers, int iValue, int iSize);
 
-    static bool b_get_sign_of_bigger_abs_number(const CNumber &cOther, const CNumber &cThisObject)  ;
+    static bool b_get_sign_of_bigger_abs_number(const CNumber &cOther, const CNumber &cThisObject);
 
     static void v_set_values(int *piNumbers, int iValue, int i_index);
+
+    static CNumber c_add(const CNumber &cNumber1, const CNumber &cNumber2);
 };
 
 

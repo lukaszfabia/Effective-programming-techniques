@@ -6,7 +6,7 @@
 #include "CNumber.h"
 #include "CHelpFunctions.h"
 
-const int DEFAULT_SIZE = 100;
+const int DEFAULT_SIZE = 10;
 
 CNumber::CNumber() {
     i_size = DEFAULT_SIZE;
@@ -54,16 +54,16 @@ CNumber CNumber::operator+(const CNumber &cOther) const {
     CNumber cResult;
 
     if (cOther.b_is_negative == b_is_negative) {
+        cResult = CHelpFunctions::c_add(cOther, *this);
         cResult.b_is_negative = b_is_negative;
-        CHelpFunctions::v_add(cOther, cResult, *this);
     } else if (cOther.b_is_negative * b_is_negative == 0) {
         bool b_sign;
         if (CHelpFunctions::b_get_sign_of_bigger_abs_number(cOther, *this)) {
             b_sign = b_is_negative;
-            CHelpFunctions::v_substraction(cOther, cResult, *this);
+            cResult = CHelpFunctions::c_substraction(cOther, *this);
         } else {
             b_sign = cOther.b_is_negative;
-            CHelpFunctions::v_substraction(*this, cResult, cOther);
+            cResult = CHelpFunctions::c_substraction(*this, cOther);
         }
         cResult.b_is_negative = b_sign;
     }
@@ -74,25 +74,25 @@ CNumber CNumber::operator-(const CNumber &cOther) const {
     CNumber cResult;
 
     if (b_is_negative && !cOther.b_is_negative || !b_is_negative && cOther.b_is_negative) {
+        cResult = CHelpFunctions::c_add(cOther, *this);
         cResult.b_is_negative = b_is_negative;
-        CHelpFunctions::v_add(cOther, cResult, *this);
     } else if (!b_is_negative && !cOther.b_is_negative) {
         bool b_sign;
         if (CHelpFunctions::b_get_sign_of_bigger_abs_number(cOther, *this)) {
             b_sign = b_is_negative;
-            CHelpFunctions::v_substraction(cOther, cResult, *this);
+            cResult = CHelpFunctions::c_substraction(cOther, *this);
         } else {
             b_sign = !cOther.b_is_negative;
-            CHelpFunctions::v_substraction(*this, cResult, cOther);
+            cResult = CHelpFunctions::c_substraction(*this, cOther);
         }
         cResult.b_is_negative = b_sign;
     } else {
         bool b_sign;
         if (CHelpFunctions::b_get_sign_of_bigger_abs_number(cOther, *this)) {
-            CHelpFunctions::v_substraction(cOther, cResult, *this);
+            cResult = CHelpFunctions::c_substraction(cOther, *this);
             b_sign = true;
         } else {
-            CHelpFunctions::v_substraction(*this, cResult, cOther);
+            cResult = CHelpFunctions::c_substraction(*this, cOther);
             b_sign = false;
         }
         cResult.b_is_negative = b_sign;
@@ -101,16 +101,26 @@ CNumber CNumber::operator-(const CNumber &cOther) const {
 }
 
 CNumber CNumber::operator*(const CNumber &cOther) const {
-    CNumber cResult(cOther.i_size + i_size);
-    int i_carry, i_product;
-    for (int i = i_size - 1; i >= 0; i--) {
-        i_carry = 0;
-        for (int j = cOther.i_size - 1; j >= 0; j--) {
-            i_product = i_numbers[i] * cOther.i_numbers[j] + i_carry + cResult.i_numbers[i + j + 1];
-            i_carry = i_product / 10;
-            cResult.i_numbers[i + j + 1] = i_product % 10;
-        }
-        cResult.i_numbers[i] += i_carry;
+//    CNumber cResult(cOther.i_size + i_size);
+//    int i_carry, i_product;
+//    for (int i = i_size - 1; i >= 0; i--) {
+//        i_carry = 0;
+//        for (int j = cOther.i_size - 1; j >= 0; j--) {
+//            i_product = i_numbers[i] * cOther.i_numbers[j] + i_carry + cResult.i_numbers[i + j + 1];
+//            i_carry = i_product / 10;
+//            cResult.i_numbers[i + j + 1] = i_product % 10;
+//        }
+//        cResult.i_numbers[i] += i_carry;
+//    }
+    CNumber cResult, cTemp1, cTemp2;
+    cResult = 0;
+    cTemp1 = *this;
+    cTemp2 = cOther;
+    cTemp1.v_set_is_negative(false);
+    cTemp2.v_set_is_negative(false);
+    while (!(cTemp2==0)){
+        cResult = CHelpFunctions::c_add(cResult, cTemp1);
+        cTemp2 = --cTemp2;
     }
 
     cResult.b_is_negative = b_is_negative != cOther.b_is_negative;
@@ -121,7 +131,6 @@ CNumber CNumber::operator*(const CNumber &cOther) const {
 CNumber CNumber::operator/(const CNumber &cOther) const {
     CNumber cResult, cTemp, absOther;
     cResult = -1;
-    // Sprawdzamy czy dzielnik nie jest zerem bo jesli jest to zwracamy -1 jako wynik
     if (!(cOther == 0)) {
         cResult = 0;
         cTemp = *this;
@@ -131,8 +140,7 @@ CNumber CNumber::operator/(const CNumber &cOther) const {
         absOther.v_set_is_negative(false);
 
         while (cTemp >= absOther) {
-            // nie uzywamy operatora, bo jest to dluzsza procedura
-            CHelpFunctions::v_substraction(absOther, cTemp, cTemp);
+            cTemp = CHelpFunctions::c_substraction(absOther, cTemp);
             cResult = ++cResult;
         }
 

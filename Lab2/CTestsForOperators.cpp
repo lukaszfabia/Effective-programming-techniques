@@ -3,7 +3,6 @@
 //
 
 #include "CTestsForOperators.h"
-#include <iostream>
 
 bool CTestsForOperators::b_test_for_substracting() {
     /// when first number is bigger than second

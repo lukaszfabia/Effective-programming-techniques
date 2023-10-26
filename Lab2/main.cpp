@@ -18,22 +18,24 @@ void v_start_test(const char *c_name_of_test) {
     delete c_tests;
 }
 
-void v_start_effectivity_tests(){
-    CEffectivityTestClass *testClass = new CEffectivityTestClass();
-    testClass->v_effectivity_test_for_factorial("factoring", 123);
-//    testClass->v_effectivity_test_for_multiplying("multiplying", 12312, 999);
-//    testClass->v_effectivity_test_for_adding("adding", INT_MAX/1234, 12);
-//    testClass->v_effectivity_test_for_substracting("substracting", INT_MAX, INT_MAX);
+void v_start_effectivity_tests() {
+    CEffectivityTestClass *testClass;
+    testClass = new CEffectivityTestClass();
 //    testClass->v_effectivity_test_for_dividing("dividing", 256, INT_MAX-1);
+//    testClass->v_effectivity_test_for_substracting("substracting", INT_MAX, INT_MAX);
+//    testClass->v_effectivity_test_for_factorial("factoring", 123);
+//    testClass->v_effectivity_test_for_multiplying("multiplying", 100, 10);
+    testClass->v_effectivity_test_for_adding("adding", 30000, INT_MAX);
+//    testClass->v_effectivity_test_for_dividing("dividing", 256, INT_MAX - 1);
     delete testClass;
 }
 
 int main() {
-//    v_start_test("Test for lab2 operators");
+    v_start_test("Test for lab2 operators");
     v_start_effectivity_tests();
-
 
     return 0;
 }
 
 
+//poprawione funkcje dodajace i odejmujace i oszczedanie pamieci

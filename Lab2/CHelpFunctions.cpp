@@ -5,41 +5,47 @@
 #include <iostream>
 #include "CHelpFunctions.h"
 
-void CHelpFunctions::v_substraction(const CNumber &cOther, const CNumber &cResult, const CNumber &cThisObject) {
+CNumber CHelpFunctions::c_substraction(const CNumber &cNumber1, const CNumber &cNumber2) {
+    int max_size = cNumber1.i_get_size();
+    CNumber cResult(max_size);
+
+    const int* larger_array;
+    const int* smaller_array;
+    int longer_size;
+    int shorter_size;
+
+    if (cNumber1.i_get_size() <= cNumber2.i_get_size()) {
+        larger_array = cNumber2.pi_get_i_numbers();
+        longer_size = cNumber2.i_get_size();
+        smaller_array = cNumber1.pi_get_i_numbers();
+        shorter_size = cNumber1.i_get_size();
+    } else {
+        larger_array = cNumber1.pi_get_i_numbers();
+        longer_size = cNumber1.i_get_size();
+        smaller_array = cNumber2.pi_get_i_numbers();
+        shorter_size = cNumber2.i_get_size();
+    }
+
     int i_borrow = 0;
-    for (int i = cThisObject.i_get_size() - 1; i >= 0; i--) {
-        cResult.pi_get_i_numbers()[i] = cThisObject.pi_get_i_numbers()[i] - cOther.pi_get_i_numbers()[i] - i_borrow;
-        if (cResult.pi_get_i_numbers()[i] < 0) {
+    int j = max_size - 1;
+
+    for (int i = longer_size- 1; i >= 0; i--) {
+        int difference = larger_array[i] -
+                         ((i >= longer_size - shorter_size) ? smaller_array[i - (longer_size - shorter_size)] : 0) -
+                         i_borrow;
+
+        if (difference < 0) {
+            difference += 10;
             i_borrow = 1;
-            cResult.pi_get_i_numbers()[i] += 10;
         } else {
             i_borrow = 0;
         }
-    }
-}
 
-void CHelpFunctions::v_add(const CNumber &cOther, const CNumber &cResult, const CNumber &cThisObject) {
-    int i_carry = 0;
-    for (int i = cThisObject.i_get_size() - 1; i >= 0; i--) {
-        cResult.pi_get_i_numbers()[i] = cThisObject.pi_get_i_numbers()[i] + cOther.pi_get_i_numbers()[i] + i_carry;
-        if (cResult.pi_get_i_numbers()[i] > 9) {
-            i_carry = 1;
-            cResult.pi_get_i_numbers()[i] -= 10;
-        } else {
-            i_carry = 0;
-        }
-    }
-}
-
-int CHelpFunctions::i_get_amount_of_digits(int iValue) {
-    int i_tmp = iValue;
-    int i_digits = 0;
-    while (i_tmp != 0) {
-        i_digits++;
-        i_tmp /= 10;
+        cResult.pi_get_i_numbers()[j] = difference;
+        j--;
     }
 
-    return i_digits;
+    return cResult;
 }
 
 void CHelpFunctions::v_show_array(const CNumber &cNumber) {
@@ -86,4 +92,39 @@ void CHelpFunctions::v_set_values(int *piNumbers, int iValue, int i_index) {
     } else {
         return;
     }
+}
+
+CNumber CHelpFunctions::c_add(const CNumber &cNumber1, const CNumber &cNumber2) {
+    int max_size = std::max(cNumber1.i_get_size(), cNumber2.i_get_size()) + 1;
+    CNumber cResult(max_size);
+
+    const int *longer_array;
+    const int *shorter_array;
+    int longer_size;
+    int shorter_size;
+
+    if (cNumber1.i_get_size() >= cNumber2.i_get_size()) {
+        longer_array = cNumber1.pi_get_i_numbers();
+        longer_size = cNumber1.i_get_size();
+        shorter_array = cNumber2.pi_get_i_numbers();
+        shorter_size = cNumber2.i_get_size();
+    } else {
+        longer_array = cNumber2.pi_get_i_numbers();
+        longer_size = cNumber2.i_get_size();
+        shorter_array = cNumber1.pi_get_i_numbers();
+        shorter_size = cNumber1.i_get_size();
+    }
+
+    int i_carry = 0;
+    int j = max_size - 1;
+
+    for (int i = longer_size - 1; i >= 0; i--) {
+        int sum = longer_array[i] +
+                  ((i >= longer_size - shorter_size) ? shorter_array[i - (longer_size - shorter_size)] : 0) + i_carry;
+        cResult.pi_get_i_numbers()[j] = sum % 10;
+        i_carry = sum / 10;
+        j--;
+    }
+
+    return cResult;
 }
