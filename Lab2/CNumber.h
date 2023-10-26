@@ -16,8 +16,6 @@ private:
 
     bool b_copy_variables(const CNumber &cOther);
 
-    void v_set_values(int iValue, int i_index);
-
 public:
     CNumber();
 
@@ -55,8 +53,7 @@ public:
 
     void v_set_size(int iSize);
 
-    void v_set_i_numbers(int *piNumbers);
-
+    void v_information() const;
 };
 
 

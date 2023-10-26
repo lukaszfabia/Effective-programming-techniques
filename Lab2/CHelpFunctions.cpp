@@ -59,7 +59,7 @@ void CHelpFunctions::v_show_array(const CNumber &cNumber) {
     for (int i = i_start_index; i < cNumber.i_get_size(); i++) {
         std::cout << cNumber.pi_get_i_numbers()[i] << " ";
     }
-    std::cout<< std::endl;
+    std::cout << std::endl;
 }
 
 void CHelpFunctions::v_fill_array(int *piNumbers, int iValue, int iSize) {
@@ -77,4 +77,13 @@ bool CHelpFunctions::b_get_sign_of_bigger_abs_number(const CNumber &cOther, cons
         }
     }
     return false; // when they're equal
+}
+
+void CHelpFunctions::v_set_values(int *piNumbers, int iValue, int i_index) {
+    if (i_index >= 0) {
+        piNumbers[i_index] = iValue % 10;
+        v_set_values(piNumbers, iValue / 10, i_index - 1);
+    } else {
+        return;
+    }
 }

@@ -45,7 +45,7 @@ CNumber &CNumber::operator=(int iValue) {
         b_is_negative = false;
     }
 
-    v_set_values(iValue, i_size - 1);
+    CHelpFunctions::v_set_values(i_numbers, iValue, i_size - 1);
 
     return *this;
 }
@@ -119,10 +119,10 @@ CNumber CNumber::operator*(const CNumber &cOther) const {
 }
 
 CNumber CNumber::operator/(const CNumber &cOther) const {
-    CNumber cResult, cTemp, cTemp2, absOther;
+    CNumber cResult, cTemp, absOther;
     cResult = -1;
     // Sprawdzamy czy dzielnik nie jest zerem bo jesli jest to zwracamy -1 jako wynik
-    if (!(cOther==0)){
+    if (!(cOther == 0)) {
         cResult = 0;
         cTemp = *this;
 
@@ -131,7 +131,8 @@ CNumber CNumber::operator/(const CNumber &cOther) const {
         absOther.v_set_is_negative(false);
 
         while (cTemp >= absOther) {
-            cTemp = cTemp - absOther;
+            // nie uzywamy operatora, bo jest to dluzsza procedura
+            CHelpFunctions::v_substraction(absOther, cTemp, cTemp);
             cResult = ++cResult;
         }
 
@@ -167,7 +168,7 @@ CNumber CNumber::operator++() const {
 
 bool CNumber::operator==(int iValue) const {
     for (int i = 0; i < i_size; i++) {
-        if (i_numbers[i] != 0) {
+        if (i_numbers[i] != iValue) {
             return false;
         }
     }
@@ -209,15 +210,6 @@ void CNumber::v_set_size(int iSize) {
     i_size = iSize;
 }
 
-void CNumber::v_set_i_numbers(int *piNumbers) {
-    i_numbers = piNumbers;
-}
-
-void CNumber::v_set_values(int iValue, int i_index) {
-    if (i_index >= 0) {
-        i_numbers[i_index] = iValue % 10;
-        v_set_values(iValue / 10, i_index - 1);
-    } else {
-        return;
-    }
+void CNumber::v_information() const {
+    CHelpFunctions::v_show_array(*this);
 }

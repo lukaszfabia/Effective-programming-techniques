@@ -3,7 +3,6 @@
 //
 
 #include "CTestsForOperators.h"
-#include "CHelpFunctions.h"
 #include <iostream>
 #include <ctime>
 
@@ -31,7 +30,7 @@ void v_effectivity_test(const char *c_name_of_test, const int i_iterations, cons
     }
 
     std::clock_t end = std::clock();
-    CHelpFunctions::v_show_array(*c_res);
+    c_res->v_information();
     delete c_num_0;
     delete c_res;
     std::cout << "Time: " << static_cast<double>(end - start) / static_cast<double> (CLOCKS_PER_SEC / 1000) << " ms"
@@ -43,10 +42,10 @@ int main() {
 //    std::cout << INT_MAX << std::endl;
 //    v_effectivity_test("effectivity (xD)", 123, 1, 0);
     CNumber c_num_0, c_num_1, c_res;
-    c_num_0 = 1;
-    c_num_1 = 0;
+    c_num_0 = 12;
+    c_num_1 = 4;
     c_res = c_num_0 / c_num_1;
-    CHelpFunctions::v_show_array(c_res);
+    c_res.v_information();
     return 0;
 }
 

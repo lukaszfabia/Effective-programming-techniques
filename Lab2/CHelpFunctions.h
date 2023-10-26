@@ -20,6 +20,8 @@ public:
     static void v_fill_array(int *piNumbers, int iValue, int iSize);
 
     static bool b_get_sign_of_bigger_abs_number(const CNumber &cOther, const CNumber &cThisObject)  ;
+
+    static void v_set_values(int *piNumbers, int iValue, int i_index);
 };
 
 
