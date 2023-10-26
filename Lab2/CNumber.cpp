@@ -166,6 +166,12 @@ CNumber CNumber::operator++() const {
     return *this + cOne;
 }
 
+CNumber CNumber::operator--() const {
+    CNumber cOne;
+    cOne = 1;
+    return *this - cOne;
+}
+
 bool CNumber::operator==(int iValue) const {
     for (int i = 0; i < i_size; i++) {
         if (i_numbers[i] != iValue) {
@@ -173,6 +179,18 @@ bool CNumber::operator==(int iValue) const {
         }
     }
     return true;
+}
+
+CNumber CNumber::operator!() const {
+    CNumber cResult(i_size * 2), cTemp;
+    cResult = 1;
+    cTemp=*this;
+    while (!(cTemp==0)){
+        cResult = cResult * cTemp;
+        cTemp = --cTemp;
+    }
+
+    return cResult;
 }
 
 bool CNumber::b_copy_elements(const CNumber &cOther) const {

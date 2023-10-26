@@ -44,7 +44,7 @@ int CHelpFunctions::i_get_amount_of_digits(int iValue) {
 
 void CHelpFunctions::v_show_array(const CNumber &cNumber) {
     std::cout << "--------------------------------------" << std::endl;
-    std::cout << "array: " << std::endl;
+    std::cout << "number: " << std::endl;
     int i_start_index = 0;
     while (cNumber.pi_get_i_numbers()[i_start_index] == 0) {
         i_start_index++;

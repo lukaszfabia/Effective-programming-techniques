@@ -43,6 +43,10 @@ public:
 
     CNumber operator++() const;
 
+    CNumber operator--() const;
+
+    CNumber operator!() const;
+
     int i_get_size() const;
 
     int *pi_get_i_numbers() const;

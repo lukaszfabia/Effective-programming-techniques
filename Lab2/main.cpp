@@ -3,8 +3,8 @@
 //
 
 #include "CTestsForOperators.h"
+#include "CEffectivityTestClass.h"
 #include <iostream>
-#include <ctime>
 
 void v_start_test(const char *c_name_of_test) {
     std::cout << "Test for " << c_name_of_test << " started" << std::endl;
@@ -18,34 +18,21 @@ void v_start_test(const char *c_name_of_test) {
     delete c_tests;
 }
 
-void v_effectivity_test(const char *c_name_of_test, const int i_iterations, const int ui_value, const int i_start_sum) {
-    std::cout << "Test for " << c_name_of_test << " started" << std::endl;
-    std::clock_t start = std::clock();
-    CNumber *c_num_0 = new CNumber();
-    CNumber *c_res = new CNumber();
-    *c_num_0 = ui_value;
-    *c_res = i_start_sum;
-    for (int i = 0; i < i_iterations; i++) {
-        *c_res = *c_res + *c_num_0;
-    }
-
-    std::clock_t end = std::clock();
-    c_res->v_information();
-    delete c_num_0;
-    delete c_res;
-    std::cout << "Time: " << static_cast<double>(end - start) / static_cast<double> (CLOCKS_PER_SEC / 1000) << " ms"
-              << std::endl;
+void v_start_effectivity_tests(){
+    CEffectivityTestClass *testClass = new CEffectivityTestClass();
+    testClass->v_effectivity_test_for_factorial("factoring", 123);
+//    testClass->v_effectivity_test_for_multiplying("multiplying", 12312, 999);
+//    testClass->v_effectivity_test_for_adding("adding", INT_MAX/1234, 12);
+//    testClass->v_effectivity_test_for_substracting("substracting", INT_MAX, INT_MAX);
+//    testClass->v_effectivity_test_for_dividing("dividing", 256, INT_MAX-1);
+    delete testClass;
 }
 
 int main() {
-    v_start_test("Test for lab2 operators");
-//    std::cout << INT_MAX << std::endl;
-//    v_effectivity_test("effectivity (xD)", 123, 1, 0);
-    CNumber c_num_0, c_num_1, c_res;
-    c_num_0 = 12;
-    c_num_1 = 4;
-    c_res = c_num_0 / c_num_1;
-    c_res.v_information();
+//    v_start_test("Test for lab2 operators");
+    v_start_effectivity_tests();
+
+
     return 0;
 }
 
