@@ -20,6 +20,14 @@ public:
     static void v_set_values(int *piNumbers, int iValue, int i_index);
 
     static CNumber c_add(const CNumber &cNumber1, const CNumber &cNumber2);
+
+    static int i_get_number_of_digits(int iNumber);
+
+    static CNumber c_resize_array(const CNumber& cResult);
+
+    static CNumber c_multiply(const CNumber &cNumber1, const CNumber &cNumber2);
+
+    static char *s_to_char_array(const CNumber &cNumber);
 };
 
 

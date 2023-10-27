@@ -56,7 +56,7 @@ void CEffectivityTestClass::v_effectivity_test_for_dividing(const char *c_name_o
     if (i_value < i_divider) {
         std::cout << "Attention, you re trying to divide smaller number by bigger" << std::endl;
     }
-    *c_res = i_value / i_divider;
+    *c_res = *c_num_0 / *c_num_1;
     std::clock_t end = std::clock();
     c_res->v_information();
     std::cout << "Time: " << static_cast<double>(end - start) / static_cast<double> (CLOCKS_PER_SEC / 1000) << " ms"

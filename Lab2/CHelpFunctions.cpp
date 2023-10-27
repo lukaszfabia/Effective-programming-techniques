@@ -9,8 +9,8 @@ CNumber CHelpFunctions::c_substraction(const CNumber &cNumber1, const CNumber &c
     int max_size = cNumber1.i_get_size();
     CNumber cResult(max_size);
 
-    const int* larger_array;
-    const int* smaller_array;
+    const int *larger_array;
+    const int *smaller_array;
     int longer_size;
     int shorter_size;
 
@@ -29,7 +29,7 @@ CNumber CHelpFunctions::c_substraction(const CNumber &cNumber1, const CNumber &c
     int i_borrow = 0;
     int j = max_size - 1;
 
-    for (int i = longer_size- 1; i >= 0; i--) {
+    for (int i = longer_size - 1; i >= 0; i--) {
         int difference = larger_array[i] -
                          ((i >= longer_size - shorter_size) ? smaller_array[i - (longer_size - shorter_size)] : 0) -
                          i_borrow;
@@ -55,7 +55,6 @@ void CHelpFunctions::v_show_array(const CNumber &cNumber) {
     while (cNumber.pi_get_i_numbers()[i_start_index] == 0) {
         i_start_index++;
     }
-
     if (cNumber.b_get_is_negative()) {
         std::cout << "- ";
     } else {
@@ -65,8 +64,27 @@ void CHelpFunctions::v_show_array(const CNumber &cNumber) {
     for (int i = i_start_index; i < cNumber.i_get_size(); i++) {
         std::cout << cNumber.pi_get_i_numbers()[i] << " ";
     }
-    std::cout << std::endl;
 }
+
+char *CHelpFunctions::s_to_char_array(const CNumber &cNumber) {
+    char *s_number = new char[cNumber.i_get_size() + 2];
+    s_number[0] = cNumber.b_get_is_negative() ? '-' : '+';
+    int i_index_for_string = 1;
+    int i_start_index = 0;
+
+    while (i_start_index < cNumber.i_get_size() && cNumber.pi_get_i_numbers()[i_start_index] == 0) {
+        i_start_index++;
+    }
+
+    for (int i = i_start_index; i < cNumber.i_get_size(); i++) {
+        s_number[i_index_for_string++] = cNumber.pi_get_i_numbers()[i] + '0';  // Konwersja na znak
+    }
+
+    s_number[i_index_for_string] = '\0';
+    return s_number;
+}
+
+
 
 void CHelpFunctions::v_fill_array(int *piNumbers, int iValue, int iSize) {
     for (int i = 0; i < iSize; i++) {
@@ -92,6 +110,28 @@ void CHelpFunctions::v_set_values(int *piNumbers, int iValue, int i_index) {
     } else {
         return;
     }
+}
+
+CNumber CHelpFunctions::c_resize_array(const CNumber &cResult) {
+    int i_first_non_zero_index = 0;
+    while (cResult.pi_get_i_numbers()[i_first_non_zero_index] == 0) {
+        i_first_non_zero_index++;
+    }
+    int i_new_size = 0;
+    for (int i = i_first_non_zero_index; i < cResult.i_get_size(); i++) {
+        i_new_size++;
+    }
+
+    CNumber c_res(i_new_size);
+    int j = 0;
+    for (int i = i_first_non_zero_index; i < cResult.i_get_size(); i++) {
+        c_res.pi_get_i_numbers()[j] = cResult.pi_get_i_numbers()[i];
+        j++;
+    }
+    c_res.v_set_is_negative(cResult.b_get_is_negative());
+
+
+    return c_res;
 }
 
 CNumber CHelpFunctions::c_add(const CNumber &cNumber1, const CNumber &cNumber2) {
@@ -124,6 +164,31 @@ CNumber CHelpFunctions::c_add(const CNumber &cNumber1, const CNumber &cNumber2) 
         cResult.pi_get_i_numbers()[j] = sum % 10;
         i_carry = sum / 10;
         j--;
+    }
+
+    return cResult;
+}
+
+int CHelpFunctions::i_get_number_of_digits(int iNumber) {
+    int i_result = 0;
+    while (iNumber != 0) {
+        i_result++;
+        iNumber /= 10;
+    }
+
+    return i_result;
+}
+
+CNumber CHelpFunctions::c_multiply(const CNumber &cNumber1, const CNumber &cNumber2) {
+    CNumber cResult, cTemp1, cTemp2;
+    cResult = 0;
+    cTemp1 = cNumber1;
+    cTemp2 = cNumber2;
+    cTemp1.v_set_is_negative(false);
+    cTemp2.v_set_is_negative(false);
+    while (!(cTemp2 == 0)) {
+        cResult = CHelpFunctions::c_add(cResult, cTemp1);
+        cTemp2 = --cTemp2;
     }
 
     return cResult;

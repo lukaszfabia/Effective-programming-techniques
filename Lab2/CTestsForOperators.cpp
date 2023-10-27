@@ -14,8 +14,7 @@ bool CTestsForOperators::b_test_for_substracting() {
     bool b_value =
             c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 5 &&
             c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 9 &&
-            c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3 &&
-            c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 0;
+            c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3;
 
     bool b_result_for_sub_test1 = b_sign_result && b_value;
 //    std::cout<<b_result_for_sub_test1<<std::endl;
@@ -28,8 +27,7 @@ bool CTestsForOperators::b_test_for_substracting() {
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 7 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 7 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 4 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 1 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 5] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 1;
 
     bool b_result_for_sub_test2 = b_sign_result && b_value;
 //    std::cout<<b_result_for_sub_test2<<std::endl;
@@ -42,8 +40,7 @@ bool CTestsForOperators::b_test_for_substracting() {
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 7 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 7 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 4 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 1 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 5] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 1;
 
     bool b_result_for_sub_test3 = b_sign_result && b_value;
 //    std::cout<<b_sign_result<<std::endl;
@@ -56,8 +53,7 @@ bool CTestsForOperators::b_test_for_substracting() {
 
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 5 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 9 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3;
 
     bool b_result_for_sub_test4 = b_sign_result && b_value;
 //    std::cout<<b_result_for_sub_test4<<std::endl;
@@ -71,8 +67,7 @@ bool CTestsForOperators::b_test_for_substracting() {
 
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 5 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 9 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3;
 
     bool b_result_for_sub_test5 = b_sign_result && b_value;
 //    std::cout<<b_result_for_sub_test5<<std::endl;
@@ -86,8 +81,7 @@ bool CTestsForOperators::b_test_for_substracting() {
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 7 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 7 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 4 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 1 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 5] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 1;
 
     bool b_result_for_sub_test6 = b_sign_result && b_value;
 //    std::cout<<b_result_for_sub_test6<<std::endl;
@@ -101,8 +95,7 @@ bool CTestsForOperators::b_test_for_substracting() {
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 7 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 7 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 4 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 1 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 5] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 1;
 
     bool b_result_for_sub_test7 = b_sign_result && b_value;
 //    std::cout<<b_result_for_sub_test7<<std::endl;
@@ -115,8 +108,7 @@ bool CTestsForOperators::b_test_for_substracting() {
 
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 5 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 9 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3;
 
     bool b_result_for_sub_test8 = b_sign_result && b_value;
 //    std::cout<<b_result_for_sub_test8<<std::endl;
@@ -135,8 +127,7 @@ bool CTestsForOperators::b_test_for_adding() {
             c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 7 &&
             c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 8 &&
             c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 8 &&
-            c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 1 &&
-            c_res.pi_get_i_numbers()[c_res.i_get_size() - 5] == 0;
+            c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 1;
 
     bool b_result_for_add_test1 = b_sign_result && b_value;
 //    std::cout << b_result_for_add_test1 << std::endl;
@@ -149,8 +140,7 @@ bool CTestsForOperators::b_test_for_adding() {
     b_sign_result = c_res.b_get_is_negative();
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 3 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 3 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3;
 
     bool b_result_for_add_test2 = b_sign_result && b_value;
 //    std::cout << b_result_for_add_test2 << std::endl;
@@ -162,8 +152,7 @@ bool CTestsForOperators::b_test_for_adding() {
     b_sign_result = !c_res.b_get_is_negative();
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 3 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 3 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3;
 
     bool b_result_for_add_test3 = b_sign_result && b_value;
 //    std::cout << b_result_for_add_test3 << std::endl;
@@ -175,8 +164,7 @@ bool CTestsForOperators::b_test_for_adding() {
     b_sign_result = c_res.b_get_is_negative();
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 9 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 7 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 5 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 5;
 
     bool b_result_for_add_test4 = b_sign_result && b_value;
 //    std::cout << b_result_for_add_test4 << std::endl;
@@ -189,8 +177,7 @@ bool CTestsForOperators::b_test_for_adding() {
     b_sign_result = !c_res.b_get_is_negative();
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 3 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 3 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3;
 
     bool b_result_for_add_test5 = b_sign_result && b_value;
 //    std::cout << b_result_for_add_test5 << std::endl;
@@ -202,8 +189,7 @@ bool CTestsForOperators::b_test_for_adding() {
     b_sign_result = c_res.b_get_is_negative();
     b_value = c_res.pi_get_i_numbers()[c_res.i_get_size() - 1] == 3 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 3 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 3;
 
     bool b_result_for_add_test6 = b_sign_result && b_value;
 //    std::cout << b_result_for_add_test6 << std::endl;
@@ -224,9 +210,7 @@ bool CTestsForOperators::b_test_for_multiplication() {
                    c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 8 &&
                    c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 0 &&
                    c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 6 &&
-                   c_res.pi_get_i_numbers()[c_res.i_get_size() - 5] == 5 &&
-                   c_res.pi_get_i_numbers()[c_res.i_get_size() - 6] == 0 &&
-                   c_res.pi_get_i_numbers()[c_res.i_get_size() - 7] == 0;
+                   c_res.pi_get_i_numbers()[c_res.i_get_size() - 5] == 5;
 
     bool b_result_for_multiplication_test1 = b_sign_result && b_value;
 //    std::cout<<b_result_for_multiplication_test1<<std::endl;
@@ -240,9 +224,7 @@ bool CTestsForOperators::b_test_for_multiplication() {
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 8 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 0 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 6 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 5] == 5 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 6] == 0 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 7] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 5] == 5;
 
     bool b_result_for_multiplication_test2 = b_sign_result && b_value;
 //    std::cout<<b_result_for_multiplication_test2<<std::endl;
@@ -255,9 +237,7 @@ bool CTestsForOperators::b_test_for_multiplication() {
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 2] == 8 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 3] == 0 &&
               c_res.pi_get_i_numbers()[c_res.i_get_size() - 4] == 6 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 5] == 5 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 6] == 0 &&
-              c_res.pi_get_i_numbers()[c_res.i_get_size() - 7] == 0;
+              c_res.pi_get_i_numbers()[c_res.i_get_size() - 5] == 5;
 
     bool b_result_for_multiplication_test3 = b_sign_result && b_value;
 

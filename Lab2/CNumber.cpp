@@ -67,7 +67,8 @@ CNumber CNumber::operator+(const CNumber &cOther) const {
         }
         cResult.b_is_negative = b_sign;
     }
-    return cResult;
+
+    return CHelpFunctions::c_resize_array(cResult);
 }
 
 CNumber CNumber::operator-(const CNumber &cOther) const {
@@ -97,7 +98,8 @@ CNumber CNumber::operator-(const CNumber &cOther) const {
         }
         cResult.b_is_negative = b_sign;
     }
-    return cResult;
+
+    return CHelpFunctions::c_resize_array(cResult);
 }
 
 CNumber CNumber::operator*(const CNumber &cOther) const {
@@ -112,20 +114,11 @@ CNumber CNumber::operator*(const CNumber &cOther) const {
 //        }
 //        cResult.i_numbers[i] += i_carry;
 //    }
-    CNumber cResult, cTemp1, cTemp2;
-    cResult = 0;
-    cTemp1 = *this;
-    cTemp2 = cOther;
-    cTemp1.v_set_is_negative(false);
-    cTemp2.v_set_is_negative(false);
-    while (!(cTemp2==0)){
-        cResult = CHelpFunctions::c_add(cResult, cTemp1);
-        cTemp2 = --cTemp2;
-    }
+    CNumber cResult;
+    cResult = CHelpFunctions::c_multiply(*this, cOther);
+    cResult.v_set_is_negative(b_is_negative != cOther.b_is_negative);
 
-    cResult.b_is_negative = b_is_negative != cOther.b_is_negative;
-
-    return cResult;
+    return CHelpFunctions::c_resize_array(cResult);
 }
 
 CNumber CNumber::operator/(const CNumber &cOther) const {
@@ -147,7 +140,8 @@ CNumber CNumber::operator/(const CNumber &cOther) const {
         cResult.b_is_negative = (b_is_negative != cOther.b_get_is_negative());
 
     }
-    return cResult;
+//    cResult = CHelpFunctions::c_resize_array(cResult);
+    return CHelpFunctions::c_resize_array(cResult);
 }
 
 bool CNumber::operator>=(const CNumber &cOther) const {
@@ -177,11 +171,11 @@ CNumber CNumber::operator++() const {
 CNumber CNumber::operator--() const {
     CNumber cOne;
     cOne = 1;
-    return *this - cOne;
+    return CHelpFunctions::c_substraction(cOne, *this);
 }
 
 bool CNumber::operator==(int iValue) const {
-    for (int i = 0; i < i_size; i++) {
+    for (int i = i_size - 1; i >= 0; i--) {
         if (i_numbers[i] != iValue) {
             return false;
         }
@@ -190,15 +184,19 @@ bool CNumber::operator==(int iValue) const {
 }
 
 CNumber CNumber::operator!() const {
-    CNumber cResult(i_size * 2), cTemp;
+    if (b_is_negative) {
+        std::cout << "Invalid input. Factorial is defined only for non-negative integers." << std::endl;
+        return CNumber();
+    }
+    CNumber cResult, cTemp;
     cResult = 1;
-    cTemp=*this;
-    while (!(cTemp==0)){
-        cResult = cResult * cTemp;
+    cTemp = *this;
+    while (!(cTemp == 0)) {
+        cResult = CHelpFunctions::c_multiply(cResult, cTemp);
         cTemp = --cTemp;
     }
 
-    return cResult;
+    return CHelpFunctions::c_resize_array(cResult);
 }
 
 bool CNumber::b_copy_elements(const CNumber &cOther) const {
@@ -237,5 +235,8 @@ void CNumber::v_set_size(int iSize) {
 }
 
 void CNumber::v_information() const {
-    CHelpFunctions::v_show_array(*this);
+    std::cout<<"------------------------------------"<<std::endl;
+    std::cout<<"result number"<<std::endl;
+    std::cout<<CHelpFunctions::s_to_char_array(*this)<<std::endl;
+    std::cout<<"------------------------------------"<<std::endl;
 }
