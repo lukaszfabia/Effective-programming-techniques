@@ -23,6 +23,14 @@ public:
     std::string getExpression();
 
     std::vector<std::string> getElements();
+
+    static bool isNumber(const std::string &token);
+
+    static bool isOperator(const std::string &token);
+
+    static bool isVariable(const std::string &token);
+
+    static bool isFunction(const std::string &token);
 };
 
 

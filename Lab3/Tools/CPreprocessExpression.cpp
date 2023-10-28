@@ -37,3 +37,19 @@ std::string CPreprocessExpression::getExpression() {
 std::vector<std::string> CPreprocessExpression::getElements() {
     return elements;
 }
+
+bool CPreprocessExpression::isNumber(const std::string &token) {
+    return isdigit(token[0]);
+}
+
+bool CPreprocessExpression::isOperator(const std::string &token) {
+    return token == "+" || token == "*" || token == "-" || token == "/";
+}
+
+bool CPreprocessExpression::isVariable(const std::string &token) {
+    return !isOperator(token) && !isNumber(token) && !isFunction(token);
+}
+
+bool CPreprocessExpression::isFunction(const std::string &token) {
+    return token == "sin" || token == "cos";
+}

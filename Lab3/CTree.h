@@ -15,14 +15,13 @@ private:
     CNode *root;
     CPreprocessExpression *preprocessExpression;
 
-
     std::string inOrderTraversal(CNode *startNode);
 
-    bool isNumber(const std::string &token);
+    std::string preOrderTraversal(CNode *startNode);
 
-    bool isOperator(const std::string &token);
+    std::string postOrderTraversal(CNode *startNode);
 
-    bool isFunction(const std::string &token);
+    CNode *buildSubtree(const std::vector<std::string> &elements, int &i);
 
 public:
     CTree();
@@ -37,9 +36,19 @@ public:
 
     std::string printVars();
 
+    std::string printNormalExpression();
+
+    CNode *getRoot() const;
+
+    void setRoot(CNode *cNodeRoot);
+
     void buildTree();
 
+    static void addSubtree(CNode *thisNode, CNode *otherNode);
 
+    CNode *searchForOperatorChild(CNode *currentNode);
+
+    std::string print();
 };
 
 

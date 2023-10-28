@@ -13,8 +13,11 @@ public:
     std::string value;
     CNode *left;
     CNode *right;
+    CNode *parent;
 
-    CNode(const std::string &value, CNode *left, CNode *right);
+    CNode();
+
+    CNode(const std::string &value, CNode *left, CNode *right, CNode *parent);
 
     ~CNode();
 
@@ -29,6 +32,10 @@ public:
     CNode *getRight() const;
 
     void setRight(CNode *right);
+
+    CNode *getParent() const;
+
+    void setParent(CNode *parent);
 };
 
 #endif //EFFECTIVE_PROGRAMMING_TECHNIQUES_CNODE_H

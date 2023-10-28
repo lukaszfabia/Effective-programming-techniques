@@ -3,10 +3,9 @@
 //
 
 #include <stack>
+#include <iostream>
 #include "CTree.h"
 #include "Tools/CPreprocessExpression.h"
-
-const int FILL_VALUE = 1;
 
 CTree::CTree() {
     root = NULL;
@@ -18,6 +17,28 @@ CTree::~CTree() {
 }
 
 CTree &CTree::operator=(const CTree &other) {
+    if (this == &other) {
+        return *this;
+    } else {
+        setRoot(other.root);
+        preprocessExpression = other.preprocessExpression;
+        return *this;
+    }
+}
+
+CTree &CTree::operator+(const CTree &other) {
+    if (root == NULL) {
+        root = other.root;
+    } else if (searchForOperatorChild(root) != NULL) {
+        CNode *operatorChild = searchForOperatorChild(root);
+        if (operatorChild->getLeft() == NULL) {
+            operatorChild->setLeft(other.getRoot());
+        } else {
+            operatorChild->setRight(other.getRoot());
+        }
+    } else {
+        addSubtree(root, other.root);
+    }
     return *this;
 }
 
@@ -32,57 +53,113 @@ std::string CTree::inOrderTraversal(CNode *startNode) {
 }
 
 
-std::string CTree::printVars() {
+std::string CTree::printNormalExpression() {
     return inOrderTraversal(root);
 }
 
-CTree &CTree::operator+(const CTree &other) {
-    return *this;
-}
 
 CTree::CTree(CPreprocessExpression *newPreprocessExpression) {
     root = NULL;
     preprocessExpression = newPreprocessExpression;
 }
 
-bool CTree::isNumber(const std::string &token) {
-    return isdigit(token[0]);
-}
-
-bool CTree::isOperator(const std::string &token) {
-    return token == "+" || token == "*" || token == "-" || token == "/" || token == "sin" || token == "cos";
-}
-
-bool CTree::isFunction(const std::string &token) {
-    return !isOperator(token) && !isNumber(token);
-}
-
 
 void CTree::buildTree() {
-    std::stack<CNode *> nodeStack;
-    CNode *newNode;
-    for (int i = 0; i < preprocessExpression->getElements().size(); i++) {
-        if (isNumber(preprocessExpression->getElements()[i])) {
-            newNode = new CNode(preprocessExpression->getElements()[i], NULL, NULL);
-            nodeStack.push(newNode);
-        } else if (isOperator(preprocessExpression->getElements()[i]) ||
-                   isFunction(preprocessExpression->getElements()[i])) {
-            newNode = new CNode(preprocessExpression->getElements()[i], NULL, NULL);
-            CNode *right = nodeStack.top();
-            nodeStack.pop();
-            CNode *left = nodeStack.top();
-            nodeStack.pop();
-            newNode->left = left;
-            newNode->right = right;
-            nodeStack.push(newNode);
+    const std::vector<std::string> &elements = preprocessExpression->getElements();
+    int i = 0;
+    root = buildSubtree(elements, i);
+}
+
+CNode *CTree::buildSubtree(const std::vector<std::string> &elements, int &i) {
+    if (i >= elements.size()) {
+        return NULL;
+    }
+
+    const std::string &value = elements[i];
+    ++i;
+
+    if (CPreprocessExpression::isFunction(value)) {
+        return new CNode(value, NULL, buildSubtree(elements, i), NULL);
+    } else if (CPreprocessExpression::isOperator(value)) {
+        CNode *node = new CNode(value, buildSubtree(elements, i), buildSubtree(elements, i), NULL);
+        return node;
+    } else {
+        return new CNode(value, NULL, NULL, NULL);
+    }
+}
+
+
+CNode *CTree::getRoot() const {
+    return root;
+}
+
+void CTree::setRoot(CNode *cNodeRoot) {
+    root = cNodeRoot;
+}
+
+CNode *CTree::searchForOperatorChild(CNode *currentNode) {
+    if (currentNode == NULL) {
+        return NULL;
+    }
+
+    if (CPreprocessExpression::isOperator(currentNode->getValue())) {
+        if (currentNode->left == NULL && currentNode->right != NULL ||
+            currentNode->left != NULL && currentNode->right == NULL) {
+            return currentNode;
         }
     }
 
-    // Po zakończeniu pętli przypisz korzeń drzewa
-    if (!nodeStack.empty()) {
-        root = nodeStack.top();
+    CNode *leftResult = searchForOperatorChild(currentNode->left);
+    if (leftResult != NULL) {
+        return leftResult;
     }
 
-    delete newNode;
+    return searchForOperatorChild(currentNode->right);
 }
 
+
+void CTree::addSubtree(CNode *thisNode, CNode *otherNode) {
+    if (otherNode == NULL) {
+        return;
+    }
+
+    CNode *operatorChild = thisNode;
+
+    while (operatorChild->left != NULL) {
+        operatorChild = operatorChild->left;
+    }
+
+    operatorChild->setValue(otherNode->getValue());
+    operatorChild->setLeft(otherNode->getLeft());
+    operatorChild->setRight(otherNode->getRight());
+}
+
+std::string CTree::preOrderTraversal(CNode *startNode) {
+    std::string result;
+    if (startNode != NULL) {
+        result += startNode->getValue() + " ";
+        result += preOrderTraversal(startNode->getLeft());
+        result += preOrderTraversal(startNode->getRight());
+    }
+    return result;
+}
+
+std::string CTree::print() {
+    return preOrderTraversal(root);
+}
+
+std::string CTree::printVars() {
+    return postOrderTraversal(root);
+}
+
+std::string CTree::postOrderTraversal(CNode *startNode) {
+    std::string result;
+    if (startNode != NULL) {
+        result += postOrderTraversal(startNode->getLeft());
+        result += postOrderTraversal(startNode->getRight());
+        if (CPreprocessExpression::isVariable(startNode->getValue())) {
+            result += startNode->getValue() + " ";
+        }
+    }
+    return result;
+}

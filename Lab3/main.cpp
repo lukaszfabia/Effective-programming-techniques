@@ -6,11 +6,12 @@
 #include "CTree.h"
 
 int main() {
-    CPreprocessExpression *ex = new CPreprocessExpression("+ * 5 sin x * + a b 8");
+    CPreprocessExpression *ex = new CPreprocessExpression("+ * a x * + c");
     CTree *tree = new CTree(ex);
     tree->buildTree();
-//    std::cout << tree->printVars() << std::endl;
-    delete ex;
+    std::cout<<tree->printVars()<<std::endl;
+    std::cout<<tree->print()<<std::endl;
     delete tree;
+    delete ex;
     return 0;
 }
