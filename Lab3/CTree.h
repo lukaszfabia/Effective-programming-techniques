@@ -7,21 +7,13 @@
 
 
 #include <string>
-#include "Tools/CPreprocessExpression.h"
-#include "Tools/CNode.h"
+#include "Utilities/CPreprocessExpression.h"
+#include "Utilities/CNode.h"
 
 class CTree {
 private:
     CNode *root;
     CPreprocessExpression *preprocessExpression;
-
-    std::string inOrderTraversal(CNode *startNode);
-
-    std::string preOrderTraversal(CNode *startNode);
-
-    std::string postOrderTraversal(CNode *startNode);
-
-    CNode *buildSubtree(const std::vector<std::string> &elements, int &i);
 
 public:
     CTree();
@@ -32,7 +24,7 @@ public:
 
     CTree &operator=(const CTree &other);
 
-    CTree &operator+(const CTree &other);
+    CTree operator+(const CTree &other) const;
 
     std::string printVars();
 
@@ -44,11 +36,15 @@ public:
 
     void buildTree();
 
-    static void addSubtree(CNode *thisNode, CNode *otherNode);
-
-    CNode *searchForOperatorChild(CNode *currentNode);
-
     std::string print();
+
+    CPreprocessExpression *getPreprocessExpression() const;
+
+    std::string printLevels();
+
+    void setPreprocessExpression(CPreprocessExpression *pExpression);
+
+    CNode *getOperatorChild() const;
 };
 
 

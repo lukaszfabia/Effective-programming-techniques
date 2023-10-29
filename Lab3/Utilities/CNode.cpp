@@ -8,18 +8,17 @@ CNode::CNode() {
     value = "1";
     left = NULL;
     right = NULL;
-    parent = NULL;
+//    parent = NULL;
 }
 
-CNode::CNode(const std::string& newValue, CNode *newLeft, CNode *newRight, CNode *newParent) {
-    value = newValue;
-    left = newLeft;
-    right = newRight;
-    parent = newParent;
+CNode::CNode(const std::string &value, CNode *left, CNode *right) {
+    this->value = value;
+    this->left = left;
+    this->right = right;
 }
 
 CNode::~CNode() {
-    delete parent;
+//    delete parent;
     delete left;
     delete right;
 }
@@ -44,14 +43,14 @@ void CNode::setRight(CNode *newRight) {
     right = newRight;
 }
 
-void CNode::setValue(const std::string& newValue) {
+void CNode::setValue(const std::string &newValue) {
     value = newValue;
 }
 
-CNode *CNode::getParent() const {
-    return parent;
-}
-
-void CNode::setParent(CNode *newParent) {
-    parent = newParent;
-}
+//CNode *CNode::getParent() const {
+//    return parent;
+//}
+//
+//void CNode::setParent(CNode *newParent) {
+//    parent = newParent;
+//}
