@@ -14,11 +14,11 @@ private:
     std::vector<std::string> elements;
     std::string expression;
 
-    static int amountOfOperators(const std::string &str);
+    int amountOfOperators();
 
-    static int amountOfNumbers(const std::string &str);
+    int amountOfNumbers();
 
-    static int hasOnlyNumbersOrVars(const std::string &str);
+    int hasOnlyNumbersOrVars();
 
 public:
     CPreprocessExpression();

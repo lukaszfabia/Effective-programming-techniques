@@ -31,9 +31,9 @@ std::string CTreesUtility::postOrderTraversal(CNode *startNode) {
     if (startNode != NULL) {
         result += postOrderTraversal(startNode->getLeft());
         result += postOrderTraversal(startNode->getRight());
-        if (CPreprocessExpression::isVariable(startNode->getValue())) {
+//        if (CPreprocessExpression::isVariable(startNode->getValue())) {
             result += startNode->getValue() + " ";
-        }
+//        }
     }
     return result;
 }

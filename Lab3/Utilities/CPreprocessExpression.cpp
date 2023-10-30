@@ -5,6 +5,7 @@
 #include <iostream>
 #include "CPreprocessExpression.h"
 #include "../CTree.h"
+#include "CScan.h"
 
 CPreprocessExpression::CPreprocessExpression() {
     elements = std::vector<std::string>();
@@ -14,7 +15,6 @@ CPreprocessExpression::CPreprocessExpression(const std::string &newExpression) {
     expression = newExpression;
     elements = std::vector<std::string>();
     fixExpression();
-    createVector(expression);
 }
 
 CPreprocessExpression::~CPreprocessExpression() {
@@ -55,9 +55,11 @@ void CPreprocessExpression::setElements(const std::vector<std::string> &newEleme
 
 void CPreprocessExpression::setExpression(const std::string &newExpression) {
     expression = newExpression;
+    createVector(expression);
 }
 
 void CPreprocessExpression::createVector(const std::string &newExpression) {
+    elements.clear();
     std::string currentElement;
     for (int i = 0; i < newExpression.length(); i++) {
         if (newExpression[i] == ' ') {
@@ -76,66 +78,79 @@ void CPreprocessExpression::createVector(const std::string &newExpression) {
 }
 
 bool CPreprocessExpression::fixExpression() {
-    if (amountOfNumbers(expression) == amountOfOperators(expression) + 1) {
+    createVector(expression);
+    if (amountOfNumbers() == amountOfOperators() + 1) {
         return false;
     }
 
-    if (expression.empty() || hasOnlyNumbersOrVars(expression)) {
+    if (expression.empty() || hasOnlyNumbersOrVars() || amountOfNumbers() == amountOfOperators()) {
         setExpression(DEFAULT_EXPRESSION);
         return false;
     }
+
+    if (amountOfOperators() == amountOfNumbers() - 2) {
+        elements.pop_back();
+        return true;
+    }
     // TODO PATRZE ISSUES NA GICIE
+    CTree tree = CTree(this);
+    std::string newExpression = tree.printNormalExpression();
+    std::string fixedExpression;
+    createVector(newExpression); // Załóżmy, że ta funkcja tworzy vector elements.
 
-    expression += " ";
-    std::string fixedString;
-    bool needOperand = true;
+    if (isOperator(elements[0])) {
+        fixedExpression += " " + FILL_VALUE;
+    }
 
-    for (int i = 0; i < expression.length(); i++) {
-        fixedString += expression[i];
-
-        if (isOperator(std::string(1, expression[i]))) {
-            if (needOperand) {
-                fixedString += " " + FILL_VALUE + " ";
-                needOperand = false;
-            }else {
-                needOperand = true;
-            }
+    for (int i = 0; i < elements.size(); i++) {
+        if (isOperator(elements[i])) {
+            fixedExpression += " " + elements[i] + " " + FILL_VALUE + " ";
         } else {
-            needOperand = true;
+            fixedExpression += " " + elements[i];
         }
     }
 
-    if (amountOfOperators(fixedString) == amountOfNumbers(fixedString)) {
-        fixedString += " " + FILL_VALUE;
+    createVector(fixedExpression);
+
+    if (isOperator(std::string(1, fixedExpression[fixedExpression.length() - 1])) &&
+        amountOfNumbers() != amountOfOperators() + 1) {
+        fixedExpression += " " + FILL_VALUE;
     }
 
-    setExpression(fixedString);
-
+    createVector(fixedExpression);
+    fixedExpression = "";
+    for (int i=0; i<elements.size(); i++) {
+        fixedExpression+=elements[i];
+    }
+    CScan::printResult(fixedExpression);
+    // todo wywolanie funkcji infix to prefix
     return true;
 }
 
-int CPreprocessExpression::amountOfOperators(const std::string& str) {
+
+int CPreprocessExpression::amountOfOperators() {
     int numberOfOperators = 0;
-    for (int i = 0; i < str.length(); i++) {
-        if (isOperator(std::string(1, str[i])))
+    for (int i = 0; i < elements.size(); i++) {
+        if (isOperator(elements[i])) {
             numberOfOperators++;
+        }
     }
     return numberOfOperators;
 }
 
-int CPreprocessExpression::amountOfNumbers(const std::string& str) {
+int CPreprocessExpression::amountOfNumbers() {
     int numberOfNumbers = 0;
-    for (int i = 0; i < str.length(); i++) {
-        if (isNumber(std::string(1, str[i])) || isVariable(std::string(1, str[i])) && str[i]!=' ') {
+    for (int i = 0; i < elements.size(); i++) {
+        if (isNumber(elements[i]) || isVariable(elements[i])) {
             numberOfNumbers++;
         }
     }
     return numberOfNumbers;
 }
 
-int CPreprocessExpression::hasOnlyNumbersOrVars(const std::string& str) {
-    for (int i = 0; i < str.length(); i++) {
-        if (!isNumber(std::string(1, str[i])) && !isVariable(std::string(1, str[i])) && str[i]!=' ') {
+int CPreprocessExpression::hasOnlyNumbersOrVars() {
+    for (int i = 0; i < elements.size(); i++) {
+        if (!isNumber(elements[i]) && !isVariable(elements[i])) {
             return false;
         }
     }
