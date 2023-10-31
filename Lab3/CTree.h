@@ -14,6 +14,7 @@ class CTree {
 private:
     CNode *root;
     CPreprocessExpression *preprocessExpression;
+    std::vector<int> values;
 
 public:
     CTree();
@@ -45,7 +46,13 @@ public:
     void setPreprocessExpression(CPreprocessExpression *pExpression);
 
     CNode *getOperatorChild() const;
+
+    bool addValue(int value);
+
+    double calculate();
 };
+
+static int amountOfVariables = 0;
 
 
 #endif //EFFECTIVE_PROGRAMMING_TECHNIQUES_CTREE_H

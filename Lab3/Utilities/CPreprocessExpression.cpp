@@ -6,6 +6,11 @@
 #include "CPreprocessExpression.h"
 #include "../CTree.h"
 #include "CScan.h"
+#include <stack>
+#include <string>
+#include <algorithm>
+#include <sstream>
+#include <cctype>
 
 CPreprocessExpression::CPreprocessExpression() {
     elements = std::vector<std::string>();
@@ -22,11 +27,11 @@ CPreprocessExpression::~CPreprocessExpression() {
 }
 
 std::string CPreprocessExpression::getExpression() {
-    setExpression("");
+    std::string tmp;
     for (int i = 0; i < elements.size(); i++) {
-        setExpression(expression + elements[i] + " ");
+        tmp += elements[i] + " ";
     }
-    return expression;
+    return tmp;
 }
 
 std::vector<std::string> CPreprocessExpression::getElements() {
@@ -34,11 +39,20 @@ std::vector<std::string> CPreprocessExpression::getElements() {
 }
 
 bool CPreprocessExpression::isNumber(const std::string &token) {
-    return isdigit(token[0]);
+    for (int i = 0; i < token.length(); ++i) {
+        if (!isdigit(token[i])) {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool CPreprocessExpression::isOperator(const std::string &token) {
     return token == "+" || token == "*" || token == "-" || token == "/";
+}
+
+bool CPreprocessExpression::isOperator(char c) {
+    return (!isalpha(c) && !isdigit(c) && c != '=');
 }
 
 bool CPreprocessExpression::isVariable(const std::string &token) {
@@ -60,20 +74,14 @@ void CPreprocessExpression::setExpression(const std::string &newExpression) {
 
 void CPreprocessExpression::createVector(const std::string &newExpression) {
     elements.clear();
-    std::string currentElement;
-    for (int i = 0; i < newExpression.length(); i++) {
-        if (newExpression[i] == ' ') {
-            if (!currentElement.empty()) {
-                elements.push_back(currentElement);
-                currentElement = "";
-            }
-        } else {
-            currentElement += newExpression[i];
-        }
+    std::istringstream iss(newExpression);
+    std::string element;
+
+    while (iss >> std::ws >> element) {
+        elements.push_back(element);
     }
-    if (!currentElement.empty()) {
-        elements.push_back(currentElement);
-    }
+
+
     setElements(elements);
 }
 
@@ -83,7 +91,7 @@ bool CPreprocessExpression::fixExpression() {
         return false;
     }
 
-    if (expression.empty() || hasOnlyNumbersOrVars() || amountOfNumbers() == amountOfOperators()) {
+    if (expression.empty() || hasOnlyNumbersOrVars()) {
         setExpression(DEFAULT_EXPRESSION);
         return false;
     }
@@ -92,41 +100,48 @@ bool CPreprocessExpression::fixExpression() {
         elements.pop_back();
         return true;
     }
-    // TODO PATRZE ISSUES NA GICIE
     CTree tree = CTree(this);
     std::string newExpression = tree.printNormalExpression();
     std::string fixedExpression;
-    createVector(newExpression); // Załóżmy, że ta funkcja tworzy vector elements.
+    createVector(newExpression);
 
     if (isOperator(elements[0])) {
         fixedExpression += " " + FILL_VALUE;
     }
 
     for (int i = 0; i < elements.size(); i++) {
-        if (isOperator(elements[i])) {
+        if (isOperator(elements[i]) && !isNumber(elements[i + 1]) && !isVariable(elements[i + 1])) {
             fixedExpression += " " + elements[i] + " " + FILL_VALUE + " ";
         } else {
             fixedExpression += " " + elements[i];
         }
     }
 
-    createVector(fixedExpression);
-
-    if (isOperator(std::string(1, fixedExpression[fixedExpression.length() - 1])) &&
-        amountOfNumbers() != amountOfOperators() + 1) {
+    if (isOperator(elements[elements.size() - 1])) {
         fixedExpression += " " + FILL_VALUE;
     }
 
     createVector(fixedExpression);
+
     fixedExpression = "";
-    for (int i=0; i<elements.size(); i++) {
-        fixedExpression+=elements[i];
+    for (int i = 0; i < elements.size(); i++) {
+        fixedExpression += elements[i] + " ";
     }
-    CScan::printResult(fixedExpression);
-    // todo wywolanie funkcji infix to prefix
+    CScan::printResult("expression was interpreted as: " + fixedExpression);
+    fixedExpression = infixToPrefix(fixedExpression);
+    // todo naprawic infixtoPrefix bo splituje jak leci
+    // todo przerobic infixa tak zeby bral sobie vectora
+    CScan::printResult("expression was interpreted as: " + infixToPrefix(fixedExpression));
+    expression = fixedExpression;
+    elements.clear();
+    createVector(expression);
+
+//    for (int i = 0; i < elements.size(); ++i) {
+//        CScan::printResult(elements[i]);
+//    }
+
     return true;
 }
-
 
 int CPreprocessExpression::amountOfOperators() {
     int numberOfOperators = 0;
@@ -155,4 +170,84 @@ int CPreprocessExpression::hasOnlyNumbersOrVars() {
         }
     }
     return true;
+}
+
+int CPreprocessExpression::getPriority(char C) {
+    if (C == '-' || C == '+')
+        return 1;
+    else if (C == '*' || C == '/')
+        return 2;
+    else if (C == '^')
+        return 3;
+    return 0;
+}
+
+std::string CPreprocessExpression::infixToPostfix(std::string infix) {
+    infix = '(' + infix + ')';
+//    int l = infix.size();
+    std::stack<char> char_stack;
+    std::string output;
+
+    for (int i = 0; i < infix.length(); i++) {
+        if (isalpha(infix[i]) || isdigit(infix[i])) {
+            output += infix[i];
+            output += " ";
+        } else if (infix[i] == '(') {
+            char_stack.push('(');
+        } else if (infix[i] == ')') {
+            while (char_stack.top() != '(') {
+                output += char_stack.top();
+                output += " ";
+                char_stack.pop();
+            }
+            char_stack.pop();
+        } else {
+            if (isOperator(char_stack.top())) {
+                if (infix[i] == '^') {
+                    while (getPriority(infix[i]) <= getPriority(char_stack.top())) {
+                        output += char_stack.top();
+                        output += " ";
+                        char_stack.pop();
+                    }
+                } else {
+                    while (getPriority(infix[i]) < getPriority(char_stack.top())) {
+                        output += char_stack.top();
+                        output += " ";
+                        char_stack.pop();
+                    }
+                }
+                char_stack.push(infix[i]);
+            }
+        }
+    }
+    while (!char_stack.empty()) {
+        output += char_stack.top();
+        char_stack.pop();
+    }
+    return output;
+}
+
+
+std::string CPreprocessExpression::infixToPrefix(std::string infix) {
+    reverse(infix.begin(), infix.end());
+    for (int i = 0; i < infix.length(); i++) {
+        if (infix[i] == '(') {
+            infix[i] = ')';
+        } else if (infix[i] == ')') {
+            infix[i] = '(';
+        }
+    }
+    std::string prefix = infixToPostfix(infix);
+    reverse(prefix.begin(), prefix.end());
+    return trim(prefix);
+}
+
+std::string CPreprocessExpression::trim(const std::string& output){
+    unsigned long first = output.find_first_not_of(" \t\n\r");
+    if (std::string::npos == first){
+        return output;
+    }
+
+    unsigned long last = output.find_last_not_of(" \t\n\r");
+    return output.substr(first, (last - first + 1));
 }

@@ -31,9 +31,10 @@ std::string CTreesUtility::postOrderTraversal(CNode *startNode) {
     if (startNode != NULL) {
         result += postOrderTraversal(startNode->getLeft());
         result += postOrderTraversal(startNode->getRight());
-//        if (CPreprocessExpression::isVariable(startNode->getValue())) {
+        if (CPreprocessExpression::isVariable(startNode->getValue())) {
             result += startNode->getValue() + " ";
-//        }
+            amountOfVariables++;
+        }
     }
     return result;
 }
@@ -100,6 +101,37 @@ CTree &CTreesUtility::addSubtree(const CTree &tree, const CTree &subtree) {
     CNode *operatorChild = searchForOperatorChild(tree.getRoot());
 
     return const_cast<CTree &>(tree);
+}
+
+double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::vector<int> &values, double result) {
+    if (currentNode != NULL) {
+        if (CPreprocessExpression::isOperator(currentNode->getValue())) {
+            if (currentNode->getValue() == "+") {
+                result = getValueOfExpression(currentNode->getLeft(), values, result) +
+                         getValueOfExpression(currentNode->getRight(), values, result);
+            } else if (currentNode->getValue() == "-") {
+                result = getValueOfExpression(currentNode->getLeft(), values, result) -
+                         getValueOfExpression(currentNode->getRight(), values, result);
+            } else if (currentNode->getValue() == "*") {
+                result = getValueOfExpression(currentNode->getLeft(), values, result) *
+                         getValueOfExpression(currentNode->getRight(), values, result);
+            } else if (currentNode->getValue() == "/") {
+                result = getValueOfExpression(currentNode->getLeft(), values, result) /
+                         getValueOfExpression(currentNode->getRight(), values, result);
+            } else if (currentNode->getValue() == "sin") {
+                result = sin(getValueOfExpression(currentNode->getRight(), values, result));
+            } else if (currentNode->getValue() == "cos") {
+                result = cos(getValueOfExpression(currentNode->getRight(), values, result));
+            }
+        } else if (CPreprocessExpression::isVariable(currentNode->getValue())) {
+            if (iteratorForAmountOfVars<amountOfVariables){
+                result = values[iteratorForAmountOfVars++];
+            }
+        } else {
+            result = std::stod(currentNode->getValue());
+        }
+    }
+    return result;
 }
 
 

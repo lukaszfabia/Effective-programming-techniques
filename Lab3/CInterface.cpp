@@ -21,7 +21,7 @@ CInterface::~CInterface() {
 void CInterface::run() {
     bool isExit = false;
     while (!isExit) {
-        CScan::printPrompt(">");
+        CScan::printPrompt("ctree>");
         scan->readLane();
         isExit = menu(scan->getLane());
     }
@@ -60,12 +60,13 @@ void CInterface::join(const std::string &lane) {
 }
 
 void CInterface::comp(const std::string &lane) {
-    //todo implement
+
 }
 
 void CInterface::print() {
     CScan::printPrompt("result: ");
     CScan::printResult(tree->print());
+    amountOfVariables = 0;
 }
 
 void CInterface::info() {

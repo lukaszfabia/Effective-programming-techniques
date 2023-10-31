@@ -26,7 +26,9 @@ public:
     static CNode *searchForOperatorChild(CNode *currentNode);
 
     static CTree &addSubtree(const CTree &tree, const CTree &subtree);
+
+    static double getValueOfExpression(CNode *currentNode, const std::vector<int> &values, double result);
 };
 
-
+static int iteratorForAmountOfVars = 0;
 #endif //EFFECTIVE_PROGRAMMING_TECHNIQUES_CTREESUTILITY_H

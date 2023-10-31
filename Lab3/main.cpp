@@ -8,8 +8,8 @@
 #include "CInterface.h"
 
 int main() {
-    CTree tree(new CPreprocessExpression("+ + + +"));
-//    std::cout << tree.printNormalExpression() << std::endl;
+    CTree tree(new CPreprocessExpression("- + - 12"));
+    std::cout << tree.printNormalExpression() << std::endl;
 
 //    CInterface interface;
 //    interface.run();

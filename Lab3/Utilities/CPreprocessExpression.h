@@ -20,6 +20,16 @@ private:
 
     int hasOnlyNumbersOrVars();
 
+    static int getPriority(char C);
+
+    static std::string infixToPostfix(std::string infix);
+
+    static std::string infixToPrefix(std::string infix);
+
+    static bool isOperator(char c);
+
+    static std::string trim(const std::string& output);
+
 public:
     CPreprocessExpression();
 
