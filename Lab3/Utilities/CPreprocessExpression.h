@@ -20,15 +20,15 @@ private:
 
     int hasOnlyNumbersOrVars();
 
-    static int getPriority(char C);
+    static int getPriority(const std::string &operator_str);
 
-    static std::string infixToPostfix(std::string infix);
+    static std::vector<std::string> infixToPostfix(const std::vector<std::string> &infix);
 
-    static std::string infixToPrefix(std::string infix);
+    static std::vector<std::string> infixToPrefix(const std::vector<std::string> &infix);
 
-    static bool isOperator(char c);
+    static std::string trim(const std::string &output);
 
-    static std::string trim(const std::string& output);
+    static bool nextNotAnOperator(const std::string &token);
 
 public:
     CPreprocessExpression();
@@ -56,6 +56,8 @@ public:
     void createVector(const std::string &newExpression);
 
     bool fixExpression();
+
+    static std::string removeDuplicates(const std::string &input);
 };
 
 static const std::string FILL_VALUE = "1";

@@ -60,7 +60,14 @@ void CInterface::join(const std::string &lane) {
 }
 
 void CInterface::comp(const std::string &lane) {
-
+//    std::string var = lane.substr(5);
+//    if (tree->addValue(std::stoi(var))) {
+//        CScan::printPrompt("value " + var + " was added\n");
+//    } else {
+//        CScan::printPrompt("value " + var + " was not added\n");
+//    }
+    CScan::printPrompt("result: ");
+    CScan::printResult(std::to_string(tree->calculate()));
 }
 
 void CInterface::print() {
@@ -75,9 +82,9 @@ void CInterface::info() {
 
 void CInterface::vars() {
     CScan::printPrompt("vars: ");
-    CScan::printResult(tree->printVars());
+    CScan::printResult(CPreprocessExpression::removeDuplicates(tree->printVars()));
 }
 
 void CInterface::unknownCommand() {
-    CScan::printPrompt(">Unknown command\n");
+    CScan::printPrompt("Unknown command\n");
 }

@@ -51,10 +51,6 @@ bool CPreprocessExpression::isOperator(const std::string &token) {
     return token == "+" || token == "*" || token == "-" || token == "/";
 }
 
-bool CPreprocessExpression::isOperator(char c) {
-    return (!isalpha(c) && !isdigit(c) && c != '=');
-}
-
 bool CPreprocessExpression::isVariable(const std::string &token) {
     return !isOperator(token) && !isNumber(token) && !isFunction(token);
 }
@@ -81,12 +77,12 @@ void CPreprocessExpression::createVector(const std::string &newExpression) {
         elements.push_back(element);
     }
 
-
     setElements(elements);
 }
 
 bool CPreprocessExpression::fixExpression() {
     createVector(expression);
+
     if (amountOfNumbers() == amountOfOperators() + 1) {
         return false;
     }
@@ -100,48 +96,34 @@ bool CPreprocessExpression::fixExpression() {
         elements.pop_back();
         return true;
     }
+
     CTree tree = CTree(this);
     std::string newExpression = tree.printNormalExpression();
-    std::string fixedExpression;
     createVector(newExpression);
 
-    if (isOperator(elements[0])) {
-        fixedExpression += " " + FILL_VALUE;
+    if (!elements.empty() && isOperator(elements[0])) {
+        elements.insert(elements.begin(), FILL_VALUE);
     }
 
     for (int i = 0; i < elements.size(); i++) {
-        if (isOperator(elements[i]) && !isNumber(elements[i + 1]) && !isVariable(elements[i + 1])) {
-            fixedExpression += " " + elements[i] + " " + FILL_VALUE + " ";
-        } else {
-            fixedExpression += " " + elements[i];
+        if (isOperator(elements[i]) && i < elements.size() - 1 && nextNotAnOperator(elements[i + 1])) {
+            elements.insert(elements.begin() + i + 1, FILL_VALUE);
         }
     }
 
-    if (isOperator(elements[elements.size() - 1])) {
-        fixedExpression += " " + FILL_VALUE;
+    if (!elements.empty() && isOperator(elements[elements.size() - 1])) {
+        elements.push_back(FILL_VALUE);
     }
 
-    createVector(fixedExpression);
+    elements = infixToPrefix(elements);
 
-    fixedExpression = "";
-    for (int i = 0; i < elements.size(); i++) {
-        fixedExpression += elements[i] + " ";
+    for (int i = 0; i < elements.size(); ++i) {
+        elements[i] = trim(elements[i]);
     }
-    CScan::printResult("expression was interpreted as: " + fixedExpression);
-    fixedExpression = infixToPrefix(fixedExpression);
-    // todo naprawic infixtoPrefix bo splituje jak leci
-    // todo przerobic infixa tak zeby bral sobie vectora
-    CScan::printResult("expression was interpreted as: " + infixToPrefix(fixedExpression));
-    expression = fixedExpression;
-    elements.clear();
-    createVector(expression);
-
-//    for (int i = 0; i < elements.size(); ++i) {
-//        CScan::printResult(elements[i]);
-//    }
 
     return true;
 }
+
 
 int CPreprocessExpression::amountOfOperators() {
     int numberOfOperators = 0;
@@ -172,82 +154,75 @@ int CPreprocessExpression::hasOnlyNumbersOrVars() {
     return true;
 }
 
-int CPreprocessExpression::getPriority(char C) {
-    if (C == '-' || C == '+')
-        return 1;
-    else if (C == '*' || C == '/')
-        return 2;
-    else if (C == '^')
-        return 3;
-    return 0;
-}
-
-std::string CPreprocessExpression::infixToPostfix(std::string infix) {
-    infix = '(' + infix + ')';
-//    int l = infix.size();
-    std::stack<char> char_stack;
-    std::string output;
-
-    for (int i = 0; i < infix.length(); i++) {
-        if (isalpha(infix[i]) || isdigit(infix[i])) {
-            output += infix[i];
-            output += " ";
-        } else if (infix[i] == '(') {
-            char_stack.push('(');
-        } else if (infix[i] == ')') {
-            while (char_stack.top() != '(') {
-                output += char_stack.top();
-                output += " ";
-                char_stack.pop();
-            }
-            char_stack.pop();
-        } else {
-            if (isOperator(char_stack.top())) {
-                if (infix[i] == '^') {
-                    while (getPriority(infix[i]) <= getPriority(char_stack.top())) {
-                        output += char_stack.top();
-                        output += " ";
-                        char_stack.pop();
-                    }
-                } else {
-                    while (getPriority(infix[i]) < getPriority(char_stack.top())) {
-                        output += char_stack.top();
-                        output += " ";
-                        char_stack.pop();
-                    }
-                }
-                char_stack.push(infix[i]);
-            }
-        }
-    }
-    while (!char_stack.empty()) {
-        output += char_stack.top();
-        char_stack.pop();
-    }
-    return output;
-}
-
-
-std::string CPreprocessExpression::infixToPrefix(std::string infix) {
-    reverse(infix.begin(), infix.end());
-    for (int i = 0; i < infix.length(); i++) {
-        if (infix[i] == '(') {
-            infix[i] = ')';
-        } else if (infix[i] == ')') {
-            infix[i] = '(';
-        }
-    }
-    std::string prefix = infixToPostfix(infix);
-    reverse(prefix.begin(), prefix.end());
-    return trim(prefix);
-}
-
-std::string CPreprocessExpression::trim(const std::string& output){
+std::string CPreprocessExpression::trim(const std::string &output) {
     unsigned long first = output.find_first_not_of(" \t\n\r");
-    if (std::string::npos == first){
+    if (std::string::npos == first) {
         return output;
     }
 
     unsigned long last = output.find_last_not_of(" \t\n\r");
     return output.substr(first, (last - first + 1));
+}
+
+int CPreprocessExpression::getPriority(const std::string &operator_str) {
+    if (operator_str == "+" || operator_str == "-") {
+        return 1;
+    } else if (operator_str == "*" || operator_str == "/") {
+        return 2;
+    } else {
+        return 0;
+    }
+}
+
+std::vector<std::string> CPreprocessExpression::infixToPostfix(const std::vector<std::string> &infix) {
+    std::stack<std::string> string_stack;
+    std::vector<std::string> output;
+    for (int i = 0; i < infix.size(); ++i) {
+        if (isNumber(infix[i]) || isVariable(infix[i]) || isFunction(infix[i])) {
+            output.push_back(" " + infix[i] + " ");
+        } else {
+            while (!string_stack.empty() && getPriority(infix[i]) < getPriority(string_stack.top())) {
+                output.push_back(" " + string_stack.top() + " ");
+                string_stack.pop();
+            }
+            string_stack.push(infix[i]);
+        }
+    }
+    while (!string_stack.empty()) {
+        output.push_back(" " + string_stack.top() + " ");
+        string_stack.pop();
+    }
+    return output;
+}
+
+std::vector<std::string> CPreprocessExpression::infixToPrefix(const std::vector<std::string> &infix) {
+    std::vector<std::string> reversedInfix = infix;
+    std::reverse(reversedInfix.begin(), reversedInfix.end());
+
+    // Konwersja na postfix
+    std::vector<std::string> postfix = infixToPostfix(reversedInfix);
+
+    // Odwrócenie postfix do uzyskania prefix
+    std::reverse(postfix.begin(), postfix.end());
+
+    return postfix;
+}
+
+bool CPreprocessExpression::nextNotAnOperator(const std::string &token) {
+    return !isNumber(token) && !isVariable(token) && !isFunction(token);
+}
+
+std::string CPreprocessExpression::removeDuplicates(const std::string &input) {
+    std::string result;
+    char lastChar = '\0';
+
+    for (int i = 0; i < input.length(); i++) {
+        if (input[i] != lastChar && !(input[i] == ' ' || lastChar == ' ')) {
+            result += input[i];
+            result += " ";
+            lastChar = input[i];
+        }
+    }
+
+    return result;
 }

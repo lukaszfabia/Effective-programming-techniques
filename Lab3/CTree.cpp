@@ -99,6 +99,6 @@ bool CTree::addValue(int value) {
 }
 
 double CTree::calculate() {
-//    return CTreesUtility::getValueOfExpression(root, 0);
-    return 0;
+    return CTreesUtility::getValueOfExpression(root, values, 0);
+//    return 0;
 }

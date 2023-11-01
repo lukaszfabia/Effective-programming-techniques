@@ -33,7 +33,6 @@ std::string CTreesUtility::postOrderTraversal(CNode *startNode) {
         result += postOrderTraversal(startNode->getRight());
         if (CPreprocessExpression::isVariable(startNode->getValue())) {
             result += startNode->getValue() + " ";
-            amountOfVariables++;
         }
     }
     return result;
@@ -105,7 +104,8 @@ CTree &CTreesUtility::addSubtree(const CTree &tree, const CTree &subtree) {
 
 double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::vector<int> &values, double result) {
     if (currentNode != NULL) {
-        if (CPreprocessExpression::isOperator(currentNode->getValue())) {
+        if (CPreprocessExpression::isOperator(currentNode->getValue()) || CPreprocessExpression::isFunction(
+                currentNode->getValue())) {
             if (currentNode->getValue() == "+") {
                 result = getValueOfExpression(currentNode->getLeft(), values, result) +
                          getValueOfExpression(currentNode->getRight(), values, result);
@@ -128,7 +128,7 @@ double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::vector
                 result = values[iteratorForAmountOfVars++];
             }
         } else {
-            result = std::stod(currentNode->getValue());
+            result = std::stoi(currentNode->getValue());
         }
     }
     return result;
