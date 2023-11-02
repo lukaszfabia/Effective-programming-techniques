@@ -63,11 +63,15 @@ void CInterface::join(const std::string &lane) {
 }
 
 void CInterface::comp(const std::string &lane) {
-    std::string values = lane.substr(5);
-    if (CPreprocessExpression::getAmountOfVariables(CPreprocessExpression::removeDuplicates(tree->printVars())) ==
-        CPreprocessExpression::getAmountOfValues(values)) {
-        tree->setValues(CPreprocessExpression::createMap(values,CPreprocessExpression::removeDuplicates(tree->printVars())));
-        CScan::printResult("result: "+ std::to_string(tree->calculate()));
+    int amountOfVars = CPreprocessExpression::getAmountOfVariables(
+            CPreprocessExpression::removeDuplicates(tree->printVars()));
+
+    if (amountOfVars == 0) {
+        CScan::printResult("result: " + std::to_string(tree->calculate()));
+    } else if (amountOfVars == CPreprocessExpression::getAmountOfValues(lane.substr(5))) {
+        tree->setValues(
+                CPreprocessExpression::createMap(lane.substr(5), CPreprocessExpression::removeDuplicates(tree->printVars())));
+        CScan::printResult("result: " + std::to_string(tree->calculate()));
     } else {
         CScan::printPrompt("amount of variables and values is not equal\n");
     }
