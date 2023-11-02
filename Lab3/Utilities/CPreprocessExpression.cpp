@@ -129,3 +129,28 @@ std::map<std::string, int> CPreprocessExpression::createMap(const std::string &v
 
     return result;
 }
+
+std::string CPreprocessExpression::toLowerCase(const std::string &input) {
+    std::string result = input;
+
+    for (int i = 0; i < result.length(); ++i) {
+        if (result[i] <= 'Z' && result[i] >= 'A')
+            result[i] = static_cast<char>(result[i] + 32);
+    }
+
+    return result;
+}
+
+std::string CPreprocessExpression::removeInvalidVars(const std::string &input) {
+    std::string result = input;
+    const char invalidChars[] = "!@#$%^&()_={}[]|\\:;\"'<>,.?/";
+
+    for (int i = 0; i < result.length(); ++i) {
+        if (strchr(invalidChars, result[i]) != NULL) {
+            result.erase(i, 1);
+            --i;
+        }
+    }
+
+    return result;
+}

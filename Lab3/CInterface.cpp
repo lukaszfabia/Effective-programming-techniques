@@ -23,14 +23,14 @@ void CInterface::run() {
     while (!isExit) {
         CScan::printPrompt(CMD_LANE);
         scan->readLane();
-        isExit = menu(scan->getLane());
+        isExit = menu(CPreprocessExpression::removeInvalidVars(CPreprocessExpression::toLowerCase(scan->getLane())));
     }
 }
 
 bool CInterface::menu(const std::string &lane) {
     if (lane.find("exit") != std::string::npos) {
         return true;
-    } else if (lane.find("enter") != std::string::npos) {
+    } else if (lane.substr(0, 5) == "enter") {
         enter(lane);
     } else if (lane.find("join") != std::string::npos) {
         join(lane);

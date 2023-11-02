@@ -47,6 +47,10 @@ public:
 
     static std::map<std::string, int> createMap(const std::string &values, const std::string &vars);
 
+    static std::string toLowerCase(const std::string &input);
+
+    static std::string removeInvalidVars(const std::string &input);
+
     virtual std::vector<std::string> fixExpression() = 0;
 };
 
