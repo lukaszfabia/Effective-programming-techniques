@@ -27,7 +27,7 @@ public:
 
     static CTree &addSubtree(const CTree &tree, const CTree &subtree);
 
-    static double getValueOfExpression(CNode *currentNode, const std::vector<int> &values, double result);
+    static double getValueOfExpression(CNode *currentNode, const std::map<std::string, int> &values, double result);
 };
 
 static int iteratorForAmountOfVars = 0;

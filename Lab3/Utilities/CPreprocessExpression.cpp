@@ -8,6 +8,7 @@
 #include "CScan.h"
 #include <stack>
 #include <string>
+#include <map>
 #include <algorithm>
 #include <sstream>
 #include <cctype>
@@ -230,6 +231,48 @@ std::string CPreprocessExpression::removeDuplicates(const std::string &input) {
             result += input[i];
             result += " ";
             lastChar = input[i];
+        }
+    }
+
+    return result;
+}
+
+int CPreprocessExpression::getAmountOfVariables(const std::string &input) {
+    int amount = 0;
+    std::istringstream iss(removeDuplicates(input));
+    std::string element;
+
+    while (iss >> std::ws >> element) {
+        amount++;
+    }
+
+    return amount;
+}
+
+int CPreprocessExpression::getAmountOfValues(const std::string &lane) {
+    int amount = 0;
+    std::istringstream iss(lane);
+    std::string element;
+
+    while (iss >> std::ws >> element) {
+        if (isNumber(element)) {
+            amount++;
+        }
+    }
+
+    return amount;
+}
+
+std::map<std::string, int> CPreprocessExpression::createMap(const std::string &values, const std::string &vars) {
+    std::map<std::string, int> result;
+    std::istringstream valuesStream(values);
+    std::istringstream varsStream(vars);
+    std::string value;
+    std::string var;
+
+    while (std::getline(valuesStream, value, ' ')) {
+        if (std::getline(varsStream, var, ' ')) {
+            result[var] = std::stoi(value);
         }
     }
 

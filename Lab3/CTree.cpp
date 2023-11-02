@@ -9,13 +9,11 @@
 CTree::CTree() {
     root = NULL;
     preprocessExpression = NULL;
-    amountOfVariables = 0;
 }
 
 CTree::CTree(CPreprocessExpression *newPreprocessExpression) {
     root = NULL;
     preprocessExpression = newPreprocessExpression;
-    amountOfVariables = 0;
     buildTree();
 }
 
@@ -78,6 +76,10 @@ void CTree::setPreprocessExpression(CPreprocessExpression *pExpression) {
     buildTree();
 }
 
+void CTree::setValues(const std::map<std::string, int>& valuesMap){
+    values = valuesMap;
+}
+
 std::string CTree::printLevels() {
     return CTreesUtility::levelOrderTraversal(root);
 }
@@ -90,15 +92,6 @@ CPreprocessExpression *CTree::getPreprocessExpression() const {
     return preprocessExpression;
 }
 
-bool CTree::addValue(int value) {
-    if (std::find(values.begin(), values.end(), value) == values.end()) {
-        values.push_back(value);
-        return true;
-    }
-    return false;
-}
-
 double CTree::calculate() {
     return CTreesUtility::getValueOfExpression(root, values, 0);
-//    return 0;
 }

@@ -4,6 +4,7 @@
 
 #include "CTreesUtility.h"
 #include "CPreprocessExpression.h"
+#include "CScan.h"
 #include <queue>
 
 std::string CTreesUtility::inOrderTraversal(CNode *startNode) {
@@ -102,7 +103,7 @@ CTree &CTreesUtility::addSubtree(const CTree &tree, const CTree &subtree) {
     return const_cast<CTree &>(tree);
 }
 
-double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::vector<int> &values, double result) {
+double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::map<std::string, int> &values, double result) {
     if (currentNode != NULL) {
         if (CPreprocessExpression::isOperator(currentNode->getValue()) || CPreprocessExpression::isFunction(
                 currentNode->getValue())) {
@@ -116,16 +117,24 @@ double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::vector
                 result = getValueOfExpression(currentNode->getLeft(), values, result) *
                          getValueOfExpression(currentNode->getRight(), values, result);
             } else if (currentNode->getValue() == "/") {
-                result = getValueOfExpression(currentNode->getLeft(), values, result) /
-                         getValueOfExpression(currentNode->getRight(), values, result);
+                double getValueOfDivider = getValueOfExpression(currentNode->getRight(), values, result);
+                if (getValueOfDivider == 0) {
+                    CScan::printResult("Division by zero!");
+                    return INFINITY;
+                }
+                result = getValueOfExpression(currentNode->getLeft(), values, result) / getValueOfDivider;
             } else if (currentNode->getValue() == "sin") {
                 result = sin(getValueOfExpression(currentNode->getRight(), values, result));
             } else if (currentNode->getValue() == "cos") {
                 result = cos(getValueOfExpression(currentNode->getRight(), values, result));
             }
         } else if (CPreprocessExpression::isVariable(currentNode->getValue())) {
-            if (iteratorForAmountOfVars<amountOfVariables){
-                result = values[iteratorForAmountOfVars++];
+            std::map<std::string, int>::iterator it;
+            for (it = const_cast<std::map<std::string, int> &>(values).begin();
+                 it != const_cast<std::map<std::string, int> &>(values).end(); ++it) {
+                if (it->first == currentNode->getValue()) {
+                    result = it->second;
+                }
             }
         } else {
             result = std::stoi(currentNode->getValue());

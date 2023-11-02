@@ -8,6 +8,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 class CPreprocessExpression {
 private:
@@ -60,6 +61,12 @@ public:
     bool isCorrect();
 
     bool hasOnlyOperators();
+
+    static int getAmountOfVariables(const std::string &input);
+
+    static int getAmountOfValues(const std::string &lane);
+
+    static std::map<std::string, int> createMap(const std::string &values, const std::string &vars);
 };
 
 static const std::string FILL_VALUE = "1";

@@ -2,7 +2,9 @@
 // Created by ufabi on 20.10.2023.
 //
 
+#include <iostream>
 #include "CInterface.h"
+#include <map>
 
 CInterface::CInterface() {
     scan = new CScan();
@@ -57,23 +59,23 @@ void CInterface::enter(const std::string &lane) {
 void CInterface::join(const std::string &lane) {
     subTree->setPreprocessExpression(new CPreprocessExpression(lane.substr(5)));
     *resultTree = *tree + *subTree;
+    // todo join
 }
 
 void CInterface::comp(const std::string &lane) {
-//    std::string var = lane.substr(5);
-//    if (tree->addValue(std::stoi(var))) {
-//        CScan::printPrompt("value " + var + " was added\n");
-//    } else {
-//        CScan::printPrompt("value " + var + " was not added\n");
-//    }
-    CScan::printPrompt("result: ");
-    CScan::printResult(std::to_string(tree->calculate()));
+    std::string values = lane.substr(5);
+    if (CPreprocessExpression::getAmountOfVariables(CPreprocessExpression::removeDuplicates(tree->printVars())) ==
+        CPreprocessExpression::getAmountOfValues(values)) {
+        tree->setValues(CPreprocessExpression::createMap(values,CPreprocessExpression::removeDuplicates(tree->printVars())));
+        CScan::printResult("result: "+ std::to_string(tree->calculate()));
+    } else {
+        CScan::printPrompt("amount of variables and values is not equal\n");
+    }
 }
 
 void CInterface::print() {
     CScan::printPrompt("result: ");
     CScan::printResult(tree->print());
-    amountOfVariables = 0;
 }
 
 void CInterface::info() {
