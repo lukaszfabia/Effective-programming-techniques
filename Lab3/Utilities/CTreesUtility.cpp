@@ -98,9 +98,20 @@ CNode *CTreesUtility::searchForOperatorChild(CNode *currentNode) {
 }
 
 CTree &CTreesUtility::addSubtree(const CTree &tree, const CTree &subtree) {
-    CNode *operatorChild = searchForOperatorChild(tree.getRoot());
+    CTree *result = new CTree();
+    for (int i = 0; i < result->getElements().size(); ++i) {
+        CScan::printResult(tree.getElements()[i]);
+    }
 
-    return const_cast<CTree &>(tree);
+    for (int i = 0; i < tree.getElements().size(); ++i) {
+        result->getElements().push_back(tree.getElements()[i]);
+    }
+    for (int i = 0; i < subtree.getElements().size(); ++i) {
+        result->getElements().push_back(subtree.getElements()[i]);
+    }
+
+    return *result;
+
 }
 
 double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::map<std::string, int> &values, double result) {

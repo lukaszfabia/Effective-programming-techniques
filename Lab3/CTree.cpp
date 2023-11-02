@@ -8,13 +8,12 @@
 
 CTree::CTree() {
     root = NULL;
-    preprocessExpression = NULL;
+    elements = std::vector<std::string>();
 }
 
-CTree::CTree(CPreprocessExpression *newPreprocessExpression) {
+CTree::CTree(const std::vector<std::string> &newElements) {
     root = NULL;
-    preprocessExpression = newPreprocessExpression;
-    buildTree();
+    elements = newElements;
 }
 
 CTree::~CTree() {
@@ -27,22 +26,16 @@ CTree &CTree::operator=(const CTree &other) {
     }
 
     setRoot(other.root);
-    setPreprocessExpression(other.preprocessExpression);
+    elements = other.elements;
     return *this;
 }
 
-CTree CTree::operator+(const CTree &other) const {
-    CTree result; // Tworzymy nowe drzewo wynikowe
-
-    if (getRoot() == NULL) {
-        result = other;
-    } else if (other.getRoot() == NULL) {
-        result = *this;
-    } else {
-        //todo: problem z podpięciem drzewa do innego drzewa
-    }
-
-    return result;
+CTree& CTree::operator+(const CTree &other) const {
+    CTree* result = new CTree();
+    result->elements.insert(result->elements.end(), elements.begin(), elements.end()-1);
+    result->elements.insert(result->elements.end(), other.elements.begin(), other.elements.end());
+    result->buildTree();
+    return *result;
 }
 
 std::string CTree::printNormalExpression() {
@@ -50,7 +43,6 @@ std::string CTree::printNormalExpression() {
 }
 
 void CTree::buildTree() {
-    const std::vector<std::string> &elements = preprocessExpression->getElements();
     int i = 0;
     root = CTreesUtility::buildSubtree(elements, i);
 }
@@ -71,12 +63,7 @@ std::string CTree::printVars() {
     return CTreesUtility::postOrderTraversal(root);
 }
 
-void CTree::setPreprocessExpression(CPreprocessExpression *pExpression) {
-    preprocessExpression = pExpression;
-    buildTree();
-}
-
-void CTree::setValues(const std::map<std::string, int>& valuesMap){
+void CTree::setValues(const std::map<std::string, int> &valuesMap) {
     values = valuesMap;
 }
 
@@ -88,10 +75,14 @@ CNode *CTree::getOperatorChild() const {
     return CTreesUtility::searchForOperatorChild(getRoot());
 }
 
-CPreprocessExpression *CTree::getPreprocessExpression() const {
-    return preprocessExpression;
-}
-
 double CTree::calculate() {
     return CTreesUtility::getValueOfExpression(root, values, 0);
+}
+
+void CTree::setElements(const std::vector<std::string> &newElements) {
+    elements = newElements;
+}
+
+std::vector<std::string> CTree::getElements() const {
+    return elements;
 }

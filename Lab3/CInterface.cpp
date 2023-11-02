@@ -53,13 +53,16 @@ bool CInterface::menu(const std::string &lane) {
 void CInterface::enter(const std::string &lane) {
     CPreprocessExpression *expression = new CPreprocessExpression(lane.substr(6));
     CScan::printResult("expression was interpreted as: " + expression->getExpression());
-    tree->setPreprocessExpression(expression);
+    tree->setElements(expression->getElements());
+    delete expression;
 }
 
 void CInterface::join(const std::string &lane) {
-    subTree->setPreprocessExpression(new CPreprocessExpression(lane.substr(5)));
-    *resultTree = *tree + *subTree;
-    // todo join
+    CPreprocessExpression *expression = new CPreprocessExpression(lane.substr(5));
+    CScan::printResult("expression was interpreted as: " + expression->getExpression());
+    subTree->setElements(expression->getElements());
+    *tree = *tree + *subTree;
+    delete expression;
 }
 
 void CInterface::comp(const std::string &lane) {
@@ -78,8 +81,7 @@ void CInterface::comp(const std::string &lane) {
 }
 
 void CInterface::print() {
-    CScan::printPrompt("result: ");
-    CScan::printResult(tree->print());
+    CScan::printResult("result: "+ tree->print());
 }
 
 void CInterface::info() {
@@ -87,8 +89,7 @@ void CInterface::info() {
 }
 
 void CInterface::vars() {
-    CScan::printPrompt("vars: ");
-    CScan::printResult(CPreprocessExpression::removeDuplicates(tree->printVars()));
+    CScan::printResult("vars: "+ CPreprocessExpression::removeDuplicates(tree->printVars()));
 }
 
 void CInterface::unknownCommand() {

@@ -54,7 +54,7 @@ public:
 
     void createVector(const std::string &newExpression);
 
-    bool fixExpression();
+    std::vector<std::string> fixExpression();
 
     static std::string removeDuplicates(const std::string &input);
 

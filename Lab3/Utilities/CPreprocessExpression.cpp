@@ -18,9 +18,9 @@ CPreprocessExpression::CPreprocessExpression() {
 }
 
 CPreprocessExpression::CPreprocessExpression(const std::string &newExpression) {
+    elements.clear();
     expression = newExpression;
-    elements = std::vector<std::string>();
-    fixExpression();
+    elements = fixExpression();
 }
 
 CPreprocessExpression::~CPreprocessExpression() {
@@ -81,21 +81,21 @@ void CPreprocessExpression::createVector(const std::string &newExpression) {
     setElements(elements);
 }
 
-bool CPreprocessExpression::fixExpression() {
+std::vector<std::string> CPreprocessExpression::fixExpression() {
     createVector(expression);
     /// case when expression is correct
     if (isCorrect()) {
-        return false;
+        return elements;
     }
     /// when expression is completely empty or has only numbers or variables
     if (expression.empty() || hasOnlyNumbersOrVars()) {
         setExpression(DEFAULT_EXPRESSION);
-        return false;
+        return elements;
     }
     /// case when we have too many args - we delete last one
     if (amountOfOperators() == amountOfNumbers() - 2) {
         elements.pop_back();
-        return true;
+        return elements;
     }
     /// case when we have a only operators in expression - we build balanced tree then
     if (hasOnlyOperators()) {
@@ -105,10 +105,10 @@ bool CPreprocessExpression::fixExpression() {
             }
         }
         elements.push_back(FILL_VALUE);
-        return true;
+        return elements;
     }
     /// case when we have a missing elements in expression - we add them
-    CTree tree = CTree(this);
+    CTree tree = CTree(elements);
     std::string newExpression = tree.printNormalExpression();
     createVector(newExpression);
 
@@ -128,7 +128,7 @@ bool CPreprocessExpression::fixExpression() {
 
     elements = infixToPrefix(elements);
 
-    return true;
+    return elements;
 }
 
 
@@ -224,13 +224,11 @@ bool CPreprocessExpression::nextNotAnOperator(const std::string &token) {
 
 std::string CPreprocessExpression::removeDuplicates(const std::string &input) {
     std::string result;
-    char lastChar = '\0';
 
     for (int i = 0; i < input.length(); i++) {
-        if (input[i] != lastChar && !(input[i] == ' ' || lastChar == ' ')) {
+        if (result.find(input[i]) == std::string::npos) {
             result += input[i];
             result += " ";
-            lastChar = input[i];
         }
     }
 

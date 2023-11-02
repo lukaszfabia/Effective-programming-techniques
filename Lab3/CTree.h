@@ -13,19 +13,20 @@
 class CTree {
 private:
     CNode *root;
-    CPreprocessExpression *preprocessExpression;
+//    CPreprocessExpression *preprocessExpression;
+    std::vector<std::string> elements;
     std::map<std::string, int> values;
 
 public:
     CTree();
 
-    explicit CTree(CPreprocessExpression *preprocessExpression);
+    explicit CTree(const std::vector<std::string> &elements);
 
     ~CTree();
 
     CTree &operator=(const CTree &other);
 
-    CTree operator+(const CTree &other) const;
+    CTree &operator+(const CTree &other) const;
 
     std::string printVars();
 
@@ -39,17 +40,19 @@ public:
 
     std::string print();
 
-    CPreprocessExpression *getPreprocessExpression() const;
+    std::vector<std::string> getElements() const;
 
     std::string printLevels();
 
-    void setPreprocessExpression(CPreprocessExpression *pExpression);
+    void setElements(const std::vector<std::string> &elements);
 
     CNode *getOperatorChild() const;
 
     double calculate();
 
     void setValues(const std::map<std::string, int>& valuesMap);
+
+    void copyTree(const CNode *sourceNode, CNode *targetNode, CTree *result) const;
 };
 
 
