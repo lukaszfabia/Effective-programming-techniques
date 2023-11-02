@@ -4,26 +4,24 @@
 
 #include <iostream>
 #include "CInterface.h"
-#include <map>
+#include "Utilities/CFixExpression.h"
 
 CInterface::CInterface() {
     scan = new CScan();
     tree = new CTree();
-    resultTree = new CTree();
     subTree = new CTree();
 }
 
 CInterface::~CInterface() {
     delete scan;
     delete tree;
-    delete resultTree;
     delete subTree;
 }
 
 void CInterface::run() {
     bool isExit = false;
     while (!isExit) {
-        CScan::printPrompt("ctree>");
+        CScan::printPrompt(CMD_LANE);
         scan->readLane();
         isExit = menu(scan->getLane());
     }
@@ -44,6 +42,8 @@ bool CInterface::menu(const std::string &lane) {
         info();
     } else if (lane.find("vars") != std::string::npos) {
         vars();
+    } else if (lane.find("norm") != std::string::npos) {
+        norm();
     } else {
         unknownCommand();
     }
@@ -51,14 +51,16 @@ bool CInterface::menu(const std::string &lane) {
 }
 
 void CInterface::enter(const std::string &lane) {
-    CPreprocessExpression *expression = new CPreprocessExpression(lane.substr(6));
+    CPreprocessExpression *expression = new CFixExpression(lane.substr(5));
+    expression->fixExpression();
     CScan::printResult("expression was interpreted as: " + expression->getExpression());
     tree->setElements(expression->getElements());
     delete expression;
 }
 
 void CInterface::join(const std::string &lane) {
-    CPreprocessExpression *expression = new CPreprocessExpression(lane.substr(5));
+    CPreprocessExpression *expression = new CFixExpression(lane.substr(4));
+    expression->fixExpression();
     CScan::printResult("expression was interpreted as: " + expression->getExpression());
     subTree->setElements(expression->getElements());
     *tree = *tree + *subTree;
@@ -73,7 +75,8 @@ void CInterface::comp(const std::string &lane) {
         CScan::printResult("result: " + std::to_string(tree->calculate()));
     } else if (amountOfVars == CPreprocessExpression::getAmountOfValues(lane.substr(5))) {
         tree->setValues(
-                CPreprocessExpression::createMap(lane.substr(5), CPreprocessExpression::removeDuplicates(tree->printVars())));
+                CPreprocessExpression::createMap(lane.substr(5),
+                                                 CPreprocessExpression::removeDuplicates(tree->printVars())));
         CScan::printResult("result: " + std::to_string(tree->calculate()));
     } else {
         CScan::printPrompt("amount of variables and values is not equal\n");
@@ -81,7 +84,7 @@ void CInterface::comp(const std::string &lane) {
 }
 
 void CInterface::print() {
-    CScan::printResult("result: "+ tree->print());
+    CScan::printResult("prefix expression: " + tree->print());
 }
 
 void CInterface::info() {
@@ -89,7 +92,11 @@ void CInterface::info() {
 }
 
 void CInterface::vars() {
-    CScan::printResult("vars: "+ CPreprocessExpression::removeDuplicates(tree->printVars()));
+    CScan::printResult("vars: " + CPreprocessExpression::removeDuplicates(tree->printVars()));
+}
+
+void CInterface::norm() {
+    CScan::printResult("normal expression: " + tree->printNormalExpression());
 }
 
 void CInterface::unknownCommand() {

@@ -14,7 +14,6 @@ private:
     CScan *scan;
     CTree *tree;
     CTree *subTree;
-    CTree *resultTree;
 
     void enter(const std::string &lane);
 
@@ -38,7 +37,10 @@ public:
     ~CInterface();
 
     void run();
+
+    void norm();
 };
 
+static const char *CMD_LANE = "ctree>";
 
 #endif //EFFECTIVE_PROGRAMMING_TECHNIQUES_CINTERFACE_H

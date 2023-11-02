@@ -11,34 +11,25 @@
 #include <map>
 
 class CPreprocessExpression {
-private:
+protected:
     std::vector<std::string> elements;
     std::string expression;
 
-    int amountOfOperators();
-
-    int amountOfNumbers();
-
-    bool hasOnlyNumbersOrVars();
-
-    static int getPriority(const std::string &operator_str);
-
-    static std::vector<std::string> infixToPostfix(const std::vector<std::string> &infix);
-
-    static std::vector<std::string> infixToPrefix(const std::vector<std::string> &infix);
-
-    static bool nextNotAnOperator(const std::string &token);
-
+    std::vector<std::string> createVector(const std::string &newExpression);
 public:
     CPreprocessExpression();
 
     explicit CPreprocessExpression(const std::string &newExpression);
 
-    ~CPreprocessExpression();
+    virtual ~CPreprocessExpression() = 0;
 
     std::string getExpression();
 
     std::vector<std::string> getElements();
+
+    void setElements(const std::vector<std::string> &newElements);
+
+    void setExpression(const std::string &newExpression);
 
     static bool isNumber(const std::string &token);
 
@@ -48,25 +39,15 @@ public:
 
     static bool isFunction(const std::string &token);
 
-    void setElements(const std::vector<std::string> &newElements);
-
-    void setExpression(const std::string &newExpression);
-
-    void createVector(const std::string &newExpression);
-
-    std::vector<std::string> fixExpression();
-
     static std::string removeDuplicates(const std::string &input);
-
-    bool isCorrect();
-
-    bool hasOnlyOperators();
 
     static int getAmountOfVariables(const std::string &input);
 
     static int getAmountOfValues(const std::string &lane);
 
     static std::map<std::string, int> createMap(const std::string &values, const std::string &vars);
+
+    virtual std::vector<std::string> fixExpression() = 0;
 };
 
 static const std::string FILL_VALUE = "1";

@@ -14,6 +14,7 @@ CTree::CTree() {
 CTree::CTree(const std::vector<std::string> &newElements) {
     root = NULL;
     elements = newElements;
+    buildTree();
 }
 
 CTree::~CTree() {
@@ -27,6 +28,8 @@ CTree &CTree::operator=(const CTree &other) {
 
     setRoot(other.root);
     elements = other.elements;
+    values = other.values;
+    buildTree();
     return *this;
 }
 
@@ -34,7 +37,6 @@ CTree& CTree::operator+(const CTree &other) const {
     CTree* result = new CTree();
     result->elements.insert(result->elements.end(), elements.begin(), elements.end()-1);
     result->elements.insert(result->elements.end(), other.elements.begin(), other.elements.end());
-    result->buildTree();
     return *result;
 }
 
@@ -81,6 +83,7 @@ double CTree::calculate() {
 
 void CTree::setElements(const std::vector<std::string> &newElements) {
     elements = newElements;
+    buildTree();
 }
 
 std::vector<std::string> CTree::getElements() const {
