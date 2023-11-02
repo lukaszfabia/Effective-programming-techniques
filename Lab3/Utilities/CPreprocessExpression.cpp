@@ -82,21 +82,31 @@ void CPreprocessExpression::createVector(const std::string &newExpression) {
 
 bool CPreprocessExpression::fixExpression() {
     createVector(expression);
-
-    if (amountOfNumbers() == amountOfOperators() + 1) {
+    /// case when expression is correct
+    if (isCorrect()) {
         return false;
     }
-
+    /// when expression is completely empty or has only numbers or variables
     if (expression.empty() || hasOnlyNumbersOrVars()) {
         setExpression(DEFAULT_EXPRESSION);
         return false;
     }
-
+    /// case when we have too many args - we delete last one
     if (amountOfOperators() == amountOfNumbers() - 2) {
         elements.pop_back();
         return true;
     }
-
+    /// case when we have a only operators in expression - we build balanced tree then
+    if (hasOnlyOperators()) {
+        for (int i = 0; i < elements.size() + 1; i++) {
+            if (i % 2 != 0) {
+                elements.insert(elements.begin() + i, FILL_VALUE);
+            }
+        }
+        elements.push_back(FILL_VALUE);
+        return true;
+    }
+    /// case when we have a missing elements in expression - we add them
     CTree tree = CTree(this);
     std::string newExpression = tree.printNormalExpression();
     createVector(newExpression);
@@ -116,10 +126,6 @@ bool CPreprocessExpression::fixExpression() {
     }
 
     elements = infixToPrefix(elements);
-
-    for (int i = 0; i < elements.size(); ++i) {
-        elements[i] = trim(elements[i]);
-    }
 
     return true;
 }
@@ -145,7 +151,7 @@ int CPreprocessExpression::amountOfNumbers() {
     return numberOfNumbers;
 }
 
-int CPreprocessExpression::hasOnlyNumbersOrVars() {
+bool CPreprocessExpression::hasOnlyNumbersOrVars() {
     for (int i = 0; i < elements.size(); i++) {
         if (!isNumber(elements[i]) && !isVariable(elements[i])) {
             return false;
@@ -154,14 +160,17 @@ int CPreprocessExpression::hasOnlyNumbersOrVars() {
     return true;
 }
 
-std::string CPreprocessExpression::trim(const std::string &output) {
-    unsigned long first = output.find_first_not_of(" \t\n\r");
-    if (std::string::npos == first) {
-        return output;
-    }
+bool CPreprocessExpression::isCorrect() {
+    return amountOfNumbers() == amountOfOperators() + 1;
+}
 
-    unsigned long last = output.find_last_not_of(" \t\n\r");
-    return output.substr(first, (last - first + 1));
+bool CPreprocessExpression::hasOnlyOperators() {
+    for (int i = 0; i < elements.size(); i++) {
+        if (!isOperator(elements[i])) {
+            return false;
+        }
+    }
+    return true;
 }
 
 int CPreprocessExpression::getPriority(const std::string &operator_str) {
@@ -179,17 +188,17 @@ std::vector<std::string> CPreprocessExpression::infixToPostfix(const std::vector
     std::vector<std::string> output;
     for (int i = 0; i < infix.size(); ++i) {
         if (isNumber(infix[i]) || isVariable(infix[i]) || isFunction(infix[i])) {
-            output.push_back(" " + infix[i] + " ");
+            output.push_back(infix[i]);
         } else {
             while (!string_stack.empty() && getPriority(infix[i]) < getPriority(string_stack.top())) {
-                output.push_back(" " + string_stack.top() + " ");
+                output.push_back(string_stack.top());
                 string_stack.pop();
             }
             string_stack.push(infix[i]);
         }
     }
     while (!string_stack.empty()) {
-        output.push_back(" " + string_stack.top() + " ");
+        output.push_back(string_stack.top());
         string_stack.pop();
     }
     return output;

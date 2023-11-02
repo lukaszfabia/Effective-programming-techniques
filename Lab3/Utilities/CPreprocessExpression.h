@@ -18,15 +18,13 @@ private:
 
     int amountOfNumbers();
 
-    int hasOnlyNumbersOrVars();
+    bool hasOnlyNumbersOrVars();
 
     static int getPriority(const std::string &operator_str);
 
     static std::vector<std::string> infixToPostfix(const std::vector<std::string> &infix);
 
     static std::vector<std::string> infixToPrefix(const std::vector<std::string> &infix);
-
-    static std::string trim(const std::string &output);
 
     static bool nextNotAnOperator(const std::string &token);
 
@@ -58,6 +56,10 @@ public:
     bool fixExpression();
 
     static std::string removeDuplicates(const std::string &input);
+
+    bool isCorrect();
+
+    bool hasOnlyOperators();
 };
 
 static const std::string FILL_VALUE = "1";

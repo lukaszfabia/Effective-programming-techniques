@@ -8,9 +8,9 @@
 #include "CInterface.h"
 
 int main() {
-//    CTree tree(new CPreprocessExpression(" +  + + 1 1 1 1"));
-//    std::cout << tree.printNormalExpression() << std::endl;
-    CInterface interface;
-    interface.run();
+    CTree tree(new CPreprocessExpression("+ * * + "));
+    std::cout << tree.printNormalExpression() << std::endl;
+//    CInterface interface;
+//    interface.run();
     return 0;
 }
