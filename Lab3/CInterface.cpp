@@ -28,21 +28,21 @@ void CInterface::run() {
 }
 
 bool CInterface::menu(const std::string &lane) {
-    if (lane.find("exit") != std::string::npos) {
+    if (lane.substr(0, 4) == "exit") {
         return true;
     } else if (lane.substr(0, 5) == "enter") {
         enter(lane);
-    } else if (lane.find("join") != std::string::npos) {
+    } else if (lane.substr(0, 4) == "join") {
         join(lane);
-    } else if (lane.find("comp") != std::string::npos) {
+    } else if (lane.substr(0, 4) == "comp" || lane.substr(0, 4) == "calc") {
         comp(lane);
-    } else if (lane.find("print") != std::string::npos) {
+    } else if (lane.substr(0, 5) == "print") {
         print();
-    } else if (lane.find("info") != std::string::npos) {
+    } else if (lane.substr(0, 4) == "info" || lane.substr(0, 4) == "help") {
         info();
-    } else if (lane.find("vars") != std::string::npos) {
+    } else if (lane.substr(0, 4) == "vars") {
         vars();
-    } else if (lane.find("norm") != std::string::npos) {
+    } else if (lane.substr(0, 4) == "norm") {
         norm();
     } else {
         unknownCommand();
@@ -68,18 +68,21 @@ void CInterface::join(const std::string &lane) {
 }
 
 void CInterface::comp(const std::string &lane) {
+    std::string tmp = lane.substr(4);
     int amountOfVars = CPreprocessExpression::getAmountOfVariables(
             CPreprocessExpression::removeDuplicates(tree->printVars()));
 
-    if (amountOfVars == 0) {
+    if (tmp.empty() && amountOfVars != 0) {
+        CScan::printPrompt("amount of variables and values is not equal\n");
+    } else if (amountOfVars == 0) {
         CScan::printResult("result: " + std::to_string(tree->calculate()));
-    } else if (amountOfVars == CPreprocessExpression::getAmountOfValues(lane.substr(5))) {
+    } else if (amountOfVars == CPreprocessExpression::getAmountOfValues(lane.substr(5)) && !tmp.empty()) {
         tree->setValues(
                 CPreprocessExpression::createMap(lane.substr(5),
                                                  CPreprocessExpression::removeDuplicates(tree->printVars())));
         CScan::printResult("result: " + std::to_string(tree->calculate()));
     } else {
-        CScan::printPrompt("amount of variables and values is not equal\n");
+        CScan::printPrompt("too many or too little args\n");
     }
 }
 
@@ -88,7 +91,7 @@ void CInterface::print() {
 }
 
 void CInterface::info() {
-    CScan::printPrompt("available commands: enter, join, comp, vars, print, info, exit\n");
+    CScan::printPrompt("available commands: enter, join, comp, norm, vars, print, info, exit\n");
 }
 
 void CInterface::vars() {
@@ -100,5 +103,5 @@ void CInterface::norm() {
 }
 
 void CInterface::unknownCommand() {
-    CScan::printPrompt("Unknown command\n");
+    CScan::printPrompt("unknown command\n");
 }

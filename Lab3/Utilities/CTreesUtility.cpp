@@ -70,8 +70,7 @@ CNode *CTreesUtility::buildSubtree(const std::vector<std::string> &elements, int
     if (CPreprocessExpression::isFunction(value)) {
         return new CNode(value, NULL, buildSubtree(elements, i));
     } else if (CPreprocessExpression::isOperator(value)) {
-        CNode *node = new CNode(value, buildSubtree(elements, i), buildSubtree(elements, i));
-        return node;
+        return new CNode(value, buildSubtree(elements, i), buildSubtree(elements, i));;
     } else {
         return new CNode(value, NULL, NULL);
     }
@@ -95,23 +94,6 @@ CNode *CTreesUtility::searchForOperatorChild(CNode *currentNode) {
     }
 
     return searchForOperatorChild(currentNode->right);
-}
-
-CTree &CTreesUtility::addSubtree(const CTree &tree, const CTree &subtree) {
-    CTree *result = new CTree();
-    for (int i = 0; i < result->getElements().size(); ++i) {
-        CScan::printResult(tree.getElements()[i]);
-    }
-
-    for (int i = 0; i < tree.getElements().size(); ++i) {
-        result->getElements().push_back(tree.getElements()[i]);
-    }
-    for (int i = 0; i < subtree.getElements().size(); ++i) {
-        result->getElements().push_back(subtree.getElements()[i]);
-    }
-
-    return *result;
-
 }
 
 double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::map<std::string, int> &values, double result) {

@@ -13,7 +13,6 @@
 class CTree {
 private:
     CNode *root;
-//    CPreprocessExpression *preprocessExpression;
     std::vector<std::string> elements;
     std::map<std::string, int> values;
 
@@ -26,7 +25,7 @@ public:
 
     CTree &operator=(const CTree &other);
 
-    CTree &operator+(const CTree &other) const;
+    CTree operator+(const CTree &other) const;
 
     std::string printVars();
 
