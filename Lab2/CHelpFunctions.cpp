@@ -15,7 +15,10 @@ CNumber CHelpFunctions::c_substraction(const CNumber &cNumber1, const CNumber &c
 
     for (int i = cNumber2.i_get_size() - 1; i >= 0; i--) {
         int difference = cNumber2.pi_get_i_numbers()[i] -
-                         ((i >= cNumber2.i_get_size() - cNumber1.i_get_size()) ? cNumber1.pi_get_i_numbers()[i - (cNumber2.i_get_size() - cNumber1.i_get_size())] : 0) -
+                         ((i >= cNumber2.i_get_size() - cNumber1.i_get_size()) ? cNumber1.pi_get_i_numbers()[i -
+                                                                                                             (cNumber2.i_get_size() -
+                                                                                                              cNumber1.i_get_size())]
+                                                                               : 0) -
                          i_borrow;
 
         if (difference < 0) {
@@ -87,11 +90,9 @@ bool CHelpFunctions::b_get_sign_of_bigger_abs_number(const CNumber &cOther, cons
 }
 
 void CHelpFunctions::v_set_values(int *piNumbers, int iValue, int i_index) {
-    if (i_index >= 0) {
-        piNumbers[i_index] = iValue % 10;
-        v_set_values(piNumbers, iValue / 10, i_index - 1);
-    } else {
-        return;
+    for (int i = i_index; i >= 0; --i) {
+        piNumbers[i] = iValue % 10;
+        iValue /= 10;
     }
 }
 
@@ -126,7 +127,10 @@ CNumber CHelpFunctions::c_add(const CNumber &cNumber1, const CNumber &cNumber2) 
 
     for (int i = cNumber2.i_get_size() - 1; i >= 0; i--) {
         int sum = cNumber2.pi_get_i_numbers()[i] +
-                  ((i >= cNumber2.i_get_size() - cNumber1.i_get_size()) ? cNumber1.pi_get_i_numbers()[i - (cNumber2.i_get_size() - cNumber1.i_get_size())] : 0) + i_carry;
+                  ((i >= cNumber2.i_get_size() - cNumber1.i_get_size()) ? cNumber1.pi_get_i_numbers()[i -
+                                                                                                      (cNumber2.i_get_size() -
+                                                                                                       cNumber1.i_get_size())]
+                                                                        : 0) + i_carry;
         cResult.pi_get_i_numbers()[j] = sum % 10;
         i_carry = sum / 10;
         j--;
