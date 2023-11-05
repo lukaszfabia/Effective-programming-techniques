@@ -3,8 +3,6 @@
 //
 #include <iostream>
 #include "CInterface.h"
-#include <string>
-#include <cctype>
 
 int main() {
     CInterface interface;
