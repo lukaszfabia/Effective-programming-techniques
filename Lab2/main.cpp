@@ -31,8 +31,8 @@ void v_start_effectivity_tests() {
 }
 
 int main() {
-//    v_start_test("Test for lab2 operators");
-//    v_start_effectivity_tests();
+    v_start_test("Test for lab2 operators");
+    v_start_effectivity_tests();
     CNumber c1 , c2 , c3;
     c1 = 1;
     c2 = 2;
@@ -40,8 +40,6 @@ int main() {
     c1.v_information();
     c2.v_information();
     c3.v_information();
-
-
 
 
     return 0;

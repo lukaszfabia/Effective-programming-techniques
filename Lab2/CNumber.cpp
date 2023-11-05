@@ -60,6 +60,7 @@ CNumber CNumber::operator+(const CNumber &cOther) const {
         bool b_sign;
         if (CHelpFunctions::b_get_sign_of_bigger_abs_number(cOther, *this)) {
             b_sign = b_is_negative;
+            // this - cOther
             cResult = CHelpFunctions::c_substraction(cOther, *this);
         } else {
             b_sign = cOther.b_is_negative;
