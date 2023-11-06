@@ -59,6 +59,12 @@ char *CHelpFunctions::s_to_char_array(const CNumber &cNumber) {
     int i_index_for_string = 1;
     int i_start_index = 0;
 
+    if (cNumber == 0) {
+        s_number[1] = '0';
+        s_number[2] = '\0';
+        return s_number;
+    }
+
     while (i_start_index < cNumber.i_get_size() && cNumber.pi_get_i_numbers()[i_start_index] == 0) {
         i_start_index++;
     }
@@ -143,7 +149,6 @@ CNumber CHelpFunctions::c_add(const CNumber &cNumber1, const CNumber &cNumber2) 
     return cResult;
 }
 
-
 int CHelpFunctions::i_get_number_of_digits(int iNumber) {
     int i_result = 0;
     while (iNumber != 0) {
@@ -155,15 +160,28 @@ int CHelpFunctions::i_get_number_of_digits(int iNumber) {
 }
 
 CNumber CHelpFunctions::c_multiply(const CNumber &cNumber1, const CNumber &cNumber2) {
-    CNumber cResult, cTemp1, cTemp2;
-    cResult = 0;
-    cTemp1 = cNumber1;
-    cTemp2 = cNumber2;
-    cTemp1.v_set_is_negative(false);
-    cTemp2.v_set_is_negative(false);
-    while (!(cTemp2 == 0)) {
-        cResult = CHelpFunctions::c_add(cResult, cTemp1);
-        cTemp2 = --cTemp2;
+//    CNumber cResult, cTemp1, cTemp2;
+//    cResult = 0;
+//    cTemp1 = cNumber1;
+//    cTemp2 = cNumber2;
+//    cTemp1.v_set_is_negative(false);
+//    cTemp2.v_set_is_negative(false);
+//    while (!(cTemp2 == 0)) {
+//        cResult = CHelpFunctions::c_add(cResult, cTemp1);
+//        cTemp2 = --cTemp2;
+//    }
+
+    CNumber cResult(cNumber1.i_get_size() + cNumber2.i_get_size());
+    int i_carry, i_product;
+    for (int i = cNumber1.i_get_size() - 1; i >= 0; i--) {
+        i_carry = 0;
+        for (int j = cNumber2.i_get_size() - 1; j >= 0; j--) {
+            i_product = cNumber1.pi_get_i_numbers()[i] * cNumber2.pi_get_i_numbers()[j] + i_carry +
+                        cResult.pi_get_i_numbers()[i + j + 1];
+            i_carry = i_product / 10;
+            cResult.pi_get_i_numbers()[i + j + 1] = i_product % 10;
+        }
+        cResult.pi_get_i_numbers()[i] += i_carry;
     }
 
     return cResult;

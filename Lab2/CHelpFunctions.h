@@ -23,7 +23,7 @@ public:
 
     static int i_get_number_of_digits(int iNumber);
 
-    static CNumber c_resize_array(const CNumber& cResult);
+    static CNumber c_resize_array(const CNumber &cResult);
 
     static CNumber c_multiply(const CNumber &cNumber1, const CNumber &cNumber2);
 

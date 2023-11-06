@@ -3,6 +3,7 @@
 //
 
 #ifndef EFFECTIVE_PROGRAMMING_TECHNIQUES_CNUMBER_H
+#define DEFAULT_SIZE 10
 #define EFFECTIVE_PROGRAMMING_TECHNIQUES_CNUMBER_H
 
 
@@ -37,7 +38,7 @@ public:
 
     bool operator>=(const CNumber &cOther) const;
 
-    bool operator>=(int iValue) const;
+    bool operator>(const CNumber &cOther) const;
 
     bool operator==(int iValue) const;
 

@@ -6,8 +6,6 @@
 #include "CNumber.h"
 #include "CHelpFunctions.h"
 
-const int DEFAULT_SIZE = 10;
-
 CNumber::CNumber() {
     i_size = DEFAULT_SIZE;
     i_numbers = new int[i_size];
@@ -104,44 +102,31 @@ CNumber CNumber::operator-(const CNumber &cOther) const {
 }
 
 CNumber CNumber::operator*(const CNumber &cOther) const {
-//    CNumber cResult(cOther.i_size + i_size);
-//    int i_carry, i_product;
-//    for (int i = i_size - 1; i >= 0; i--) {
-//        i_carry = 0;
-//        for (int j = cOther.i_size - 1; j >= 0; j--) {
-//            i_product = i_numbers[i] * cOther.i_numbers[j] + i_carry + cResult.i_numbers[i + j + 1];
-//            i_carry = i_product / 10;
-//            cResult.i_numbers[i + j + 1] = i_product % 10;
-//        }
-//        cResult.i_numbers[i] += i_carry;
-//    }
-    CNumber cResult;
-    cResult = CHelpFunctions::c_multiply(*this, cOther);
+    CNumber cResult = CHelpFunctions::c_multiply(*this, cOther);
     cResult.v_set_is_negative(b_is_negative != cOther.b_is_negative);
 
     return CHelpFunctions::c_resize_array(cResult);
 }
 
 CNumber CNumber::operator/(const CNumber &cOther) const {
-    CNumber cResult, cTemp, absOther;
-    cResult = -1;
-    if (!(cOther == 0)) {
-        cResult = 0;
-        cTemp = *this;
-
-        cTemp.v_set_is_negative(false);
-        absOther = cOther;
-        absOther.v_set_is_negative(false);
-
-        while (cTemp >= absOther) {
-            cTemp = CHelpFunctions::c_substraction(absOther, cTemp);
-            cResult = ++cResult;
-        }
-
-        cResult.b_is_negative = (b_is_negative != cOther.b_get_is_negative());
-
+    if (cOther > *this || cOther == 0) {
+        std::cout << "Error: Division by zero or division by bigger number" << std::endl;
+        return CNumber(0);
     }
-//    cResult = CHelpFunctions::c_resize_array(cResult);
+    CNumber cResult, cTemp, absOther;
+    cResult = 0;
+    cTemp = *this;
+
+    cTemp.v_set_is_negative(false);
+    absOther = cOther;
+    absOther.v_set_is_negative(false);
+
+    while (cTemp >= absOther) {
+        cTemp = CHelpFunctions::c_substraction(absOther, cTemp);
+        cResult = ++cResult;
+    }
+
+    cResult.b_is_negative = (b_is_negative != cOther.b_get_is_negative());
     return CHelpFunctions::c_resize_array(cResult);
 }
 
@@ -157,10 +142,16 @@ bool CNumber::operator>=(const CNumber &cOther) const {
     return true;
 }
 
-bool CNumber::operator>=(int iValue) const {
-    CNumber cOther;
-    cOther = iValue;
-    return *this >= cOther;
+bool CNumber::operator>(const CNumber &cOther) const {
+    for (int i = 0; i < i_size; i++) {
+        if (i_numbers[i] > cOther.i_numbers[i]) {
+            return true;
+        } else if (i_numbers[i] < cOther.i_numbers[i]) {
+            return false;
+        }
+    }
+
+    return false;
 }
 
 CNumber CNumber::operator++() const {
@@ -236,8 +227,8 @@ void CNumber::v_set_size(int iSize) {
 }
 
 void CNumber::v_information() const {
-    std::cout<<"------------------------------------"<<std::endl;
-    std::cout<<"result number"<<std::endl;
-    std::cout<<CHelpFunctions::s_to_char_array(*this)<<std::endl;
-    std::cout<<"------------------------------------"<<std::endl;
+    std::cout << "------------------------------------" << std::endl;
+    std::cout << "result number" << std::endl;
+    std::cout << CHelpFunctions::s_to_char_array(*this) << std::endl;
+    std::cout << "------------------------------------" << std::endl;
 }

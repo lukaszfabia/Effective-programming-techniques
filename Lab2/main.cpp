@@ -32,12 +32,12 @@ void v_start_effectivity_tests() {
 
 int main() {
 //    v_start_test("Test for lab2 operators");
-    v_start_effectivity_tests();
-//    CNumber c1 , c2 , c3;
-//    c1 = 320;
-//    c2 = !c1;
-//    c2.v_information();
-//    std::cout<<c2.i_get_size()<<std::endl;
+//    v_start_effectivity_tests();
+    CNumber c1 , c2 , c3;
+    c1 = 123;
+    c2 = 5;
+    c3 = c1/c2;
+    c3.v_information();
 
 
     return 0;
