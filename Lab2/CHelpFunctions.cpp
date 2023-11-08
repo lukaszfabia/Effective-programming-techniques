@@ -12,25 +12,25 @@ CNumber CHelpFunctions::c_substraction(const CNumber &cNumber1, const CNumber &c
 
     int i_borrow = 0;
     int j = max_size - 1;
-
+    int i_diff;
+    int k = cNumber1.i_get_size() - 1;
     for (int i = cNumber2.i_get_size() - 1; i >= 0; i--) {
-        int difference = cNumber2.pi_get_i_numbers()[i] -
-                         ((i >= cNumber2.i_get_size() - cNumber1.i_get_size()) ? cNumber1.pi_get_i_numbers()[i -
-                                                                                                             (cNumber2.i_get_size() -
-                                                                                                              cNumber1.i_get_size())]
-                                                                               : 0) -
-                         i_borrow;
-
-        if (difference < 0) {
-            difference += 10;
+        if (i >= cNumber2.i_get_size() - cNumber1.i_get_size()) {
+            i_diff = cNumber2.pi_get_i_numbers()[i] -
+                     cNumber1.pi_get_i_numbers()[k--] - i_borrow;
+        } else {
+            i_diff = cNumber2.pi_get_i_numbers()[i] + i_borrow;
+        }
+        if (i_diff < 0) {
+            i_diff += 10;
             i_borrow = 1;
         } else {
             i_borrow = 0;
         }
 
-        cResult.pi_get_i_numbers()[j] = difference;
-        j--;
+        cResult.pi_get_i_numbers()[j--] = i_diff;
     }
+
 
     return cResult;
 }
@@ -58,25 +58,21 @@ char *CHelpFunctions::s_to_char_array(const CNumber &cNumber) {
     s_number[0] = cNumber.b_get_is_negative() ? '-' : '+';
     int i_index_for_string = 1;
     int i_start_index = 0;
-
     if (cNumber == 0) {
-        s_number[1] = '0';
-        s_number[2] = '\0';
+        s_number[0] = '0';
+        s_number[1] = '\0';
         return s_number;
     }
-
     while (i_start_index < cNumber.i_get_size() && cNumber.pi_get_i_numbers()[i_start_index] == 0) {
         i_start_index++;
     }
-
     for (int i = i_start_index; i < cNumber.i_get_size(); i++) {
-        s_number[i_index_for_string++] = cNumber.pi_get_i_numbers()[i] + '0';  // Konwersja na znak
+        s_number[i_index_for_string++] = cNumber.pi_get_i_numbers()[i] + '0';
     }
 
     s_number[i_index_for_string] = '\0';
     return s_number;
 }
-
 
 void CHelpFunctions::v_fill_array(int *piNumbers, int iValue, int iSize) {
     for (int i = 0; i < iSize; i++) {
@@ -92,7 +88,7 @@ bool CHelpFunctions::b_get_sign_of_bigger_abs_number(const CNumber &cOther, cons
             return true;
         }
     }
-    return false; // when they're equal
+    return false; // gdy obie liczby sa rowne to zwracamy false
 }
 
 void CHelpFunctions::v_set_values(int *piNumbers, int iValue, int i_index) {
@@ -107,10 +103,7 @@ CNumber CHelpFunctions::c_resize_array(const CNumber &cResult) {
     while (cResult.pi_get_i_numbers()[i_first_non_zero_index] == 0) {
         i_first_non_zero_index++;
     }
-    int i_new_size = 0;
-    for (int i = i_first_non_zero_index; i < cResult.i_get_size(); i++) {
-        i_new_size++;
-    }
+    int i_new_size = cResult.i_get_size() - i_first_non_zero_index;
 
     CNumber c_res(i_new_size);
     int j = 0;
@@ -125,23 +118,22 @@ CNumber CHelpFunctions::c_resize_array(const CNumber &cResult) {
 }
 
 CNumber CHelpFunctions::c_add(const CNumber &cNumber1, const CNumber &cNumber2) {
+
     int max_size = std::max(cNumber1.i_get_size(), cNumber2.i_get_size()) + 1;
 
     CNumber cResult(max_size);
     int i_carry = 0;
     int j = max_size - 1;
-
+    int i_sum, k = cNumber1.i_get_size() - 1;
     for (int i = cNumber2.i_get_size() - 1; i >= 0; i--) {
-        int sum = cNumber2.pi_get_i_numbers()[i] +
-                  ((i >= cNumber2.i_get_size() - cNumber1.i_get_size()) ? cNumber1.pi_get_i_numbers()[i -
-                                                                                                      (cNumber2.i_get_size() -
-                                                                                                       cNumber1.i_get_size())]
-                                                                        : 0) + i_carry;
-        cResult.pi_get_i_numbers()[j] = sum % 10;
-        i_carry = sum / 10;
-        j--;
+        if (i >= cNumber2.i_get_size() - cNumber1.i_get_size()) {
+            i_sum = cNumber2.pi_get_i_numbers()[i] + cNumber1.pi_get_i_numbers()[k--] + i_carry;
+        } else {
+            i_sum = cNumber2.pi_get_i_numbers()[i] + i_carry;
+        }
+        cResult.pi_get_i_numbers()[j--] = i_sum % 10;
+        i_carry = i_sum / 10;
     }
-
     if (i_carry > 0) {
         cResult.pi_get_i_numbers()[j] = i_carry;
     }
@@ -160,17 +152,6 @@ int CHelpFunctions::i_get_number_of_digits(int iNumber) {
 }
 
 CNumber CHelpFunctions::c_multiply(const CNumber &cNumber1, const CNumber &cNumber2) {
-//    CNumber cResult, cTemp1, cTemp2;
-//    cResult = 0;
-//    cTemp1 = cNumber1;
-//    cTemp2 = cNumber2;
-//    cTemp1.v_set_is_negative(false);
-//    cTemp2.v_set_is_negative(false);
-//    while (!(cTemp2 == 0)) {
-//        cResult = CHelpFunctions::c_add(cResult, cTemp1);
-//        cTemp2 = --cTemp2;
-//    }
-
     CNumber cResult(cNumber1.i_get_size() + cNumber2.i_get_size());
     int i_carry, i_product;
     for (int i = cNumber1.i_get_size() - 1; i >= 0; i--) {

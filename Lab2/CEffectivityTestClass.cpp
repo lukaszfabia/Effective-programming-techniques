@@ -73,6 +73,7 @@ void CEffectivityTestClass::v_effectivity_test_for_multiplying(const char *c_nam
 
     std::clock_t end = std::clock();
     c_res->v_information();
+    std::cout<<"Size of result: "<<c_res->i_get_size()<<std::endl;
     std::cout << "Time: " << static_cast<double>(end - start) / static_cast<double> (CLOCKS_PER_SEC / 1000) << " ms"
               << std::endl;
 }

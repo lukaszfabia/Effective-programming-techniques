@@ -22,22 +22,25 @@ void v_start_effectivity_tests() {
     CEffectivityTestClass *testClass;
     testClass = new CEffectivityTestClass();
     testClass->v_effectivity_test_for_dividing("dividing", 256, INT_MAX-1);
-    testClass->v_effectivity_test_for_substracting("substracting", INT_MAX, INT_MAX);
-    testClass->v_effectivity_test_for_factorial("factoring", 140);
-    testClass->v_effectivity_test_for_multiplying("multiplying", 100, 10);
-    testClass->v_effectivity_test_for_adding("adding", 30000, INT_MAX);
+//    testClass->v_effectivity_test_for_substracting("substracting", INT_MAX, INT_MAX);
+//    testClass->v_effectivity_test_for_factorial("factoring", 140);
+//    testClass->v_effectivity_test_for_multiplying("multiplying", 100, 10);
+//    testClass->v_effectivity_test_for_adding("adding", 30000, INT_MAX);
     testClass->v_effectivity_test_for_dividing("dividing", 12213, 123);
     delete testClass;
 }
 
 int main() {
 //    v_start_test("Test for lab2 operators");
-//    v_start_effectivity_tests();
-    CNumber c1 , c2 , c3;
-    c1 = 123;
-    c2 = 5;
-    c3 = c1/c2;
-    c3.v_information();
+    v_start_effectivity_tests();
+//    CNumber c1 , c2 , c3;
+//    c1 = -12813;
+//    c2 = -453;
+//    c3 = c1 - c2;
+//
+//    c1.v_information();
+//    c2.v_information();
+//    c3.v_information();
 
 
     return 0;

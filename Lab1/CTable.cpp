@@ -5,9 +5,6 @@
 #include "CTable.h"
 #include <iostream>
 
-const int DEFAULT_LENGTH = 10;
-const std::string DEFAULT_NAME = "Default name";
-
 CTable::CTable() {
     std::cout << "bezp: '" << DEFAULT_NAME << "'" << std::endl;
     s_name = DEFAULT_NAME;
@@ -33,7 +30,7 @@ CTable::CTable(CTable &pcOther) {
 }
 
 CTable::~CTable() {
-    delete []pi_table;
+    delete[]pi_table;
     std::cout << "usuwam: '" << s_name << "'" << std::endl;
 }
 
@@ -43,8 +40,8 @@ void CTable::vSetName(std::string sName) {
 
 bool CTable::bSetNewSize(int iTableLen) {
     if (iTableLen > 0) {
-        int *pi_new_table = new int [iTableLen];
-        delete []pi_table;
+        int *pi_new_table = new int[iTableLen];
+        delete[]pi_table;
         pi_table = pi_new_table;
         i_table_length = iTableLen;
         return true;
@@ -54,7 +51,7 @@ bool CTable::bSetNewSize(int iTableLen) {
 }
 
 CTable *CTable::pcClone() {
-    return this;
+    return new CTable(*this);
 }
 
 void CTable::vShow() {

@@ -77,15 +77,14 @@ void CTableTest::v_test_for_clone() {
     CTable *pcTab = new CTable("Dynamic object", 10);
     CTable *cloneTab = pcTab->pcClone();
     cloneTab->vSetName("Clone of dynamic object");
-    delete pcTab;
-    delete cloneTab;
 
-    std::cout<<"----------------------------\n";
+    std::cout << "----------------------------\n";
 
     CTable tab("Static object", 10);
     CTable *cloneTab2 = tab.pcClone();
     cloneTab2->vSetName("Clone of static object");
+    delete pcTab;
+    delete cloneTab;
     delete cloneTab2;
 }
-
 

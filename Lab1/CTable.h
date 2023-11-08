@@ -3,6 +3,8 @@
 //
 
 #ifndef TEP_CTABLE_H
+#define DEFAULT_LENGTH 10
+#define DEFAULT_NAME "Default name"
 #define TEP_CTABLE_H
 
 

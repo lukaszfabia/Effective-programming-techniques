@@ -10,14 +10,12 @@ CNumber::CNumber() {
     i_size = DEFAULT_SIZE;
     i_numbers = new int[i_size];
     b_is_negative = false;
-    CHelpFunctions::v_fill_array(i_numbers, 0, DEFAULT_SIZE);
 }
 
 CNumber::CNumber(int iSize) {
     i_size = iSize;
     i_numbers = new int[i_size];
     b_is_negative = false;
-    CHelpFunctions::v_fill_array(i_numbers, 0, iSize);
 }
 
 CNumber::~CNumber() {
@@ -39,10 +37,7 @@ CNumber &CNumber::operator=(int iValue) {
     if (iValue < 0) {
         iValue = -iValue;
         b_is_negative = true;
-    } else {
-        b_is_negative = false;
     }
-
     CHelpFunctions::v_set_values(i_numbers, iValue, i_size - 1);
 
     return *this;
@@ -50,7 +45,6 @@ CNumber &CNumber::operator=(int iValue) {
 
 CNumber CNumber::operator+(const CNumber &cOther) const {
     CNumber cResult;
-
     if (cOther.b_is_negative == b_is_negative) {
         cResult = CHelpFunctions::c_add(cOther, *this);
         cResult.b_is_negative = b_is_negative;
@@ -58,7 +52,6 @@ CNumber CNumber::operator+(const CNumber &cOther) const {
         bool b_sign;
         if (CHelpFunctions::b_get_sign_of_bigger_abs_number(cOther, *this)) {
             b_sign = b_is_negative;
-            // this - cOther
             cResult = CHelpFunctions::c_substraction(cOther, *this);
         } else {
             b_sign = cOther.b_is_negative;
@@ -72,7 +65,6 @@ CNumber CNumber::operator+(const CNumber &cOther) const {
 
 CNumber CNumber::operator-(const CNumber &cOther) const {
     CNumber cResult;
-
     if (b_is_negative && !cOther.b_is_negative || !b_is_negative && cOther.b_is_negative) {
         cResult = CHelpFunctions::c_add(cOther, *this);
         cResult.b_is_negative = b_is_negative;
@@ -87,50 +79,72 @@ CNumber CNumber::operator-(const CNumber &cOther) const {
         }
         cResult.b_is_negative = b_sign;
     } else {
-        bool b_sign;
         if (CHelpFunctions::b_get_sign_of_bigger_abs_number(cOther, *this)) {
             cResult = CHelpFunctions::c_substraction(cOther, *this);
-            b_sign = true;
+            cResult.b_is_negative = true;
         } else {
             cResult = CHelpFunctions::c_substraction(*this, cOther);
-            b_sign = false;
+            cResult.b_is_negative= false;
         }
-        cResult.b_is_negative = b_sign;
     }
 
     return CHelpFunctions::c_resize_array(cResult);
 }
 
 CNumber CNumber::operator*(const CNumber &cOther) const {
-    CNumber cResult = CHelpFunctions::c_multiply(*this, cOther);
+    CNumber cTemp1, cTemp2;
+    cTemp1 = CHelpFunctions::c_resize_array(*this);
+    cTemp2 = CHelpFunctions::c_resize_array(cOther);
+    CNumber cResult = CHelpFunctions::c_multiply(cTemp1, cTemp2);
     cResult.v_set_is_negative(b_is_negative != cOther.b_is_negative);
 
     return CHelpFunctions::c_resize_array(cResult);
 }
 
 CNumber CNumber::operator/(const CNumber &cOther) const {
-    if (cOther > *this || cOther == 0) {
+    if (cOther == 0) {
         std::cout << "Error: Division by zero or division by bigger number" << std::endl;
-        return CNumber(0);
+        CNumber cRes;
+        cRes = INT_MAX;
+        return cRes;
     }
+
+    if (cOther == 1) {
+        return *this;
+    }
+
     CNumber cResult, cTemp, absOther;
     cResult = 0;
     cTemp = *this;
 
-    cTemp.v_set_is_negative(false);
     absOther = cOther;
     absOther.v_set_is_negative(false);
+    cTemp.v_set_is_negative(false);
+
+    if (absOther > cTemp) {
+        return CNumber(0);
+    }
+
 
     while (cTemp >= absOther) {
         cTemp = CHelpFunctions::c_substraction(absOther, cTemp);
         cResult = ++cResult;
     }
-
-    cResult.b_is_negative = (b_is_negative != cOther.b_get_is_negative());
+    cResult.b_is_negative = (b_is_negative != cOther.b_is_negative);
     return CHelpFunctions::c_resize_array(cResult);
 }
 
 bool CNumber::operator>=(const CNumber &cOther) const {
+    if (b_is_negative && !cOther.b_is_negative) {
+        return false;
+    } else if (!b_is_negative && cOther.b_is_negative) {
+        return true;
+    }
+    if (i_size > cOther.i_size) {
+        return true;
+    } else if (i_size < cOther.i_size) {
+        return false;
+    }
     for (int i = 0; i < i_size; i++) {
         if (i_numbers[i] > cOther.i_numbers[i]) {
             return true;
@@ -138,11 +152,20 @@ bool CNumber::operator>=(const CNumber &cOther) const {
             return false;
         }
     }
-
     return true;
 }
 
 bool CNumber::operator>(const CNumber &cOther) const {
+    if (b_is_negative && !cOther.b_is_negative) {
+        return false;
+    } else if (!b_is_negative && cOther.b_is_negative) {
+        return true;
+    }
+    if (i_size > cOther.i_size) {
+        return true;
+    } else if (i_size < cOther.i_size) {
+        return false;
+    }
     for (int i = 0; i < i_size; i++) {
         if (i_numbers[i] > cOther.i_numbers[i]) {
             return true;
