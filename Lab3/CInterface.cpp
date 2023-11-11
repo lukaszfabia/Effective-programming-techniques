@@ -2,7 +2,7 @@
 // Created by ufabi on 20.10.2023.
 //
 
-#include <iostream>
+#include <sstream>
 #include "CInterface.h"
 #include "Utilities/CFixExpression.h"
 
@@ -21,7 +21,7 @@ CInterface::~CInterface() {
 void CInterface::run() {
     bool isExit = false;
     while (!isExit) {
-        CScan::printPrompt(CMD_LANE);
+        CScan::printLane(CMD_LANE);
         scan->readLane();
         isExit = menu(CPreprocessExpression::removeInvalidVars(CPreprocessExpression::toLowerCase(scan->getLane())));
     }
@@ -69,18 +69,21 @@ void CInterface::join(const std::string &lane) {
 
 void CInterface::comp(const std::string &lane) {
     std::string tmp = lane.substr(4);
+    std::stringstream ss;
     int amountOfVars = CPreprocessExpression::getAmountOfVariables(
             CPreprocessExpression::removeDuplicates(tree->printVars()));
 
     if (tmp.empty() && amountOfVars != 0) {
         CScan::printPrompt("amount of variables and values is not equal\n");
     } else if (amountOfVars == 0) {
-        CScan::printResult("result: " + std::to_string(tree->calculate()));
+        ss << tree->calculate();
+        CScan::printResult("result: " + ss.str());
     } else if (amountOfVars == CPreprocessExpression::getAmountOfValues(lane.substr(5)) && !tmp.empty()) {
         tree->setValues(
                 CPreprocessExpression::createMap(lane.substr(5),
                                                  CPreprocessExpression::removeDuplicates(tree->printVars())));
-        CScan::printResult("result: " + std::to_string(tree->calculate()));
+        ss << tree->calculate();
+        CScan::printResult("result: " + ss.str());
     } else {
         CScan::printPrompt("too many or too little args\n");
     }
@@ -91,7 +94,7 @@ void CInterface::print() {
 }
 
 void CInterface::info() {
-    CScan::printPrompt("available commands: enter, join, comp, norm, vars, print, info, exit\n");
+    CScan::printPrompt(HELP);
 }
 
 void CInterface::vars() {

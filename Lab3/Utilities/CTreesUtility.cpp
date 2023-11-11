@@ -6,6 +6,7 @@
 #include "CPreprocessExpression.h"
 #include "CScan.h"
 #include <queue>
+#include <valarray>
 
 std::string CTreesUtility::inOrderTraversal(CNode *startNode) {
     std::string result;
@@ -113,7 +114,7 @@ double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::map<st
                 double getValueOfDivider = getValueOfExpression(currentNode->getRight(), values, result);
                 if (getValueOfDivider == 0) {
                     CScan::printResult("Division by zero!");
-                    return INFINITY;
+                    return INT_MAX;
                 }
                 result = getValueOfExpression(currentNode->getLeft(), values, result) / getValueOfDivider;
             } else if (currentNode->getValue() == "sin") {
@@ -130,7 +131,7 @@ double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::map<st
                 }
             }
         } else {
-            result = std::stoi(currentNode->getValue());
+            result = std::strtol(currentNode->getValue().c_str(), NULL, 10);
         }
     }
     return result;

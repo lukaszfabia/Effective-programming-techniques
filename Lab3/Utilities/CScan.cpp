@@ -40,3 +40,7 @@ void CScan::printPrompt(const char *prompt) {
 void CScan::printResult(const std::string &result) {
     std::cout << result << std::endl;
 }
+
+void CScan::printLane(const std::string &lane) {
+    std::cout << lane;
+}

@@ -3,6 +3,7 @@
 //
 
 #ifndef EFFECTIVE_PROGRAMMING_TECHNIQUES_CSCAN_H
+#define MAX_SIZE 100
 #define EFFECTIVE_PROGRAMMING_TECHNIQUES_CSCAN_H
 
 
@@ -31,9 +32,9 @@ public:
 
     static void printResult(const std::string &result);
 
-};
+    static void printLane(const std::string &lane);
 
-static const int MAX_SIZE = 100;
+};
 
 
 #endif //EFFECTIVE_PROGRAMMING_TECHNIQUES_CSCAN_H

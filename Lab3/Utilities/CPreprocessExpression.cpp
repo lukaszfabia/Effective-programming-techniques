@@ -7,7 +7,8 @@
 #include <string>
 #include <map>
 #include <sstream>
-#include <cctype>
+#include <cstring>
+#include <cstdlib>
 
 CPreprocessExpression::CPreprocessExpression() {
     elements = std::vector<std::string>();
@@ -123,7 +124,7 @@ std::map<std::string, int> CPreprocessExpression::createMap(const std::string &v
 
     while (std::getline(valuesStream, value, ' ')) {
         if (std::getline(varsStream, var, ' ')) {
-            result[var] = std::stoi(value);
+            result[var] = std::strtol(value.c_str(), NULL, 10);
         }
     }
 

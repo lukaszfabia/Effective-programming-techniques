@@ -5,6 +5,7 @@
 #include "CFixExpression.h"
 #include "../CTree.h"
 #include <stack>
+#include <algorithm>
 
 CFixExpression::CFixExpression() {
     expression = DEFAULT_EXPRESSION;

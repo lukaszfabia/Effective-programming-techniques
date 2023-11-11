@@ -4,6 +4,16 @@
 
 #ifndef EFFECTIVE_PROGRAMMING_TECHNIQUES_CINTERFACE_H
 #define EFFECTIVE_PROGRAMMING_TECHNIQUES_CINTERFACE_H
+#define CMD_LANE "ctree>"
+#define HELP "Commands:\n"\
+             "enter <expression> - enter expression\n"\
+             "join <expression> - join expression\n"\
+             "comp <expression> - compute expression\n"\
+             "print - print expression\n"\
+             "vars - print variables\n"\
+             "norm - normalize expression\n"\
+             "help - print help\n"\
+             "exit - exit\n"
 
 
 #include "Utilities/CScan.h"
@@ -31,16 +41,14 @@ private:
 
     static void unknownCommand();
 
+    void norm();
+
 public:
     CInterface();
 
     ~CInterface();
 
     void run();
-
-    void norm();
 };
-
-static const char *CMD_LANE = "ctree>";
 
 #endif //EFFECTIVE_PROGRAMMING_TECHNIQUES_CINTERFACE_H
