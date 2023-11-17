@@ -131,7 +131,7 @@ double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::map<st
                 }
             }
         } else {
-            result = std::strtol(currentNode->getValue().c_str(), NULL, 10);
+            result = std::strtod(currentNode->getValue().c_str(), NULL);
         }
     }
     return result;

@@ -36,9 +36,15 @@ std::vector<std::string> CPreprocessExpression::getElements() {
 }
 
 bool CPreprocessExpression::isNumber(const std::string &token) {
+    bool hasDot = false;
+
     for (int i = 0; i < token.length(); ++i) {
         if (!isdigit(token[i])) {
-            return false;
+            if (token[i] == '.' && !hasDot) {
+                hasDot = true;
+            } else {
+                return false;
+            }
         }
     }
     return true;
@@ -144,7 +150,7 @@ std::string CPreprocessExpression::toLowerCase(const std::string &input) {
 
 std::string CPreprocessExpression::removeInvalidVars(const std::string &input) {
     std::string result = input;
-    const char invalidChars[] = "!@#$%^&()_={}[]|\\:;\"'<>,.?/";
+    const char invalidChars[] = "!@#$%^&()_={}[]|\\:;\"'<>,?/";
 
     for (int i = 0; i < result.length(); ++i) {
         if (strchr(invalidChars, result[i]) != NULL) {
