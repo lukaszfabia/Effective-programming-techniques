@@ -97,7 +97,7 @@ CNode *CTreesUtility::searchForOperatorChild(CNode *currentNode) {
     return searchForOperatorChild(currentNode->right);
 }
 
-double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::map<std::string, int> &values, double result) {
+double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::map<std::string, double> &values, double result) {
     if (currentNode != NULL) {
         if (CPreprocessExpression::isOperator(currentNode->getValue()) || CPreprocessExpression::isFunction(
                 currentNode->getValue())) {
@@ -123,9 +123,9 @@ double CTreesUtility::getValueOfExpression(CNode *currentNode, const std::map<st
                 result = cos(getValueOfExpression(currentNode->getRight(), values, result));
             }
         } else if (CPreprocessExpression::isVariable(currentNode->getValue())) {
-            std::map<std::string, int>::iterator it;
-            for (it = const_cast<std::map<std::string, int> &>(values).begin();
-                 it != const_cast<std::map<std::string, int> &>(values).end(); ++it) {
+            std::map<std::string, double>::iterator it;
+            for (it = const_cast<std::map<std::string, double> &>(values).begin();
+                 it != const_cast<std::map<std::string, double> &>(values).end(); ++it) {
                 if (it->first == currentNode->getValue()) {
                     result = it->second;
                 }

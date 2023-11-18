@@ -14,7 +14,7 @@ class CTree {
 private:
     CNode *root;
     std::vector<std::string> elements;
-    std::map<std::string, int> values;
+    std::map<std::string, double> values;
 
 public:
     CTree();
@@ -49,7 +49,7 @@ public:
 
     double calculate();
 
-    void setValues(const std::map<std::string, int>& valuesMap);
+    void setValues(const std::map<std::string, double>& valuesMap);
 
     void copyTree(const CNode *sourceNode, CNode *targetNode, CTree *result) const;
 };

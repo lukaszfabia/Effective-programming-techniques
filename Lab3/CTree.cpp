@@ -64,7 +64,7 @@ std::string CTree::printVars() {
     return CTreesUtility::postOrderTraversal(root);
 }
 
-void CTree::setValues(const std::map<std::string, int> &valuesMap) {
+void CTree::setValues(const std::map<std::string, double> &valuesMap) {
     values = valuesMap;
 }
 
@@ -77,7 +77,7 @@ CNode *CTree::getOperatorChild() const {
 }
 
 double CTree::calculate() {
-    return CTreesUtility::getValueOfExpression(root, values, 0);
+    return CTreesUtility::getValueOfExpression(root, values, 0.0);
 }
 
 void CTree::setElements(const std::vector<std::string> &newElements) {

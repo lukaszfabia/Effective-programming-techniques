@@ -9,6 +9,7 @@
 #include <sstream>
 #include <cstring>
 #include <cstdlib>
+#include <set>
 
 CPreprocessExpression::CPreprocessExpression() {
     elements = std::vector<std::string>();
@@ -83,17 +84,24 @@ std::vector<std::string> CPreprocessExpression::createVector(const std::string &
 }
 
 std::string CPreprocessExpression::removeDuplicates(const std::string &input) {
-    std::string result;
+    std::istringstream iss(input);
+    std::set<std::string> seenElements;
+    std::string result, word;
 
-    for (int i = 0; i < input.length(); i++) {
-        if (result.find(input[i]) == std::string::npos) {
-            result += input[i];
-            result += " ";
+    while (iss >> word) {
+        if (seenElements.find(word) == seenElements.end()) {
+            seenElements.insert(word);
+            result += word + " ";
         }
+    }
+
+    if (!result.empty()) {
+        result.erase(result.size() - 1); // Remove the trailing space
     }
 
     return result;
 }
+
 
 int CPreprocessExpression::getAmountOfVariables(const std::string &input) {
     int amount = 0;
@@ -121,8 +129,8 @@ int CPreprocessExpression::getAmountOfValues(const std::string &lane) {
     return amount;
 }
 
-std::map<std::string, int> CPreprocessExpression::createMap(const std::string &values, const std::string &vars) {
-    std::map<std::string, int> result;
+std::map<std::string, double> CPreprocessExpression::createMap(const std::string &values, const std::string &vars) {
+    std::map<std::string, double> result;
     std::istringstream valuesStream(values);
     std::istringstream varsStream(vars);
     std::string value;
@@ -130,7 +138,7 @@ std::map<std::string, int> CPreprocessExpression::createMap(const std::string &v
 
     while (std::getline(valuesStream, value, ' ')) {
         if (std::getline(varsStream, var, ' ')) {
-            result[var] = std::strtol(value.c_str(), NULL, 10);
+            result[var] = std::strtod(value.c_str(), NULL);
         }
     }
 

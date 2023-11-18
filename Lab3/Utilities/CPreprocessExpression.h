@@ -45,7 +45,7 @@ public:
 
     static int getAmountOfValues(const std::string &lane);
 
-    static std::map<std::string, int> createMap(const std::string &values, const std::string &vars);
+    static std::map<std::string, double> createMap(const std::string &values, const std::string &vars);
 
     static std::string toLowerCase(const std::string &input);
 

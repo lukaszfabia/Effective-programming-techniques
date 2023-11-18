@@ -25,7 +25,7 @@ public:
 
     static CNode *searchForOperatorChild(CNode *currentNode);
 
-    static double getValueOfExpression(CNode *currentNode, const std::map<std::string, int> &values, double result);
+    static double getValueOfExpression(CNode *currentNode, const std::map<std::string, double> &values, double result);
 };
 
 #endif //EFFECTIVE_PROGRAMMING_TECHNIQUES_CTREESUTILITY_H
