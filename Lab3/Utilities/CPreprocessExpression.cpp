@@ -63,6 +63,10 @@ bool CPreprocessExpression::isFunction(const std::string &token) {
     return token == "sin" || token == "cos";
 }
 
+bool CPreprocessExpression::isString(const std::string &token) {
+    return token[0] == '"' && token[token.length() - 1] == '"';
+}
+
 void CPreprocessExpression::setElements(const std::vector<std::string> &newElements) {
     elements = newElements;
 }

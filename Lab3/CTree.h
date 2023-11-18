@@ -49,7 +49,7 @@ public:
 
     double calculate();
 
-    void setValues(const std::map<std::string, double>& valuesMap);
+    void setValues(const std::map<std::string, double> &valuesMap);
 
     void copyTree(const CNode *sourceNode, CNode *targetNode, CTree *result) const;
 };

@@ -52,6 +52,8 @@ public:
     static std::string removeInvalidVars(const std::string &input);
 
     virtual std::vector<std::string> fixExpression() = 0;
+
+    static bool isString(const std::string &token);
 };
 
 static const std::string FILL_VALUE = "1";
