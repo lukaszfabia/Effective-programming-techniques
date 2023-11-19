@@ -20,10 +20,6 @@ private:
 
     static int getPriority(const std::string &operator_str);
 
-    static std::vector<std::string> infixToPostfix(const std::vector<std::string> &infix);
-
-    static std::vector<std::string> infixToPrefix(const std::vector<std::string> &infix);
-
     static bool nextNotAnOperator(const std::string &token);
 
     bool isCorrect();
@@ -38,6 +34,10 @@ public:
     ~CFixExpression();
 
     std::vector<std::string> fixExpression();
+
+    static std::vector<std::string> infixToPostfix(const std::vector<std::string> &infix);
+
+    static std::vector<std::string> infixToPrefix(const std::vector<std::string> &infix);
 };
 
 
