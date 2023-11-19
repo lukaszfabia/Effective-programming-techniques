@@ -125,8 +125,42 @@ double Tree<double>::eval(Node<double> *current, double result) {
 }
 
 template<>
-std::string Tree<std::string>::eval(Node<std::string> *node, std::string result) {
-    return NULL;
+std::string Tree<std::string>::eval(Node<std::string> *current, std::string result) {
+    std::string left, right;
+    if (current != NULL) {
+        if (current->getType() == OPERATOR) {
+            switch (current->getOp()) {
+                case ADD:
+                    return "\""+Tools<std::string>::removeQuote(eval(current->getLeft(), result)) +
+                           Tools<std::string>::removeQuote(eval(current->getRight(), result)) + "\"";
+                case SUBTRACT:
+                    return Tools<std::string>::substract(
+                            Tools<std::string>::removeQuote(eval(current->getLeft(), result)),
+                            Tools<std::string>::removeQuote(eval(current->getRight(), result)));
+                case MULTIPLY:
+                    return Tools<std::string>::multiply(
+                            Tools<std::string>::removeQuote(eval(current->getLeft(), result)),
+                            Tools<std::string>::removeQuote(eval(current->getRight(), result)));
+                case DIVIDE:
+                    return Tools<std::string>::divide(Tools<std::string>::removeQuote(eval(current->getLeft(), result)),
+                                                      Tools<std::string>::removeQuote(
+                                                              eval(current->getRight(), result)));
+                default:
+                    break;
+            }
+        } else if (current->getType() == VARIABLE) {
+            typename std::map<std::string, std::string>::iterator it = values.find(current->getVariable());
+            for (it = values.begin(); it != values.end(); it++) {
+                if (it->first == current->getVariable()) {
+                    result = it->second;
+                    break;
+                }
+            }
+        } else {
+            return current->getValue();
+        }
+    }
+    return result;
 }
 
 template<>

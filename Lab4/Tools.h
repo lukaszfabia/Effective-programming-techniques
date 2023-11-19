@@ -39,7 +39,72 @@ public:
     static int getAmountOfVariables(const std::string &input);
 
     static int getAmountOfValues(const std::string &input);
+
+    static std::string substract(const std::string &input, const std::string &sub);
+
+    static std::string multiply(const std::string &input, const std::string &sub);
+
+    static std::string divide(const std::string &input, const std::string &sub);
+
+    static std::string removeQuote(const std::string &input);
 };
+
+template<class T>
+std::string Tools<T>::removeQuote(const std::string &input) {
+    return input.substr(1, input.size()-2);
+}
+
+template<class T>
+std::string Tools<T>::substract(const std::string &input, const std::string &sub) {
+    std::stringstream ss;
+    if (input.length() < sub.length() || input.find(sub) == std::string::npos) {
+        ss << '"' << input << '"';
+        return ss.str();
+    }
+    size_t index = input.length() - sub.length();
+    for (size_t i = index; i < input.length(); ++i) {
+        if (input[i] != sub[i - index]) {
+            ss << '"' << input << '"';
+            return ss.str();
+        }
+    }
+
+    ss << '"' << input.substr(0, index) << '"';
+    return ss.str();
+}
+
+template<class T>
+std::string Tools<T>::multiply(const std::string &input, const std::string &sub) {
+    std::string result;
+    std::stringstream ss;
+    for (size_t i = 0; i < input.length(); ++i) {
+        if (input[i] == sub[0]) {
+            result += sub;
+        } else {
+            result += input[i];
+        }
+    }
+
+    ss << '"' << result << '"';
+    return ss.str();
+}
+
+template<class T>
+std::string Tools<T>::divide(const std::string &input, const std::string &sub) {
+    std::string result;
+    std::stringstream ss;
+    for (size_t i = 0; i < input.length(); i++) {
+        if (input[i] == sub[0]) {
+            i += sub.length() - 1;
+            result += sub[0];
+        } else {
+            result += input[i];
+        }
+    }
+
+    ss << '"' << result << '"';
+    return ss.str();
+}
 
 template<class T>
 int Tools<T>::getAmountOfValues(const std::string &input) {
