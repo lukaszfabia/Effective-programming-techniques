@@ -5,6 +5,14 @@
 #ifndef TEMPLATES_TOOLS_H
 #define FILL "x"
 #define EXPRESSION "+ x y"
+#define SET_QUOTE(x) ss << '"' << x << '"';
+#define IS_OPERATOR(token) token == "+" || token == "-" || token == "*" || token == "/"
+#define IS_FUNCTION(token) token == SINUS || token == COSINUS
+#define IS_STRING(token) token[0] == '"' && token[token.size() - 1] == '"'
+#define IS_NUMBER(token) Tools<T>::isNumber(token)
+#define IS_VARIABLE(token) !(IS_OPERATOR(token)) && !(IS_FUNCTION(token)) && !(IS_NUMBER(token)) && !(IS_STRING(token))
+#define DOT '.'
+#define REMOVE_QUOTE(input) input.substr(1, input.size() - 2)
 #define TEMPLATES_TOOLS_H
 
 
@@ -19,14 +27,6 @@
 template<class T>
 class Tools {
 public:
-
-    static bool isOperator(const std::string &token);
-
-    static bool isFunction(const std::string &token);
-
-    static bool isVariable(const std::string &token);
-
-    static bool isString(const std::string &token);
 
     static bool isNumber(const std::string &token);
 
@@ -46,30 +46,24 @@ public:
 
     static std::string divide(const std::string &input, const std::string &sub);
 
-    static std::string removeQuote(const std::string &input);
 };
-
-template<class T>
-std::string Tools<T>::removeQuote(const std::string &input) {
-    return input.substr(1, input.size()-2);
-}
 
 template<class T>
 std::string Tools<T>::substract(const std::string &input, const std::string &sub) {
     std::stringstream ss;
     if (input.length() < sub.length() || input.find(sub) == std::string::npos) {
-        ss << '"' << input << '"';
+        SET_QUOTE(input)
         return ss.str();
     }
     size_t index = input.length() - sub.length();
     for (size_t i = index; i < input.length(); ++i) {
         if (input[i] != sub[i - index]) {
-            ss << '"' << input << '"';
+            SET_QUOTE(input)
             return ss.str();
         }
     }
 
-    ss << '"' << input.substr(0, index) << '"';
+    SET_QUOTE(input.substr(0, index))
     return ss.str();
 }
 
@@ -85,7 +79,7 @@ std::string Tools<T>::multiply(const std::string &input, const std::string &sub)
         }
     }
 
-    ss << '"' << result << '"';
+    SET_QUOTE(result)
     return ss.str();
 }
 
@@ -102,7 +96,7 @@ std::string Tools<T>::divide(const std::string &input, const std::string &sub) {
         }
     }
 
-    ss << '"' << result << '"';
+    SET_QUOTE(result)
     return ss.str();
 }
 
@@ -113,7 +107,7 @@ int Tools<T>::getAmountOfValues(const std::string &input) {
     std::string element;
 
     while (iss >> std::ws >> element) {
-        if (isNumber(element) || isString(element)) {
+        if (IS_NUMBER(element) || IS_STRING(element)) {
             amount++;
         }
     }
@@ -135,32 +129,12 @@ int Tools<T>::getAmountOfVariables(const std::string &input) {
 }
 
 template<class T>
-bool Tools<T>::isOperator(const std::string &token) {
-    return token == "+" || token == "-" || token == "*" || token == "/";
-}
-
-template<class T>
-bool Tools<T>::isFunction(const std::string &token) {
-    return token == "sin" || token == "cos";
-}
-
-template<class T>
-bool Tools<T>::isVariable(const std::string &token) {
-    return !isOperator(token) && !isFunction(token) && !isNumber(token) && !isString(token);
-}
-
-template<class T>
-bool Tools<T>::isString(const std::string &token) {
-    return token[0] == '"' && token[token.size() - 1] == '"';
-}
-
-template<class T>
 bool Tools<T>::isNumber(const std::string &token) {
     bool hasDot = false;
 
     for (int i = 0; i < token.length(); ++i) {
         if (!isdigit(token[i])) {
-            if (token[i] == '.' && !hasDot) {
+            if (token[i] == DOT && !hasDot) {
                 hasDot = true;
             } else {
                 return false;
@@ -192,7 +166,7 @@ std::string Tools<T>::removeDuplicates(const std::string &input) {
     while (iss >> word) {
         if (seenElements.find(word) == seenElements.end()) {
             seenElements.insert(word);
-            result += word + " ";
+            result += word + SPACE;
         }
     }
 

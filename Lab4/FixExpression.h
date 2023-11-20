@@ -4,6 +4,7 @@
 
 #ifndef TEMPLATES_FIXEXPRESSION_H
 #define TEMPLATES_FIXEXPRESSION_H
+#define IS_CORRECT(vector1) amountOfNumbers(vector1) == amountOfOperators(vector1) + 1
 
 #include <vector>
 #include <string>
@@ -14,13 +15,9 @@ template<class T>
 class FixExpression {
 private:
 
-    static bool isCorrect(const std::vector<std::string> &vector1) {
-        return amountOfNumbers(vector1) == amountOfOperators(vector1) + 1;
-    }
-
     static bool hasOnlyVarsOrNumbers(const std::vector<std::string> &vector1) {
         for (int i = 0; i < vector1.size(); i++) {
-            if (!Tools<T>::isOperator(vector1[i]) || !Tools<T>::isFunction(vector1[i])) {
+            if (!(IS_OPERATOR(vector1[i])) || !(IS_FUNCTION(vector1[i]))) {
                 return false;
             }
         }
@@ -30,7 +27,7 @@ private:
     static int amountOfOperators(const std::vector<std::string> &vector1) {
         int numberOfOperators = 0;
         for (int i = 0; i < vector1.size(); i++) {
-            if (Tools<T>::isOperator(vector1[i])) {
+            if (IS_OPERATOR(vector1[i])) {
                 numberOfOperators++;
             }
         }
@@ -40,7 +37,7 @@ private:
     static int amountOfNumbers(const std::vector<std::string> &vector1) {
         int numberOfNumbers = 0;
         for (int i = 0; i < vector1.size(); i++) {
-            if (Tools<T>::isNumber(vector1[i]) || Tools<T>::isVariable(vector1[i]) || Tools<T>::isString(vector1[i])) {
+            if (!(IS_FUNCTION(vector1[i]) || IS_OPERATOR(vector1[i]))) {
                 numberOfNumbers++;
             }
         }
@@ -49,7 +46,7 @@ private:
 
     static bool hasOnlyOperators(const std::vector<std::string> &vector1) {
         for (int i = 0; i < vector1.size(); i++) {
-            if (!Tools<T>::isOperator(vector1[i])) {
+            if (!(IS_OPERATOR(vector1[i]))) {
                 return false;
             }
         }
@@ -68,7 +65,7 @@ public:
 
 template<class T>
 std::vector<std::string> FixExpression<T>::fix(std::vector<std::string> tokens) {
-    if (isCorrect(tokens)) {
+    if (IS_CORRECT(tokens)) {
         return tokens;
     }
 
@@ -97,17 +94,17 @@ std::vector<std::string> FixExpression<T>::fix(std::vector<std::string> tokens) 
     delete tree;
     tokens = Tools<T>::createVector(newExpression);
 
-    if (!tokens.empty() && Tools<T>::isOperator(tokens[0])) {
+    if (!tokens.empty() && IS_OPERATOR(tokens[0])) {
         tokens.insert(tokens.begin(), FILL);
     }
 
     for (int i = 0; i < tokens.size(); i++) {
-        if (Tools<T>::isOperator(tokens[i]) && i < tokens.size() - 1 && Tools<T>::isOperator(tokens[i + 1])) {
+        if (IS_OPERATOR(tokens[i]) && i < tokens.size() - 1 && IS_OPERATOR(tokens[i + 1])) {
             tokens.insert(tokens.begin() + i + 1, FILL);
         }
     }
 
-    if (!tokens.empty() && Tools<T>::isOperator(tokens[tokens.size() - 1])) {
+    if (!tokens.empty() && IS_OPERATOR(tokens[tokens.size() - 1])) {
         tokens.push_back(FILL);
     }
 
@@ -135,7 +132,7 @@ std::vector<std::string> FixExpression<T>::infixToPostfix(const std::vector<std:
     std::stack<std::string> string_stack;
     std::vector<std::string> output;
     for (int i = 0; i < infix.size(); ++i) {
-        if (!Tools<T>::isOperator(infix[i])) {
+        if (!(IS_OPERATOR(infix[i]))) {
             output.push_back(infix[i]);
         } else {
             while (!string_stack.empty() && getPriority(infix[i]) < getPriority(string_stack.top())) {

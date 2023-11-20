@@ -3,12 +3,13 @@
 #else
 #define CLEAR system("clear")
 #endif
-
+#define MENU "1. int\n"\
+            "2. double\n"\
+            "3. string\n" \
+            "Choose type of variables: ";
+#define WRONG "Wrong choice!\n"
 
 #include <iostream>
-#include <vector>
-#include "Tools.h"
-#include "Tree.h"
 #include "Interface.h"
 
 enum VariableType {
@@ -19,9 +20,7 @@ enum VariableType {
 
 void run() {
     std::string choice;
-    std::cout << "1. int\n"
-                 "2. double\n"
-                 "3. string\n" "Choose type of variables:";
+    std::cout << MENU;
 
     std::getline(std::cin, choice);
     std::cout << choice[0] << std::endl;
@@ -43,8 +42,7 @@ void run() {
             break;
         }
         default: {
-            std::cout << "Wrong choice!\n";
-            break;
+            std::cout << WRONG;
         }
     }
 }

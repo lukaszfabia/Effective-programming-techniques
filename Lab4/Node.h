@@ -52,31 +52,6 @@ public:
     std::string getVariable() const {
         return variable;
     }
-
-    void setValue(T newValue) {
-        this->value = newValue;
-    }
-
-    void setLeft(Node<T> *newLeft) {
-        this->left = newLeft;
-    }
-
-    void setRight(Node<T> *newRight) {
-        this->right = newRight;
-    }
-
-    void setOp(Operator anOperator) {
-        this->op = anOperator;
-    }
-
-    void setType(Type newType) {
-        this->type = newType;
-    }
-
-    void setVariable(const std::string &newVariable) {
-        this->variable = newVariable;
-    }
-
 };
 
 

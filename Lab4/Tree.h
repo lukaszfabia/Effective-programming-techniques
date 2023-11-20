@@ -4,6 +4,12 @@
 
 #ifndef TEMPLATES_TREE_H
 #define DIV_ERROR "Division by zero"
+#define ZERO 0
+#define EMPTY ""
+#define SPACE " "
+#define SINUS "sin"
+#define COSINUS "cos"
+#define QUOTE "\""
 #define TEMPLATES_TREE_H
 
 #include <cmath>
@@ -41,6 +47,8 @@ public:
     }
 
     ~Tree() {
+        values.clear();
+        elements.clear();
         delete root;
     }
 
@@ -97,7 +105,7 @@ double Tree<double>::eval(Node<double> *current, double result) {
                     return eval(current->getLeft(), result) * eval(current->getRight(), result);
                 case DIVIDE:
                     right = eval(current->getRight(), result);
-                    if (right == 0.0) {
+                    if (right == ZERO) {
                         std::cout << DIV_ERROR << std::endl;
                         return INT_MAX;
                     }
@@ -107,14 +115,14 @@ double Tree<double>::eval(Node<double> *current, double result) {
                 case COS:
                     return cos(eval(current->getRight(), result));
                 default:
-                    break;
+                    return ZERO;
             }
-        } else if (Tools<double>::isVariable(current->getVariable())) {
+        } else if (current->getType() == VARIABLE) {
             typename std::map<std::string, double>::iterator it = values.find(current->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
                 if (it->first == current->getVariable()) {
                     result = it->second;
-                    break;
+                    return result;
                 }
             }
         } else {
@@ -131,29 +139,31 @@ std::string Tree<std::string>::eval(Node<std::string> *current, std::string resu
         if (current->getType() == OPERATOR) {
             switch (current->getOp()) {
                 case ADD:
-                    return "\""+Tools<std::string>::removeQuote(eval(current->getLeft(), result)) +
-                           Tools<std::string>::removeQuote(eval(current->getRight(), result)) + "\"";
+                    return QUOTE + REMOVE_QUOTE(eval(current->getLeft(), result))
+                           +
+                           REMOVE_QUOTE(eval(current->getRight(), result))
+                           + QUOTE;
                 case SUBTRACT:
                     return Tools<std::string>::substract(
-                            Tools<std::string>::removeQuote(eval(current->getLeft(), result)),
-                            Tools<std::string>::removeQuote(eval(current->getRight(), result)));
+                            REMOVE_QUOTE(eval(current->getLeft(), result)),
+                            REMOVE_QUOTE(eval(current->getRight(), result)));
                 case MULTIPLY:
                     return Tools<std::string>::multiply(
-                            Tools<std::string>::removeQuote(eval(current->getLeft(), result)),
-                            Tools<std::string>::removeQuote(eval(current->getRight(), result)));
+                            REMOVE_QUOTE(eval(current->getLeft(), result)),
+                            REMOVE_QUOTE(eval(current->getRight(), result)));
                 case DIVIDE:
-                    return Tools<std::string>::divide(Tools<std::string>::removeQuote(eval(current->getLeft(), result)),
-                                                      Tools<std::string>::removeQuote(
+                    return Tools<std::string>::divide(REMOVE_QUOTE(eval(current->getLeft(), result)),
+                                                      REMOVE_QUOTE(
                                                               eval(current->getRight(), result)));
                 default:
-                    break;
+                    return EMPTY;
             }
         } else if (current->getType() == VARIABLE) {
             typename std::map<std::string, std::string>::iterator it = values.find(current->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
                 if (it->first == current->getVariable()) {
                     result = it->second;
-                    break;
+                    return result;
                 }
             }
         } else {
@@ -187,14 +197,14 @@ int Tree<int>::eval(Node<int> *current, int result) {
                 case COS:
                     return static_cast<int>(cos(eval(current->getRight(), result)));
                 default:
-                    break;
+                    return ZERO;
             }
         } else if (current->getType() == VARIABLE) {
             typename std::map<std::string, int>::iterator it = values.find(current->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
                 if (it->first == current->getVariable()) {
                     result = it->second;
-                    break;
+                    return result;
                 }
             }
         } else {
@@ -207,24 +217,25 @@ int Tree<int>::eval(Node<int> *current, int result) {
 template<class T>
 std::string Tree<T>::inorder(Node<T> *node) {
     std::string result;
+    std::ostringstream oss;
     if (node != NULL) {
         result += inorder(node->getLeft());
         if (node->getType() == OPERATOR) {
             if (node->getOp() == SIN) {
-                result += "sin ";
+                result += SINUS;
+                result += SPACE;
             } else if (node->getOp() == COS) {
-                result += "cos ";
+                result += COSINUS;
+                result += SPACE;
             } else {
-                std::ostringstream oss;
                 oss << node->getOp();
-                result += oss.str() + " ";
+                result += oss.str() + SPACE;
             }
         } else if (node->getType() == VALUE) {
-            std::ostringstream oss;
             oss << node->getValue();
-            result += oss.str() + " ";
+            result += oss.str() + SPACE;
         } else if (node->getType() == VARIABLE) {
-            result += node->getVariable() + " ";
+            result += node->getVariable() + SPACE;
         }
         result += inorder(node->getRight());
     }
@@ -233,24 +244,25 @@ std::string Tree<T>::inorder(Node<T> *node) {
 
 template<class T>
 std::string Tree<T>::preorder(Node<T> *node) {
+    std::ostringstream oss;
     std::string result;
     if (node != NULL) {
         if (node->getType() == OPERATOR) {
             if (node->getOp() == SIN) {
-                result += "sin ";
+                result += SINUS;
+                result += SPACE;
             } else if (node->getOp() == COS) {
-                result += "cos ";
+                result += COSINUS;
+                result += SPACE;
             } else {
-                std::ostringstream oss;
                 oss << node->getOp();
-                result += oss.str() + " ";
+                result += oss.str() + SPACE;
             }
         } else if (node->getType() == VALUE) {
-            std::ostringstream oss;
             oss << node->getValue();
-            result += oss.str() + " ";
+            result += oss.str() + SPACE;
         } else if (node->getType() == VARIABLE) {
-            result += node->getVariable() + " ";
+            result += node->getVariable() + SPACE;
         }
         result += preorder(node->getLeft());
         result += preorder(node->getRight());
@@ -265,7 +277,7 @@ std::string Tree<T>::postorder(Node<T> *node) {
         result += postorder(node->getLeft());
         result += postorder(node->getRight());
         if (node->getType() == VARIABLE) {
-            result += node->getVariable() + " ";
+            result += node->getVariable() + SPACE;
         }
     }
     return result;
@@ -280,34 +292,34 @@ Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
     const std::string &token = vector[index];
     ++index;
 
-    if (Tools<T>::isFunction(token)) {
-        return token == "sin" ? new Node<T>(T(), NULL, build(vector, index), SIN, OPERATOR, "") : new Node<T>(T(),
-                                                                                                              NULL,
-                                                                                                              build(vector,
-                                                                                                                    index),
-                                                                                                              COS,
-                                                                                                              OPERATOR,
-                                                                                                              "");
-    } else if (Tools<T>::isOperator(token)) {
+    if (IS_FUNCTION(token)) {
+        return token == SINUS ? new Node<T>(T(), NULL, build(vector, index), SIN, OPERATOR, EMPTY) : new Node<T>(T(),
+                                                                                                                 NULL,
+                                                                                                                 build(vector,
+                                                                                                                       index),
+                                                                                                                 COS,
+                                                                                                                 OPERATOR,
+                                                                                                                 EMPTY);
+    } else if (IS_OPERATOR(token)) {
         switch (token[0]) {
             case ADD:
-                return new Node<T>(T(), build(vector, index), build(vector, index), ADD, OPERATOR, "");
+                return new Node<T>(T(), build(vector, index), build(vector, index), ADD, OPERATOR, EMPTY);
             case SUBTRACT:
-                return new Node<T>(T(), build(vector, index), build(vector, index), SUBTRACT, OPERATOR, "");
+                return new Node<T>(T(), build(vector, index), build(vector, index), SUBTRACT, OPERATOR, EMPTY);
             case MULTIPLY:
-                return new Node<T>(T(), build(vector, index), build(vector, index), MULTIPLY, OPERATOR, "");
+                return new Node<T>(T(), build(vector, index), build(vector, index), MULTIPLY, OPERATOR, EMPTY);
             case DIVIDE:
-                return new Node<T>(T(), build(vector, index), build(vector, index), DIVIDE, OPERATOR, "");
+                return new Node<T>(T(), build(vector, index), build(vector, index), DIVIDE, OPERATOR, EMPTY);
             default:
                 return NULL;
         }
-    } else if (Tools<T>::isVariable(token)) {
+    } else if (IS_VARIABLE(token)) {
         return new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, token);
     } else {
         std::istringstream iss(token);
         T value;
         iss >> value;
-        return new Node<T>(value, NULL, NULL, UNDEFINED, VALUE, "");
+        return new Node<T>(value, NULL, NULL, UNDEFINED, VALUE, EMPTY);
     }
 }
 
