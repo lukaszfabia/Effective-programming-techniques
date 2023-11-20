@@ -301,18 +301,8 @@ Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
                                                                                                                  OPERATOR,
                                                                                                                  EMPTY);
     } else if (IS_OPERATOR(token)) {
-        switch (token[0]) {
-            case ADD:
-                return new Node<T>(T(), build(vector, index), build(vector, index), ADD, OPERATOR, EMPTY);
-            case SUBTRACT:
-                return new Node<T>(T(), build(vector, index), build(vector, index), SUBTRACT, OPERATOR, EMPTY);
-            case MULTIPLY:
-                return new Node<T>(T(), build(vector, index), build(vector, index), MULTIPLY, OPERATOR, EMPTY);
-            case DIVIDE:
-                return new Node<T>(T(), build(vector, index), build(vector, index), DIVIDE, OPERATOR, EMPTY);
-            default:
-                return NULL;
-        }
+        return new Node<T>(T(), build(vector, index), build(vector, index), static_cast<Operator>(token[0]), OPERATOR,
+                           EMPTY);
     } else if (IS_VARIABLE(token)) {
         return new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, token);
     } else {
