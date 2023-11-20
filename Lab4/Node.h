@@ -28,7 +28,11 @@ public:
                                                                                                            type(type),
                                                                                                            variable(
                                                                                                                    newVariable) {};
-
+    ~Node(){
+        delete left;
+        delete right;
+    }
+    
     T getValue() const {
         return value;
     }
