@@ -28,11 +28,12 @@ public:
                                                                                                            type(type),
                                                                                                            variable(
                                                                                                                    newVariable) {};
-    ~Node(){
+
+    ~Node() {
         delete left;
         delete right;
     }
-    
+
     T getValue() const {
         return value;
     }
@@ -57,6 +58,5 @@ public:
         return variable;
     }
 };
-
 
 #endif //TEMPLATES_NODE_H

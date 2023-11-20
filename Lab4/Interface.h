@@ -15,7 +15,7 @@
              "exit - exit\n"<<std::endl
 
 
-#define INTERPRETED(expression) std::cout << "expression was interpreted" << expression << std::endl
+#define INTERPRETED(expression) std::cout << "expression was interpreted: " << expression << std::endl
 #define WRONG_AMOUNT_OF_ARGS std::cout << "wrong amount of args" << std::endl
 #define RESULT_(str) std::cout << "result: " << str << std::endl
 #define TEMPLATES_INTERFACE_H
@@ -23,6 +23,15 @@
 #define NORMAL(str) std::cout << "normal expression: " << str << std::endl
 #define VARS(str) std::cout<< "vars: " << str << std::endl
 #define UNKNOWN std::cout << "unknown command" << std::endl
+#define IS_ON_EXIT(lane) lane.substr(0, 4) == "exit"
+#define IS_COMP(lane) lane.substr(0, 4) == "comp" || lane.substr(0, 4) == "calc"
+#define IS_ENTER(lane) lane.substr(0, 5) == "enter"
+#define IS_PRINT(lane) lane.substr(0, 5) == "print"
+#define IS_NORM(lane) lane.substr(0, 4) == "norm"
+#define IS_VARS(lane) lane.substr(0, 4) == "vars"
+#define IS_JOIN(lane) lane.substr(0, 4) == "join"
+#define IS_HELP(lane) lane.substr(0, 4) == "help" || lane.substr(0, 4) == "info"
+
 
 #include <iostream>
 #include <string>
@@ -45,26 +54,33 @@ private:
     void comp(const std::string &lane);
 
 public:
+    Interface() : tree(NULL), subtree(NULL) {};
+
+    ~Interface() {
+        delete tree;
+        delete subtree;
+    }
+
     void run();
 };
 
 template<class T>
 bool Interface<T>::menu(const std::string &lane) {
-    if (lane.substr(0, 4) == "exit") {
+    if (IS_ON_EXIT(lane)) {
         return true;
-    } else if (lane.substr(0, 5) == "enter") {
+    } else if (IS_ENTER(lane)) {
         enter(lane);
-    } else if (lane.substr(0, 4) == "join") {
+    } else if (IS_JOIN(lane)) {
         join(lane);
-    } else if (lane.substr(0, 4) == "comp" || lane.substr(0, 4) == "calc") {
+    } else if (IS_COMP(lane)) {
         comp(lane);
-    } else if (lane.substr(0, 5) == "print") {
+    } else if (IS_PRINT(lane)) {
         PREFIX(tree->print());
-    } else if (lane.substr(0, 4) == "info" || lane.substr(0, 4) == "help") {
+    } else if (IS_HELP(lane)) {
         HELP;
-    } else if (lane.substr(0, 4) == "vars") {
+    } else if (IS_VARS(lane)) {
         VARS(tree->vars());
-    } else if (lane.substr(0, 4) == "norm") {
+    } else if (IS_NORM(lane)) {
         NORMAL(tree->norm());
     } else {
         UNKNOWN;
@@ -113,7 +129,7 @@ void Interface<T>::run() {
         std::string lane;
         std::cout << CMD;
         std::getline(std::cin, lane);
-        isExit = menu(lane);
+        isExit = menu(Tools<T>::removeInvalidChars(Tools<T>::toLowerCase(lane)));
     }
 }
 

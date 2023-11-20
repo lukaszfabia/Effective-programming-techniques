@@ -2,6 +2,15 @@
 // Created by ufabi on 19.11.2023.
 //
 
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <stack>
+#include <sstream>
+#include <cstring>
+
 #ifndef TEMPLATES_TOOLS_H
 #define FILL "x"
 #define EXPRESSION "+ x y"
@@ -15,14 +24,6 @@
 #define REMOVE_QUOTE(input) input.substr(1, input.size() - 2)
 #define TEMPLATES_TOOLS_H
 
-
-#include <string>
-#include <vector>
-#include <map>
-#include <set>
-#include <algorithm>
-#include <stack>
-#include <sstream>
 
 template<class T>
 class Tools {
@@ -46,7 +47,33 @@ public:
 
     static std::string divide(const std::string &input, const std::string &sub);
 
+    static std::string removeInvalidChars(const std::string &input);
+
+    static std::string toLowerCase(const std::string &input);
+
 };
+
+template<class T>
+std::string Tools<T>::toLowerCase(const std::string &input) {
+    std::string result = input;
+    std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+    return result;
+}
+
+template<class T>
+std::string Tools<T>::removeInvalidChars(const std::string &input) {
+    std::string result = input;
+    const char invalidChars[] = "!@#$%^&()_={}[]|\\:;\"'<>,?/";
+
+    for (int i = 0; i < result.length(); ++i) {
+        if (strchr(invalidChars, result[i]) != NULL) {
+            result.erase(i, 1);
+            --i;
+        }
+    }
+
+    return result;
+}
 
 template<class T>
 std::string Tools<T>::substract(const std::string &input, const std::string &sub) {
