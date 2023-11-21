@@ -17,7 +17,7 @@ private:
 
     static bool hasOnlyVarsOrNumbers(const std::vector<std::string> &vector1) {
         for (int i = 0; i < vector1.size(); i++) {
-            if (!(IS_OPERATOR(vector1[i])) || !(IS_FUNCTION(vector1[i]))) {
+            if (IS_OPERATOR(vector1[i]) || IS_FUNCTION(vector1[i])) {
                 return false;
             }
         }

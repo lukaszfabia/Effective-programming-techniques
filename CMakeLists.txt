@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 project(Effective_programming_techniques)
 
-set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD 11)
 
 #add_executable(Effective_programming_techniques Lab3/CTree.cpp
 #        Lab3/CTree.h Lab3/main.cpp Lab3/CInterface.cpp Lab3/CInterface.h Lab3/Utilities/CNode.cpp

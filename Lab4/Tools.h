@@ -14,7 +14,7 @@
 #ifndef TEMPLATES_TOOLS_H
 #define FILL "x"
 #define EXPRESSION "+ x y"
-#define SET_QUOTE(x) ss << '"' << x << '"';
+#define SET_QUOTE(x) ss << '"' << x << '"'
 #define IS_OPERATOR(token) token == "+" || token == "-" || token == "*" || token == "/"
 #define IS_FUNCTION(token) token == SINUS || token == COSINUS
 #define IS_STRING(token) token[0] == '"' && token[token.size() - 1] == '"'
@@ -22,6 +22,7 @@
 #define IS_VARIABLE(token) !(IS_OPERATOR(token)) && !(IS_FUNCTION(token)) && !(IS_NUMBER(token)) && !(IS_STRING(token))
 #define DOT '.'
 #define REMOVE_QUOTE(input) input.substr(1, input.size() - 2)
+#define INVALID_CHARS "!@#$%^&()_={}[]|\\:;\"'<>,?/"
 #define TEMPLATES_TOOLS_H
 
 
@@ -63,10 +64,9 @@ std::string Tools<T>::toLowerCase(const std::string &input) {
 template<class T>
 std::string Tools<T>::removeInvalidChars(const std::string &input) {
     std::string result = input;
-    const char invalidChars[] = "!@#$%^&()_={}[]|\\:;\"'<>,?/";
 
     for (int i = 0; i < result.length(); ++i) {
-        if (strchr(invalidChars, result[i]) != NULL) {
+        if (strchr(INVALID_CHARS, result[i]) != NULL) {
             result.erase(i, 1);
             --i;
         }
@@ -79,18 +79,18 @@ template<class T>
 std::string Tools<T>::substract(const std::string &input, const std::string &sub) {
     std::stringstream ss;
     if (input.length() < sub.length() || input.find(sub) == std::string::npos) {
-        SET_QUOTE(input)
+        SET_QUOTE(input);
         return ss.str();
     }
     size_t index = input.length() - sub.length();
     for (size_t i = index; i < input.length(); ++i) {
         if (input[i] != sub[i - index]) {
-            SET_QUOTE(input)
+            SET_QUOTE(input);
             return ss.str();
         }
     }
 
-    SET_QUOTE(input.substr(0, index))
+    SET_QUOTE(input.substr(0, index));
     return ss.str();
 }
 
@@ -106,7 +106,7 @@ std::string Tools<T>::multiply(const std::string &input, const std::string &sub)
         }
     }
 
-    SET_QUOTE(result)
+    SET_QUOTE(result);
     return ss.str();
 }
 
@@ -116,14 +116,19 @@ std::string Tools<T>::divide(const std::string &input, const std::string &sub) {
     std::stringstream ss;
     for (size_t i = 0; i < input.length(); i++) {
         if (input[i] == sub[0]) {
-            i += sub.length() - 1;
-            result += sub[0];
+            if (input.substr(i, sub.length()) == sub) {
+                result += sub[0];
+                i += sub.length() - 1;
+            }else{
+                result += input[i];
+            }
         } else {
             result += input[i];
         }
     }
 
-    SET_QUOTE(result)
+
+    SET_QUOTE(result);
     return ss.str();
 }
 
