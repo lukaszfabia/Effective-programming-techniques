@@ -22,7 +22,7 @@
 #define IS_VARIABLE(token) !(IS_OPERATOR(token)) && !(IS_FUNCTION(token)) && !(IS_NUMBER(token)) && !(IS_STRING(token))
 #define DOT '.'
 #define REMOVE_QUOTE(input) input.substr(1, input.size() - 2)
-#define INVALID_CHARS "!@#$%^&()_={}[]|\\:;\"'<>,?/"
+#define INVALID_CHARS "!@#$%^&()_={}[]|\\:;\'<>,?/"
 #define TEMPLATES_TOOLS_H
 
 
