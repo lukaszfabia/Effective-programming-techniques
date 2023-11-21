@@ -18,7 +18,6 @@
 #define INTERPRETED(expression) std::cout << "expression was interpreted: " << expression << std::endl
 #define WRONG_AMOUNT_OF_ARGS std::cout << "wrong amount of args" << std::endl
 #define RESULT_(str) std::cout << "result: " << str << std::endl
-#define TEMPLATES_INTERFACE_H
 #define PREFIX(str) std::cout << "prefix expression: " << str << std::endl
 #define NORMAL(str) std::cout << "normal expression: " << str << std::endl
 #define VARS(str) std::cout<< "vars: " << str << std::endl
@@ -31,13 +30,13 @@
 #define IS_VARS(lane) lane.substr(0, 4) == "vars"
 #define IS_JOIN(lane) lane.substr(0, 4) == "join"
 #define IS_HELP(lane) lane.substr(0, 4) == "help" || lane.substr(0, 4) == "info"
-
+#define TEMPLATES_INTERFACE_H
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include "Tree.h"
-#include "FixExpression.h"
+#include "utilities/FixExpression.h"
 
 template<class T>
 class Interface {

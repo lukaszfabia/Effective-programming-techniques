@@ -1,12 +1,7 @@
-//
-// Created by ufabi on 20.10.2023.
-//
 
-#include "CInterface.h"
-
+#include "Interface.h"
 int main() {
-    CInterface *interface = new CInterface();
-    interface->run();
-    delete interface;
+    Interface interface;
+    interface.run();
     return 0;
 }

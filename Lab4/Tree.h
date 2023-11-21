@@ -16,8 +16,8 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
-#include "Node.h"
-#include "Tools.h"
+#include "utilities/Node.h"
+#include "utilities/Tools.h"
 
 
 template<class T>

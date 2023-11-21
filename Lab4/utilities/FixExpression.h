@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 #include "Tools.h"
-#include "Tree.h"
+#include "../Tree.h"
 
 template<class T>
 class FixExpression {
@@ -98,9 +98,10 @@ std::vector<std::string> FixExpression<T>::fix(std::vector<std::string> tokens) 
         tokens.insert(tokens.begin(), FILL);
     }
 
-    for (int i = 0; i < tokens.size(); i++) {
+    for (int i = 0; i < tokens.size() - 1; i++) {
         if (IS_OPERATOR(tokens[i]) && i < tokens.size() - 1 && IS_OPERATOR(tokens[i + 1])) {
             tokens.insert(tokens.begin() + i + 1, FILL);
+            i++;
         }
     }
 
