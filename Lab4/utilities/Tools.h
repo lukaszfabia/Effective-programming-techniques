@@ -21,6 +21,7 @@
 #define IS_NUMBER(token) Tools<T>::isNumber(token)
 #define IS_VARIABLE(token) !(IS_OPERATOR(token)) && !(IS_FUNCTION(token)) && !(IS_NUMBER(token)) && !(IS_STRING(token))
 #define DOT '.'
+#define MINUS '-'
 #define REMOVE_QUOTE(input) input.substr(1, input.size() - 2)
 #define INVALID_CHARS "!@#$%^&()_={}[]|\\:;\'<>,?/"
 #define TEMPLATES_TOOLS_H
@@ -163,11 +164,14 @@ int Tools<T>::getAmountOfVariables(const std::string &input) {
 template<class T>
 bool Tools<T>::isNumber(const std::string &token) {
     bool hasDot = false;
+    bool hasMinus = false;
 
     for (int i = 0; i < token.length(); ++i) {
         if (!isdigit(token[i])) {
             if (token[i] == DOT && !hasDot) {
                 hasDot = true;
+            } else if (token[i] == MINUS && !hasMinus) {
+                hasMinus = true;
             } else {
                 return false;
             }

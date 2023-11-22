@@ -5,6 +5,44 @@
 #include "FixExpression.h"
 #include "../Tree.h"
 
+bool FixExpression::hasOnlyVarsOrNumbers(const std::vector<std::string> &vector1) {
+    for (int i = 0; i < vector1.size(); i++) {
+        if (IS_OPERATOR(vector1[i]) || IS_FUNCTION(vector1[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int FixExpression::amountOfOperators(const std::vector<std::string> &vector1) {
+    int numberOfOperators = 0;
+    for (int i = 0; i < vector1.size(); i++) {
+        if (IS_OPERATOR(vector1[i])) {
+            numberOfOperators++;
+        }
+    }
+    return numberOfOperators;
+}
+
+int FixExpression::amountOfNumbers(const std::vector<std::string> &vector1) {
+    int numberOfNumbers = 0;
+    for (int i = 0; i < vector1.size(); i++) {
+        if (!(IS_FUNCTION(vector1[i]) || IS_OPERATOR(vector1[i]))) {
+            numberOfNumbers++;
+        }
+    }
+    return numberOfNumbers;
+}
+
+bool FixExpression::hasOnlyOperators(const std::vector<std::string> &vector1) {
+    for (int i = 0; i < vector1.size(); i++) {
+        if (!(IS_OPERATOR(vector1[i]))) {
+            return false;
+        }
+    }
+    return true;
+}
+
 std::vector<std::string> FixExpression::infixToPrefix(const std::vector<std::string> &infix) {
     std::vector<std::string> reversedInfix = infix;
     std::reverse(reversedInfix.begin(), reversedInfix.end());
