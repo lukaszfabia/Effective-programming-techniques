@@ -20,6 +20,7 @@
 #define IS_NUMBER(token) Tools::isNumber(token)
 #define IS_VARIABLE(token) !(IS_OPERATOR(token)) && !(IS_FUNCTION(token)) && !(IS_NUMBER(token)) && !(IS_STRING(token))
 #define DOT '.'
+#define MINUS '-'
 #define REMOVE_QUOTE(input) input.substr(1, input.size() - 2)
 #define INVALID_CHARS "!@#$%^&()_={}[]|\\:;\"'<>,?/"
 #define TREE_TOOLS_H

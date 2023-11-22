@@ -7,11 +7,14 @@
 
 bool Tools::isNumber(const std::string &token) {
     bool hasDot = false;
+    bool hasMinus = false;
 
     for (int i = 0; i < token.length(); ++i) {
         if (!isdigit(token[i])) {
             if (token[i] == DOT && !hasDot) {
                 hasDot = true;
+            } else if (token[i] == MINUS && !hasMinus) {
+                hasMinus = true;
             } else {
                 return false;
             }

@@ -38,7 +38,6 @@
 #include <string>
 #include <vector>
 #include "Tree.h"
-#include "utilities/FixExpression.h"
 
 class Interface {
 private:

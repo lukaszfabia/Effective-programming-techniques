@@ -42,8 +42,7 @@ public:
 
     explicit Tree(const std::vector<std::string> &expression) {
         int index = 0;
-        elements = expression;
-        root = build(elements, index);
+        root = build(expression, index);
     }
 
     ~Tree() {
@@ -60,9 +59,8 @@ public:
         if (this != &tree) {
             delete root;
             values = tree.values;
-            elements = tree.elements;
             int index = 0;
-            root = build(elements, index);
+            root = build(tree.elements, index);
         }
         return *this;
     }
@@ -293,19 +291,42 @@ Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
     ++index;
 
     if (IS_FUNCTION(token)) {
-        return token == SINUS ? new Node<T>(T(), NULL, build(vector, index), SIN, OPERATOR, EMPTY) : new Node<T>(T(),
-                                                                                                                 NULL,
-                                                                                                                 build(vector,
-                                                                                                                       index),
-                                                                                                                 COS,
-                                                                                                                 OPERATOR,
-                                                                                                                 EMPTY);
+        elements.push_back(token);
+        Node<T> *rightChild = build(vector, index);
+        if (rightChild == NULL) {
+            elements.push_back(FILL);
+            rightChild = new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+        }
+
+        return token == SINUS ? new Node<T>(T(), NULL, rightChild, SIN, OPERATOR, EMPTY)
+                              : new Node<T>(T(),
+                                                 NULL,
+                                                 rightChild,
+                                                 COS,
+                                                 OPERATOR,
+                                                 EMPTY);
     } else if (IS_OPERATOR(token)) {
-        return new Node<T>(T(), build(vector, index), build(vector, index), static_cast<Operator>(token[0]), OPERATOR,
-                           EMPTY);
+        elements.push_back(token);
+        Node<T> *leftChild = build(vector, index);
+        Node<T> *rightChild = build(vector, index);
+
+        // Sprawdzamy czy nie ma drugiego dziecka i jeśli tak, tworzymy nowy węzeł z domyślną wartością
+        if (leftChild == NULL) {
+            elements.push_back(FILL);
+            leftChild = new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+        }
+
+        if (rightChild == NULL) {
+            elements.push_back(FILL);
+            rightChild = new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+        }
+
+        return new Node<T>(T(), leftChild, rightChild, static_cast<Operator>(token[0]), OPERATOR, EMPTY);
     } else if (IS_VARIABLE(token)) {
+        elements.push_back(token);
         return new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, token);
     } else {
+        elements.push_back(token);
         std::istringstream iss(token);
         T value;
         iss >> value;

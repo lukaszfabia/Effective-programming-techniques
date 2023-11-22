@@ -36,7 +36,6 @@
 #include <string>
 #include <vector>
 #include "Tree.h"
-#include "utilities/FixExpression.h"
 
 template<class T>
 class Interface {
@@ -89,13 +88,13 @@ bool Interface<T>::menu(const std::string &lane) {
 
 template<class T>
 void Interface<T>::enter(const std::string &lane) {
-    tree = new Tree<T>(FixExpression<T>::fix(Tools<T>::createVector(lane.substr(5))));
+    tree = new Tree<T>(Tools<T>::createVector(lane.substr(5)));
     INTERPRETED(tree->print());
 }
 
 template<class T>
 void Interface<T>::join(const std::string &lane) {
-    subtree = new Tree<T>(FixExpression<T>::fix(Tools<T>::createVector(lane.substr(4))));
+    subtree = new Tree<T>(Tools<T>::createVector(lane.substr(4)));
     *tree = *tree + *subtree;
     INTERPRETED(tree->print());
 }
@@ -116,8 +115,6 @@ void Interface<T>::comp(const std::string &lane) {
                 Tools<T>::createMap(lane.substr(5), tree->vars()));
         ss << tree->comp();
         RESULT_(ss.str());
-    } else {
-        WRONG_AMOUNT_OF_ARGS;
     }
 }
 

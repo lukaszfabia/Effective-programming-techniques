@@ -3,6 +3,7 @@
 //
 
 #include <string>
+#include <iostream>
 #include <vector>
 #include <map>
 #include "utilities/Node.h"
@@ -40,8 +41,7 @@ public:
 
     explicit Tree(const std::vector<std::string> &expression) {
         int index = 0;
-        elements = expression;
-        root = build(elements, index);
+        root = build(expression, index);
     }
 
     ~Tree() {
@@ -58,9 +58,8 @@ public:
         if (this != &tree) {
             delete root;
             values = tree.values;
-            elements = tree.elements;
             int index = 0;
-            root = build(elements, index);
+            root = build(tree.elements, index);
         }
         return *this;
     }

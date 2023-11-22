@@ -18,19 +18,42 @@ Node<double> *Tree::build(const std::vector<std::string> &vector, int &index) {
     ++index;
 
     if (IS_FUNCTION(token)) {
-        return token == SINUS ? new Node<double>(double(), NULL, build(vector, index), SIN, OPERATOR, EMPTY) : new Node<double>(double(),
-                                                                                                                 NULL,
-                                                                                                                 build(vector,
-                                                                                                                       index),
-                                                                                                                 COS,
-                                                                                                                 OPERATOR,
-                                                                                                                 EMPTY);
+        elements.push_back(token);
+        Node<double> *rightChild = build(vector, index);
+        if (rightChild == NULL) {
+            elements.push_back(FILL);
+            rightChild = new Node<double>(double(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+        }
+
+        return token == SINUS ? new Node<double>(double(), NULL, rightChild, SIN, OPERATOR, EMPTY)
+                              : new Node<double>(double(),
+                                                 NULL,
+                                                 rightChild,
+                                                 COS,
+                                                 OPERATOR,
+                                                 EMPTY);
     } else if (IS_OPERATOR(token)) {
-        return new Node<double>(double(), build(vector, index), build(vector, index), static_cast<Operator>(token[0]), OPERATOR,
-                           EMPTY);
+        elements.push_back(token);
+        Node<double> *leftChild = build(vector, index);
+        Node<double> *rightChild = build(vector, index);
+
+        // Sprawdzamy czy nie ma drugiego dziecka i jeśli tak, tworzymy nowy węzeł z domyślną wartością
+        if (leftChild == NULL) {
+            elements.push_back(FILL);
+            leftChild = new Node<double>(double(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+        }
+
+        if (rightChild == NULL) {
+            elements.push_back(FILL);
+            rightChild = new Node<double>(double(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+        }
+
+        return new Node<double>(double(), leftChild, rightChild, static_cast<Operator>(token[0]), OPERATOR, EMPTY);
     } else if (IS_VARIABLE(token)) {
+        elements.push_back(token);
         return new Node<double>(double(), NULL, NULL, UNDEFINED, VARIABLE, token);
     } else {
+        elements.push_back(token);
         std::istringstream iss(token);
         double value;
         iss >> value;

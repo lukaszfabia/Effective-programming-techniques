@@ -28,12 +28,12 @@ bool Interface::menu(const std::string &lane) {
 }
 
 void Interface::enter(const std::string &lane) {
-    tree = new Tree(FixExpression::fix(Tools::createVector(lane.substr(5))));
+    tree = new Tree(Tools::createVector(lane.substr(5)));
     INTERPRETED(tree->print());
 }
 
 void Interface::join(const std::string &lane) {
-    subtree = new Tree(FixExpression::fix(Tools::createVector(lane.substr(4))));
+    subtree = new Tree(Tools::createVector(lane.substr(4)));
     *tree = *tree + *subtree;
     INTERPRETED(tree->print());
 }
@@ -53,8 +53,6 @@ void Interface::comp(const std::string &lane) {
                 Tools::createMap(lane.substr(5), tree->vars()));
         ss << tree->comp();
         RESULT_(ss.str());
-    } else {
-        WRONG_AMOUNT_OF_ARGS;
     }
 }
 
