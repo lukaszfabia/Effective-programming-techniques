@@ -57,7 +57,7 @@ Node *Tree::build(const std::vector<std::string> &vector, int &index) {
         Node *leftChild = build(vector, index);
         Node *rightChild = build(vector, index);
 
-        // Sprawdzamy czy nie ma drugiego dziecka i jeśli tak, tworzymy nowy węzeł z domyślną wartością
+    
         if (leftChild == NULL) {
             elements.push_back(FILL);
             leftChild = new Node(double(), NULL, NULL, UNDEFINED, VARIABLE, FILL);

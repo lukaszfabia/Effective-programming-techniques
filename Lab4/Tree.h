@@ -310,7 +310,7 @@ Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
         Node<T> *leftChild = build(vector, index);
         Node<T> *rightChild = build(vector, index);
 
-        // Sprawdzamy czy nie ma drugiego dziecka i jeśli tak, tworzymy nowy węzeł z domyślną wartością
+    
         if (leftChild == NULL) {
             elements.push_back(FILL);
             leftChild = new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
