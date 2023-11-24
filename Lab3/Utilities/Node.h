@@ -10,53 +10,32 @@
 #include "Operators.h"
 #include "Type.h"
 
-template<class T>
+
 class Node {
 private:
-    T value;
-    Node<T> *left;
-    Node<T> *right;
+    double value;
+    Node *left;
+    Node *right;
     Operator op;
     Type type;
     std::string variable;
 public:
 
-    Node(T value, Node<T> *left, Node<T> *right, Operator op, Type type, const std::string &newVariable) : value(value),
-                                                                                                           left(left),
-                                                                                                           right(right),
-                                                                                                           op(op),
-                                                                                                           type(type),
-                                                                                                           variable(
-                                                                                                                   newVariable) {};
+    Node(double value, Node *left, Node *right, Operator op, Type type, const std::string &newVariable);
 
-    ~Node() {
-        delete left;
-        delete right;
-    }
+    ~Node();
 
-    T getValue() const {
-        return value;
-    }
+    double getValue() const;
 
-    Node<T> *getLeft() const {
-        return left;
-    }
+    Node *getLeft() const;
 
-    Node<T> *getRight() const {
-        return right;
-    }
+    Node *getRight() const;
 
-    char getOp() const {
-        return op;
-    }
+    char getOp() const;
 
-    Type getType() const {
-        return type;
-    }
+    Type getType() const;
 
-    std::string getVariable() const {
-        return variable;
-    }
+    std::string getVariable() const;
 };
 
 #endif //TEMPLATES_NODE_H

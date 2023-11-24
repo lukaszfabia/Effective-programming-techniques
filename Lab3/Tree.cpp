@@ -8,8 +8,28 @@
 #include "utilities/Tools.h"
 #include "utilities/Node.h"
 
+Tree::Tree() {
+    root = NULL;
+}
 
-Node<double> *Tree::build(const std::vector<std::string> &vector, int &index) {
+Tree::Tree(const std::vector<std::string> &expression) {
+    root = NULL;
+    int index = 0;
+    root = build(expression, index);
+}
+
+Tree::~Tree() {
+    values.clear();
+    elements.clear();
+    delete root;
+}
+
+void Tree::setMap(const std::map<std::string, double> &newValues) {
+    values = newValues;
+}
+
+
+Node *Tree::build(const std::vector<std::string> &vector, int &index) {
     if (index >= vector.size()) {
         return NULL;
     }
@@ -19,49 +39,49 @@ Node<double> *Tree::build(const std::vector<std::string> &vector, int &index) {
 
     if (IS_FUNCTION(token)) {
         elements.push_back(token);
-        Node<double> *rightChild = build(vector, index);
+        Node *rightChild = build(vector, index);
         if (rightChild == NULL) {
             elements.push_back(FILL);
-            rightChild = new Node<double>(double(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+            rightChild = new Node(double(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
         }
 
-        return token == SINUS ? new Node<double>(double(), NULL, rightChild, SIN, OPERATOR, EMPTY)
-                              : new Node<double>(double(),
-                                                 NULL,
-                                                 rightChild,
-                                                 COS,
-                                                 OPERATOR,
-                                                 EMPTY);
+        return token == SINUS ? new Node(double(), NULL, rightChild, SIN, OPERATOR, EMPTY)
+                              : new Node(double(),
+                                         NULL,
+                                         rightChild,
+                                         COS,
+                                         OPERATOR,
+                                         EMPTY);
     } else if (IS_OPERATOR(token)) {
         elements.push_back(token);
-        Node<double> *leftChild = build(vector, index);
-        Node<double> *rightChild = build(vector, index);
+        Node *leftChild = build(vector, index);
+        Node *rightChild = build(vector, index);
 
         // Sprawdzamy czy nie ma drugiego dziecka i jeśli tak, tworzymy nowy węzeł z domyślną wartością
         if (leftChild == NULL) {
             elements.push_back(FILL);
-            leftChild = new Node<double>(double(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+            leftChild = new Node(double(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
         }
 
         if (rightChild == NULL) {
             elements.push_back(FILL);
-            rightChild = new Node<double>(double(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+            rightChild = new Node(double(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
         }
 
-        return new Node<double>(double(), leftChild, rightChild, static_cast<Operator>(token[0]), OPERATOR, EMPTY);
+        return new Node(double(), leftChild, rightChild, static_cast<Operator>(token[0]), OPERATOR, EMPTY);
     } else if (IS_VARIABLE(token)) {
         elements.push_back(token);
-        return new Node<double>(double(), NULL, NULL, UNDEFINED, VARIABLE, token);
+        return new Node(double(), NULL, NULL, UNDEFINED, VARIABLE, token);
     } else {
         elements.push_back(token);
         std::istringstream iss(token);
         double value;
         iss >> value;
-        return new Node<double>(value, NULL, NULL, UNDEFINED, VALUE, EMPTY);
+        return new Node(value, NULL, NULL, UNDEFINED, VALUE, EMPTY);
     }
 }
 
-std::string Tree::inorder(Node<double> *node) {
+std::string Tree::inorder(Node *node) {
     std::string result;
     std::ostringstream oss;
     if (node != NULL) {
@@ -88,7 +108,7 @@ std::string Tree::inorder(Node<double> *node) {
     return result;
 }
 
-std::string Tree::preorder(Node<double> *node) {
+std::string Tree::preorder(Node *node) {
     std::ostringstream oss;
     std::string result;
     if (node != NULL) {
@@ -115,7 +135,7 @@ std::string Tree::preorder(Node<double> *node) {
     return result;
 }
 
-std::string Tree::postorder(Node<double> *node) {
+std::string Tree::postorder(Node *node) {
     std::string result;
     if (node != NULL) {
         result += postorder(node->getLeft());
@@ -127,7 +147,7 @@ std::string Tree::postorder(Node<double> *node) {
     return result;
 }
 
-double Tree::eval(Node<double> *current, double result) {
+double Tree::eval(Node *current, double result) {
     double right;
     if (current != NULL) {
         if (current->getType() == OPERATOR) {
@@ -167,3 +187,35 @@ double Tree::eval(Node<double> *current, double result) {
     return result;
 }
 
+Tree &Tree::operator=(const Tree &tree) {
+    if (this != &tree) {
+        delete root;
+        values = tree.values;
+        int index = 0;
+        root = build(tree.elements, index);
+    }
+    return *this;
+}
+
+Tree Tree::operator+(const Tree &other) {
+    Tree result;
+    result.elements.insert(result.elements.end(), elements.begin(), elements.end() - 1);
+    result.elements.insert(result.elements.end(), other.elements.begin(), other.elements.end());
+    return result;
+}
+
+std::string Tree::print() {
+    return preorder(root);
+}
+
+double Tree::comp() {
+    return eval(root, 0);
+}
+
+std::string Tree::vars() {
+    return Tools::removeDuplicates(postorder(root));
+}
+
+std::string Tree::norm() {
+    return inorder(root);
+}
