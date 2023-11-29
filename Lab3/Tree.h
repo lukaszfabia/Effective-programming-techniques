@@ -16,6 +16,7 @@
 #define SPACE " "
 #define SINUS "sin"
 #define COSINUS "cos"
+#define NEW_LANE "\n"
 #define TREE_TREE_H
 
 
@@ -55,6 +56,10 @@ public:
     std::string vars();
 
     double comp();
+
+    void set(const std::string &oldElement, const std::string &newElement);
+
+    std::string printLevels();
 };
 
 

@@ -21,6 +21,10 @@ bool Interface::menu(const std::string &lane) {
         VARS(tree->vars());
     } else if (IS_NORM(lane)) {
         NORMAL(tree->norm());
+    } else if (IS_SET(lane)) {
+        set(lane);
+    }else if (IS_LVL(lane)) {
+        LEVEL(tree->printLevels());
     } else {
         UNKNOWN;
     }
@@ -53,6 +57,16 @@ void Interface::comp(const std::string &lane) {
                 Tools::createMap(lane.substr(5), tree->vars()));
         ss << tree->comp();
         RESULT_(ss.str());
+    }
+}
+
+void Interface::set(const std::string &lane) {
+    std::vector<std::string> args = Tools::createVector(lane.substr(3));
+    if (args.size() != 2) {
+        WRONG_AMOUNT_OF_ARGS;
+    } else {
+        tree->set(args[0], args[1]);
+        INTERPRETED(tree->print());
     }
 }
 

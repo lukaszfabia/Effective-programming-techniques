@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <queue>
 #include "Tree.h"
 #include "utilities/Tools.h"
 #include "utilities/Node.h"
@@ -57,7 +58,7 @@ Node *Tree::build(const std::vector<std::string> &vector, int &index) {
         Node *leftChild = build(vector, index);
         Node *rightChild = build(vector, index);
 
-    
+
         if (leftChild == NULL) {
             elements.push_back(FILL);
             leftChild = new Node(double(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
@@ -173,7 +174,7 @@ double Tree::eval(Node *current, double result) {
                     return ZERO;
             }
         } else if (current->getType() == VARIABLE) {
-            typename std::map<std::string, double>::iterator it = values.find(current->getVariable());
+            std::map<std::string, double>::iterator it = values.find(current->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
                 if (it->first == current->getVariable()) {
                     result = it->second;
@@ -218,4 +219,62 @@ std::string Tree::vars() {
 
 std::string Tree::norm() {
     return inorder(root);
+}
+
+void Tree::set(const std::string &oldElement, const std::string &newElement) {
+    for (int i = 0; i < elements.size(); ++i) {
+        if (elements[i] == oldElement) {
+            elements[i] = newElement;
+        }
+    }
+
+    int index = 0;
+    delete root;
+    root = build(elements, index);
+}
+
+std::string Tree::printLevels() {
+    std::string result;
+    std::queue<Node *> queue;
+    queue.push(root);
+    int currentLevelNodes = 1;
+    int nextLevelNodes = 0;
+
+    while (!queue.empty()) {
+        Node *current = queue.front();
+        queue.pop();
+        currentLevelNodes--;
+
+        if (current != NULL) {
+            std::ostringstream oss;
+            if (current->getType() == OPERATOR) {
+                if (current->getOp() == SIN) {
+                    result += SINUS;
+                    result += SPACE;
+                } else if (current->getOp() == COS) {
+                    result += COSINUS;
+                    result += SPACE;
+                } else {
+                    oss << current->getOp();
+                    result += oss.str() + SPACE;
+                }
+            } else if (current->getType() == VALUE) {
+                oss << current->getValue();
+                result += oss.str() + SPACE;
+            } else if (current->getType() == VARIABLE) {
+                result += current->getVariable() + SPACE;
+            }
+
+            queue.push(current->getLeft());
+            queue.push(current->getRight());
+            nextLevelNodes += 2;
+        }
+
+        if (currentLevelNodes == 0) {
+            result += NEW_LANE;
+            currentLevelNodes = nextLevelNodes;
+            nextLevelNodes = 0;
+        }
+    }
+    return result.substr(0, result.size() - 3);
 }
