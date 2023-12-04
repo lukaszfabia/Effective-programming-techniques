@@ -14,13 +14,13 @@ class CTable {
 public:
     CTable();
 
-    CTable(std::string sName, int iTableLen);
+    CTable(const std::string& sName, int iTableLen);
 
     CTable(CTable &pcOther);
 
     ~CTable();
 
-    void vSetName(std::string sName);
+    void vSetName(const std::string& sName);
 
     bool bSetNewSize(int iTableLen);
 

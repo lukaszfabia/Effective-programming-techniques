@@ -5,6 +5,7 @@
 #include "CTable.h"
 #include <iostream>
 
+
 CTable::CTable() {
     std::cout << "bezp: '" << DEFAULT_NAME << "'" << std::endl;
     s_name = DEFAULT_NAME;
@@ -12,7 +13,7 @@ CTable::CTable() {
     pi_table = new int[i_table_length];
 }
 
-CTable::CTable(std::string sName, int iTableLen) {
+CTable::CTable(const std::string& sName, int iTableLen) {
     s_name = sName;
     i_table_length = iTableLen;
     pi_table = new int[i_table_length];
@@ -34,7 +35,7 @@ CTable::~CTable() {
     std::cout << "usuwam: '" << s_name << "'" << std::endl;
 }
 
-void CTable::vSetName(std::string sName) {
+void CTable::vSetName(const std::string& sName) {
     s_name = sName;
 }
 

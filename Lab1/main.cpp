@@ -5,14 +5,6 @@
 #include "CTable.h"
 
 
-//cmake executable code
-//add_executable(Effective_programming_techniques
-//Lab1/main.cpp Lab1/CTable.cpp
-//        Lab1/CTable.h
-//        Lab1/CTableFunctions.cpp
-//        Lab1/CTableFunctions.h)
-
-
 void v_test_for_alloc_functions() {
     CTableFunctions::v_alloc_table_fill_34(5);
     CTableFunctions::v_alloc_table_fill_34(0);
