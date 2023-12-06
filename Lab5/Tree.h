@@ -38,7 +38,7 @@ private:
     T eval(Node<T> *node, T result);
 
 public:
-    Tree() : root(NULL) {
+    Tree() : root(nullptr) {
         std::cout<<"object init"<<std::endl;
     };
 
@@ -46,6 +46,15 @@ public:
         std::cout<<"object init"<<std::endl;
         int index = 0;
         root = build(expression, index);
+    }
+
+    Tree(Tree&& tree) noexcept {
+        std::cout<<"object init"<<std::endl;
+        root = tree.root;
+        values = std::move(tree.values);
+        elements = std::move(tree.elements);
+
+        tree.root = nullptr;
     }
 
     ~Tree() {
@@ -58,19 +67,23 @@ public:
         values = newValues;
     }
 
-    Tree &operator=(const Tree &tree) {
+    Tree &operator=(Tree &&tree) noexcept {
         if (this != &tree) {
             delete root;
-            values = tree.values;
+            tree.root = nullptr;
+            values = std::move(tree.values);
             int index = 0;
-            root = build(tree.elements, index);
+            elements.clear();
+            root = build(std::move(tree.elements), index);
+            // 2 kopie mniej chyba
         }
         return *this;
     }
 
-    Tree operator+(const Tree &other) {
+    Tree operator+(const Tree &other) const {
         Tree<T> result;
-        result.elements.insert(result.elements.end(), elements.begin(), elements.end() - 1);
+        result.elements = elements;
+        result.elements.pop_back();
         result.elements.insert(result.elements.end(), other.elements.begin(), other.elements.end());
         return result;
     }
@@ -95,7 +108,7 @@ public:
 template<>
 double Tree<double>::eval(Node<double> *current, double result) {
     double right;
-    if (current != NULL) {
+    if (current != nullptr) {
         if (current->getType() == OPERATOR) {
             switch (current->getOp()) {
                 case ADD:
@@ -119,7 +132,7 @@ double Tree<double>::eval(Node<double> *current, double result) {
                     return ZERO;
             }
         } else if (current->getType() == VARIABLE) {
-             std::map<std::string, double>::iterator it = values.find(current->getVariable());
+            std::map<std::string, double>::iterator it = values.find(current->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
                 if (it->first == current->getVariable()) {
                     result = it->second;
@@ -136,7 +149,7 @@ double Tree<double>::eval(Node<double> *current, double result) {
 template<>
 std::string Tree<std::string>::eval(Node<std::string> *current, std::string result) {
     std::string left, right;
-    if (current != NULL) {
+    if (current != nullptr) {
         if (current->getType() == OPERATOR) {
             switch (current->getOp()) {
                 case ADD:
@@ -177,7 +190,7 @@ std::string Tree<std::string>::eval(Node<std::string> *current, std::string resu
 template<>
 int Tree<int>::eval(Node<int> *current, int result) {
     int right;
-    if (current != NULL) {
+    if (current != nullptr) {
         if (current->getType() == OPERATOR) {
             switch (current->getOp()) {
                 case ADD:
@@ -219,7 +232,7 @@ template<class T>
 std::string Tree<T>::inorder(Node<T> *node) {
     std::string result;
     std::ostringstream oss;
-    if (node != NULL) {
+    if (node != nullptr) {
         result += inorder(node->getLeft());
         if (node->getType() == OPERATOR) {
             if (node->getOp() == SIN) {
@@ -247,7 +260,7 @@ template<class T>
 std::string Tree<T>::preorder(Node<T> *node) {
     std::ostringstream oss;
     std::string result;
-    if (node != NULL) {
+    if (node != nullptr) {
         if (node->getType() == OPERATOR) {
             if (node->getOp() == SIN) {
                 result += SINUS;
@@ -274,7 +287,7 @@ std::string Tree<T>::preorder(Node<T> *node) {
 template<class T>
 std::string Tree<T>::postorder(Node<T> *node) {
     std::string result;
-    if (node != NULL) {
+    if (node != nullptr) {
         result += postorder(node->getLeft());
         result += postorder(node->getRight());
         if (node->getType() == VARIABLE) {
@@ -287,23 +300,23 @@ std::string Tree<T>::postorder(Node<T> *node) {
 template<class T>
 Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
     if (index >= vector.size()) {
-        return NULL;
+        return nullptr;
     }
 
-    const std::string& token = vector[index];
+    const std::string &token = vector[index];
     ++index;
 
     if (IS_FUNCTION(token)) {
         elements.push_back(token);
         Node<T> *rightChild = build(vector, index);
-        if (rightChild == NULL) {
-            elements.push_back(FILL);
-            rightChild = new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+        if (rightChild == nullptr) {
+            elements.emplace_back(FILL);
+            rightChild = new Node<T>(T(), nullptr, nullptr, UNDEFINED, VARIABLE, FILL);
         }
 
-        return token == SINUS ? new Node<T>(T(), NULL, rightChild, SIN, OPERATOR, EMPTY)
+        return token == SINUS ? new Node<T>(T(), nullptr, rightChild, SIN, OPERATOR, EMPTY)
                               : new Node<T>(T(),
-                                            NULL,
+                                            nullptr,
                                             rightChild,
                                             COS,
                                             OPERATOR,
@@ -314,26 +327,26 @@ Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
         Node<T> *rightChild = build(vector, index);
 
 
-        if (leftChild == NULL) {
-            elements.push_back(FILL);
-            leftChild = new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+        if (leftChild == nullptr) {
+            elements.emplace_back(FILL);
+            leftChild = new Node<T>(T(), nullptr, nullptr, UNDEFINED, VARIABLE, FILL);
         }
 
-        if (rightChild == NULL) {
-            elements.push_back(FILL);
-            rightChild = new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, FILL);
+        if (rightChild == nullptr) {
+            elements.emplace_back(FILL);
+            rightChild = new Node<T>(T(), nullptr, nullptr, UNDEFINED, VARIABLE, FILL);
         }
 
         return new Node<T>(T(), leftChild, rightChild, static_cast<Operator>(token[0]), OPERATOR, EMPTY);
     } else if (IS_VARIABLE(token)) {
         elements.push_back(token);
-        return new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, token);
+        return new Node<T>(T(), nullptr, nullptr, UNDEFINED, VARIABLE, token);
     } else {
         elements.push_back(token);
         std::istringstream iss(token);
         T value;
         iss >> value;
-        return new Node<T>(value, NULL, NULL, UNDEFINED, VALUE, EMPTY);
+        return new Node<T>(value, nullptr, nullptr, UNDEFINED, VALUE, EMPTY);
     }
 }
 
