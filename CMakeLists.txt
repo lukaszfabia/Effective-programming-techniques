@@ -15,8 +15,8 @@ set(CMAKE_CXX_STANDARD 98)
 
 #add_executable(Effective_programming_techniques Lab2/CNumber.h Lab2/CNumber.cpp Lab2/main.cpp Lab2/CTestsForOperators.cpp Lab2/CTestsForOperators.h Lab2/CHelpFunctions.h Lab2/CHelpFunctions.cpp Lab2/CEffectivityTestClass.h Lab2/CEffectivityTestClass.cpp)
 
-#add_executable(Effective_programming_techniques Lab4/main.cpp Lab4/utilities/Node.h
-#        Lab4/utilities/Type.h Lab4/utilities/Operators.h Lab4/Tree.h
-#        Lab4/utilities/Tools.h Lab4/Interface.h)
+add_executable(Effective_programming_techniques Lab4/main.cpp Lab4/utilities/Node.h
+        Lab4/utilities/Type.h Lab4/utilities/Operators.h Lab4/Tree.h
+        Lab4/utilities/Tools.h Lab4/Interface.h)
 
-add_executable(Effective_programming_techniques Lab5/main.cpp Lab5/MySmartPointer.h Lab5/main.cpp Lab5/RefCounter.h)
+#add_executable(Effective_programming_techniques Lab5/main.cpp Lab5/MySmartPointer.h Lab5/main.cpp Lab5/RefCounter.h)

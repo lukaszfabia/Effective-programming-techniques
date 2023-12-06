@@ -6,7 +6,6 @@
 
 int main() {
     MySmartPointer<int> a(11);
-    MySmartPointer<int> b(99);
-    a = b;
+    MySmartPointer<int> b;
     return 0;
 }

@@ -116,7 +116,7 @@ double Tree<double>::eval(Node<double> *current, double result) {
                     return ZERO;
             }
         } else if (current->getType() == VARIABLE) {
-            typename std::map<std::string, double>::iterator it = values.find(current->getVariable());
+             std::map<std::string, double>::iterator it = values.find(current->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
                 if (it->first == current->getVariable()) {
                     result = it->second;
@@ -157,7 +157,7 @@ std::string Tree<std::string>::eval(Node<std::string> *current, std::string resu
                     return EMPTY;
             }
         } else if (current->getType() == VARIABLE) {
-            typename std::map<std::string, std::string>::iterator it = values.find(current->getVariable());
+            std::map<std::string, std::string>::iterator it = values.find(current->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
                 if (it->first == current->getVariable()) {
                     result = it->second;
@@ -198,7 +198,7 @@ int Tree<int>::eval(Node<int> *current, int result) {
                     return ZERO;
             }
         } else if (current->getType() == VARIABLE) {
-            typename std::map<std::string, int>::iterator it = values.find(current->getVariable());
+            std::map<std::string, int>::iterator it = values.find(current->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
                 if (it->first == current->getVariable()) {
                     result = it->second;
@@ -287,7 +287,7 @@ Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
         return NULL;
     }
 
-    const std::string &token = vector[index];
+    const std::string& token = vector[index];
     ++index;
 
     if (IS_FUNCTION(token)) {
@@ -300,17 +300,17 @@ Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
 
         return token == SINUS ? new Node<T>(T(), NULL, rightChild, SIN, OPERATOR, EMPTY)
                               : new Node<T>(T(),
-                                                 NULL,
-                                                 rightChild,
-                                                 COS,
-                                                 OPERATOR,
-                                                 EMPTY);
+                                            NULL,
+                                            rightChild,
+                                            COS,
+                                            OPERATOR,
+                                            EMPTY);
     } else if (IS_OPERATOR(token)) {
         elements.push_back(token);
         Node<T> *leftChild = build(vector, index);
         Node<T> *rightChild = build(vector, index);
 
-    
+
         if (leftChild == NULL) {
             elements.push_back(FILL);
             leftChild = new Node<T>(T(), NULL, NULL, UNDEFINED, VARIABLE, FILL);

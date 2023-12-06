@@ -72,19 +72,19 @@ public:
         return *this;
     }
 
-    MySmartPointer &operator=(const MySmartPointer<T> &other) {
-        if (this != &other) {
-            if (ref_counter->release() == 0) {
-                delete element;
-                delete ref_counter;
-            }
-            this->element = other.element;
-            this->ref_counter = other.ref_counter;
-            ref_counter->add_ref();
-        }
-        PRINT;
-        return *this;
-    }
+//    MySmartPointer &operator=(const MySmartPointer<T> &other) {
+//        if (this != &other) {
+//            if (ref_counter->release() == 0) {
+//                delete element;
+//                delete ref_counter;
+//            }
+//            this->element = other.element;
+//            this->ref_counter = other.ref_counter;
+//            ref_counter->add_ref();
+//        }
+//        PRINT;
+//        return *this;
+//    }
 };
 
 #endif //EFFECTIVE_PROGRAMMING_TECHNIQUES_MYSMARTPOINTER_H
