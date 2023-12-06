@@ -39,11 +39,11 @@ private:
 
 public:
     Tree() : root(NULL) {
-        std::cout<<"object init"<<std::endl;
+        std::cout << "object init" << std::endl;
     };
 
     explicit Tree(const std::vector<std::string> &expression) {
-        std::cout<<"object init"<<std::endl;
+        std::cout << "object init" << std::endl;
         int index = 0;
         root = build(expression, index);
     }
@@ -58,15 +58,37 @@ public:
         values = newValues;
     }
 
-    Tree &operator=(const Tree &tree) {
-        if (this != &tree) {
-            delete root;
-            values = tree.values;
-            int index = 0;
-            root = build(tree.elements, index);
-        }
-        return *this;
-    }
+//    Tree &operator=(const Tree &tree) {
+//        if (this != &tree) {
+//            delete root;
+//            values = tree.values;
+//            int index = 0;
+//            root = build(tree.elements, index);
+//        }
+//        return *this;
+//    }
+
+    // do laba 5
+//    Tree &operator=(Tree &&tree) noexcept {
+//        if (this != &tree) {
+//            delete root;
+//            values = tree.values;
+//            int index = 0;
+//            root = build(tree.elements, index);
+//
+//            tree.root = NULL;
+//        }
+//        return *this;
+//    }
+//
+//    Tree(Tree &&tree)  noexcept {
+//        root = tree.root;
+//        values = tree.values;
+//        elements = tree.elements;
+//        tree.root = NULL;
+//        tree.elements.clear();
+//        tree.values.clear();
+//    }
 
     Tree operator+(const Tree &other) {
         Tree<T> result;
@@ -119,7 +141,7 @@ double Tree<double>::eval(Node<double> *current, double result) {
                     return ZERO;
             }
         } else if (current->getType() == VARIABLE) {
-             std::map<std::string, double>::iterator it = values.find(current->getVariable());
+            std::map<std::string, double>::iterator it = values.find(current->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
                 if (it->first == current->getVariable()) {
                     result = it->second;
@@ -290,7 +312,7 @@ Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
         return NULL;
     }
 
-    const std::string& token = vector[index];
+    const std::string &token = vector[index];
     ++index;
 
     if (IS_FUNCTION(token)) {
