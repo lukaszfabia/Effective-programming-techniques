@@ -58,15 +58,15 @@ public:
         values = newValues;
     }
 
-//    Tree &operator=(const Tree &tree) {
-//        if (this != &tree) {
-//            delete root;
-//            values = tree.values;
-//            int index = 0;
-//            root = build(tree.elements, index);
-//        }
-//        return *this;
-//    }
+    Tree &operator=(const Tree &tree) {
+        if (this != &tree) {
+            delete root;
+            values = tree.values;
+            int index = 0;
+            root = build(tree.elements, index);
+        }
+        return *this;
+    }
 
     // do laba 5
 //    Tree &operator=(Tree &&tree) noexcept {

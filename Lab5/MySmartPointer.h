@@ -15,21 +15,23 @@ private:
     T *element;
     RefCounter *ref_counter;
 public:
-    MySmartPointer() {
-        this->element = new T();
-        this->ref_counter = new RefCounter();
-    }
-
-    explicit MySmartPointer(const T &new_element) {
-        this->element = new T(new_element);
-        this->ref_counter = new RefCounter();
+    MySmartPointer() : element(new T()), ref_counter(new RefCounter()) {
         ref_counter->add_ref();
         PRINT;
     }
 
-    MySmartPointer(const MySmartPointer<T> &other) {
-        this->element = new T(other.get_element());
-        this->ref_counter = other.ref_counter;
+    explicit MySmartPointer(const T &new_element) : element(new T(new_element)), ref_counter(new RefCounter()) {
+        ref_counter->add_ref();
+        PRINT;
+    }
+
+    MySmartPointer(const MySmartPointer<T> &other) : element(new T(other.get_element())),
+                                                     ref_counter(other.ref_counter) {
+        ref_counter->add_ref();
+        PRINT;
+    }
+
+    MySmartPointer(const MySmartPointer<T> &&other) noexcept: element(new T(other.get_element())), ref_counter(other.ref_counter) {
         ref_counter->add_ref();
         PRINT;
     }
@@ -38,9 +40,7 @@ public:
         if (ref_counter->release() == 0) {
             delete element;
             delete ref_counter;
-            std::cout<<"Deleted ";
-            std::cout<<&element<<std::endl;
-            PRINT;
+            std::cout << &element << std::endl;
         }
     }
 
@@ -54,6 +54,10 @@ public:
 
     T &operator*() const {
         return *element;
+    }
+
+    T &operator->() const {
+        return element;
     }
 
     void set_element(T new_element) {
@@ -72,19 +76,19 @@ public:
         return *this;
     }
 
-//    MySmartPointer &operator=(const MySmartPointer<T> &other) {
-//        if (this != &other) {
-//            if (ref_counter->release() == 0) {
-//                delete element;
-//                delete ref_counter;
-//            }
-//            this->element = other.element;
-//            this->ref_counter = other.ref_counter;
-//            ref_counter->add_ref();
-//        }
-//        PRINT;
-//        return *this;
-//    }
+    MySmartPointer &operator=(MySmartPointer<T> &&other) noexcept {
+        if (this != &other) {
+            delete element;
+            delete ref_counter;
+            this->element = new T(other.get_element());
+            this->ref_counter = other.ref_counter;
+            ref_counter->add_ref();
+            other.element = nullptr;
+            other.ref_counter = nullptr;
+            PRINT;
+        }
+        return *this;
+    }
 };
 
 #endif //EFFECTIVE_PROGRAMMING_TECHNIQUES_MYSMARTPOINTER_H

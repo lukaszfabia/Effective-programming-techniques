@@ -18,6 +18,10 @@
 #include <iostream>
 #include "utilities/Node.h"
 #include "utilities/Tools.h"
+#include "utilities/OperatorNode.h"
+#include "utilities/ValueNode.h"
+
+#include "utilities/VariableNode.h"
 
 
 template<class T>
@@ -35,29 +39,21 @@ private:
 
     std::string postorder(Node<T> *node);
 
-    T eval(Node<T> *node, T result);
+    virtual T eval(Node<T> *node, T result);
 
 public:
-    Tree() : root(nullptr) {
-        std::cout<<"object init"<<std::endl;
-    };
+    Tree() : root(nullptr) {}
 
     explicit Tree(const std::vector<std::string> &expression) {
-        std::cout<<"object init"<<std::endl;
         int index = 0;
         root = build(expression, index);
     }
 
-    Tree(Tree&& tree) noexcept {
-        std::cout<<"object init"<<std::endl;
-        root = tree.root;
-        values = std::move(tree.values);
-        elements = std::move(tree.elements);
-
+    Tree(Tree &&tree) noexcept: root(tree.root), values(std::move(tree.values)), elements(std::move(tree.elements)) {
         tree.root = nullptr;
     }
 
-    ~Tree() {
+    virtual ~Tree() {
         values.clear();
         elements.clear();
         delete root;
@@ -72,10 +68,9 @@ public:
             delete root;
             tree.root = nullptr;
             values = std::move(tree.values);
-            int index = 0;
             elements.clear();
+            int index = 0;
             root = build(std::move(tree.elements), index);
-            // 2 kopie mniej chyba
         }
         return *this;
     }
@@ -109,38 +104,38 @@ template<>
 double Tree<double>::eval(Node<double> *current, double result) {
     double right;
     if (current != nullptr) {
-        if (current->getType() == OPERATOR) {
-            switch (current->getOp()) {
-                case ADD:
-                    return eval(current->getLeft(), result) + eval(current->getRight(), result);
-                case SUBTRACT:
-                    return eval(current->getLeft(), result) - eval(current->getRight(), result);
-                case MULTIPLY:
-                    return eval(current->getLeft(), result) * eval(current->getRight(), result);
-                case DIVIDE:
-                    right = eval(current->getRight(), result);
+        if (OperatorNode<double> *opNode = dynamic_cast<OperatorNode<double> *>(current)) {
+            switch (opNode->getOperator()) {
+                case Add:
+                    return eval(opNode->getLeft(), result) + eval(opNode->getRight(), result);
+                case Sub:
+                    return eval(opNode->getLeft(), result) - eval(opNode->getRight(), result);
+                case Mul:
+                    return eval(opNode->getLeft(), result) * eval(opNode->getRight(), result);
+                case Div:
+                    right = eval(opNode->getRight(), result);
                     if (right == ZERO) {
                         std::cout << DIV_ERROR << std::endl;
                         return INT_MAX;
                     }
-                    return eval(current->getLeft(), result) / right;
-                case SIN:
-                    return sin(eval(current->getRight(), result));
-                case COS:
-                    return cos(eval(current->getRight(), result));
+                    return eval(opNode->getLeft(), result) / right;
+                case Sin:
+                    return sin(eval(opNode->getRight(), result));
+                case Cos:
+                    return cos(eval(opNode->getRight(), result));
                 default:
                     return ZERO;
             }
-        } else if (current->getType() == VARIABLE) {
-            std::map<std::string, double>::iterator it = values.find(current->getVariable());
+        } else if (VariableNode<double> *varNode = dynamic_cast<VariableNode<double> *>(current)) {
+            std::map<std::string, double>::iterator it = values.find(varNode->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
-                if (it->first == current->getVariable()) {
+                if (it->first == varNode->getVariable()) {
                     result = it->second;
                     return result;
                 }
             }
-        } else {
-            return current->getValue();
+        } else if (ValueNode<double> *valNode = dynamic_cast<ValueNode<double> *>(current)) {
+            return valNode->getValue();
         }
     }
     return result;
@@ -150,38 +145,38 @@ template<>
 std::string Tree<std::string>::eval(Node<std::string> *current, std::string result) {
     std::string left, right;
     if (current != nullptr) {
-        if (current->getType() == OPERATOR) {
-            switch (current->getOp()) {
-                case ADD:
+        if (OperatorNode<std::string> *opNode = dynamic_cast<OperatorNode<std::string> *>(current)) {
+            switch (opNode->getOperator()) {
+                case Add:
                     return QUOTE + REMOVE_QUOTE(eval(current->getLeft(), result))
                            +
                            REMOVE_QUOTE(eval(current->getRight(), result))
                            + QUOTE;
-                case SUBTRACT:
+                case Sub:
                     return Tools<std::string>::substract(
                             REMOVE_QUOTE(eval(current->getLeft(), result)),
                             REMOVE_QUOTE(eval(current->getRight(), result)));
-                case MULTIPLY:
+                case Mul:
                     return Tools<std::string>::multiply(
                             REMOVE_QUOTE(eval(current->getLeft(), result)),
                             REMOVE_QUOTE(eval(current->getRight(), result)));
-                case DIVIDE:
+                case Div:
                     return Tools<std::string>::divide(REMOVE_QUOTE(eval(current->getLeft(), result)),
                                                       REMOVE_QUOTE(
                                                               eval(current->getRight(), result)));
                 default:
                     return EMPTY;
             }
-        } else if (current->getType() == VARIABLE) {
-            std::map<std::string, std::string>::iterator it = values.find(current->getVariable());
+        } else if (VariableNode<std::string> *varNode = dynamic_cast<VariableNode<std::string> *>(current)) {
+            std::map<std::string, std::string>::iterator it = values.find(varNode->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
-                if (it->first == current->getVariable()) {
+                if (it->first == varNode->getVariable()) {
                     result = it->second;
                     return result;
                 }
             }
-        } else {
-            return current->getValue();
+        } else if (ValueNode<std::string> *valNode = dynamic_cast<ValueNode<std::string> *>(current)) {
+            return valNode->getValue();
         }
     }
     return result;
@@ -191,38 +186,38 @@ template<>
 int Tree<int>::eval(Node<int> *current, int result) {
     int right;
     if (current != nullptr) {
-        if (current->getType() == OPERATOR) {
-            switch (current->getOp()) {
-                case ADD:
+        if (OperatorNode<int> *opNode = dynamic_cast<OperatorNode<int> *>(current)) {
+            switch (opNode->getOperator()) {
+                case Add:
                     return eval(current->getLeft(), result) + eval(current->getRight(), result);
-                case SUBTRACT:
+                case Sub:
                     return eval(current->getLeft(), result) - eval(current->getRight(), result);
-                case MULTIPLY:
+                case Mul:
                     return eval(current->getLeft(), result) * eval(current->getRight(), result);
-                case DIVIDE:
+                case Div:
                     right = eval(current->getRight(), result);
                     if (right == 0) {
                         std::cout << DIV_ERROR << std::endl;
                         return INT_MAX;
                     }
                     return static_cast<int>(eval(current->getLeft(), result) / right);
-                case SIN:
+                case Sin:
                     return static_cast<int>(sin(eval(current->getRight(), result)));
-                case COS:
+                case Cos:
                     return static_cast<int>(cos(eval(current->getRight(), result)));
                 default:
                     return ZERO;
             }
-        } else if (current->getType() == VARIABLE) {
-            std::map<std::string, int>::iterator it = values.find(current->getVariable());
+        } else if (VariableNode<int> *varNode = dynamic_cast<VariableNode<int> *>(current)) {
+            std::map<std::string, int>::iterator it = values.find(varNode->getVariable());
             for (it = values.begin(); it != values.end(); it++) {
-                if (it->first == current->getVariable()) {
+                if (it->first == varNode->getVariable()) {
                     result = it->second;
                     return result;
                 }
             }
-        } else {
-            return current->getValue();
+        } else if (ValueNode<int> *valNode = dynamic_cast<ValueNode<int> *>(current)) {
+            return valNode->getValue();
         }
     }
     return result;
@@ -234,22 +229,22 @@ std::string Tree<T>::inorder(Node<T> *node) {
     std::ostringstream oss;
     if (node != nullptr) {
         result += inorder(node->getLeft());
-        if (node->getType() == OPERATOR) {
-            if (node->getOp() == SIN) {
+        if (OperatorNode<T> *opNode = dynamic_cast<OperatorNode<T> *>(node)) {
+            if (opNode->getOperator() == Sin) {
                 result += SINUS;
                 result += SPACE;
-            } else if (node->getOp() == COS) {
+            } else if (opNode->getOperator() == Cos) {
                 result += COSINUS;
                 result += SPACE;
             } else {
-                oss << node->getOp();
+                oss << opNode->getOperator();
                 result += oss.str() + SPACE;
             }
-        } else if (node->getType() == VALUE) {
-            oss << node->getValue();
+        } else if (ValueNode<T> *valNode = dynamic_cast<ValueNode<T> *>(node)) {
+            oss << valNode->getValue();
             result += oss.str() + SPACE;
-        } else if (node->getType() == VARIABLE) {
-            result += node->getVariable() + SPACE;
+        } else if (VariableNode<T> *varNode = dynamic_cast<VariableNode<T> *>(node)) {
+            result += varNode->getVariable() + SPACE;
         }
         result += inorder(node->getRight());
     }
@@ -261,22 +256,22 @@ std::string Tree<T>::preorder(Node<T> *node) {
     std::ostringstream oss;
     std::string result;
     if (node != nullptr) {
-        if (node->getType() == OPERATOR) {
-            if (node->getOp() == SIN) {
+        if (OperatorNode<T>* opNode = dynamic_cast<OperatorNode<T>*>(node)) {
+            if (opNode->getOperator() == Sin) {
                 result += SINUS;
                 result += SPACE;
-            } else if (node->getOp() == COS) {
+            } else if (opNode->getOperator() == Cos) {
                 result += COSINUS;
                 result += SPACE;
             } else {
-                oss << node->getOp();
+                oss << opNode->getOperator();
                 result += oss.str() + SPACE;
             }
-        } else if (node->getType() == VALUE) {
-            oss << node->getValue();
+        } else if (auto * valueNode = dynamic_cast<ValueNode<T>*>(node)) {
+            oss << valueNode->getValue();
             result += oss.str() + SPACE;
-        } else if (node->getType() == VARIABLE) {
-            result += node->getVariable() + SPACE;
+        } else if (VariableNode<T>* varNode = dynamic_cast<VariableNode<T>*>(node)) {
+            result += varNode->getVariable() + SPACE;
         }
         result += preorder(node->getLeft());
         result += preorder(node->getRight());
@@ -290,8 +285,8 @@ std::string Tree<T>::postorder(Node<T> *node) {
     if (node != nullptr) {
         result += postorder(node->getLeft());
         result += postorder(node->getRight());
-        if (node->getType() == VARIABLE) {
-            result += node->getVariable() + SPACE;
+        if (VariableNode<T> *varNode = dynamic_cast<VariableNode<T> *>(node)) {
+            result += varNode->getVariable() + SPACE;
         }
     }
     return result;
@@ -308,19 +303,15 @@ Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
 
     if (IS_FUNCTION(token)) {
         elements.push_back(token);
-        Node<T> *rightChild = build(vector, index);
-        if (rightChild == nullptr) {
+        Node<T> *middleChild = build(vector, index);
+        if (middleChild == nullptr) {
             elements.emplace_back(FILL);
-            rightChild = new Node<T>(T(), nullptr, nullptr, UNDEFINED, VARIABLE, FILL);
+            middleChild = new VariableNode<T>(nullptr, nullptr, FILL);
         }
 
-        return token == SINUS ? new Node<T>(T(), nullptr, rightChild, SIN, OPERATOR, EMPTY)
-                              : new Node<T>(T(),
-                                            nullptr,
-                                            rightChild,
-                                            COS,
-                                            OPERATOR,
-                                            EMPTY);
+        return token == SINUS ? new OperatorNode<T>(nullptr, middleChild, Sin)
+                              : new OperatorNode<T>(nullptr, middleChild, Cos);
+
     } else if (IS_OPERATOR(token)) {
         elements.push_back(token);
         Node<T> *leftChild = build(vector, index);
@@ -329,24 +320,24 @@ Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
 
         if (leftChild == nullptr) {
             elements.emplace_back(FILL);
-            leftChild = new Node<T>(T(), nullptr, nullptr, UNDEFINED, VARIABLE, FILL);
+            leftChild = new VariableNode<T>(nullptr, nullptr, FILL);
         }
 
         if (rightChild == nullptr) {
             elements.emplace_back(FILL);
-            rightChild = new Node<T>(T(), nullptr, nullptr, UNDEFINED, VARIABLE, FILL);
+            rightChild = new VariableNode<T>(nullptr, nullptr, FILL);
         }
 
-        return new Node<T>(T(), leftChild, rightChild, static_cast<Operator>(token[0]), OPERATOR, EMPTY);
+        return new OperatorNode<T>(leftChild, rightChild, static_cast<Operator>(token[0]));
     } else if (IS_VARIABLE(token)) {
         elements.push_back(token);
-        return new Node<T>(T(), nullptr, nullptr, UNDEFINED, VARIABLE, token);
+        return new VariableNode<T>(nullptr, nullptr, token);
     } else {
         elements.push_back(token);
         std::istringstream iss(token);
         T value;
         iss >> value;
-        return new Node<T>(value, nullptr, nullptr, UNDEFINED, VALUE, EMPTY);
+        return new ValueNode<T>(nullptr, nullptr, value);
     }
 }
 
