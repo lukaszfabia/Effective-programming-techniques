@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Interface.h"
+#include "MySmartPointer.h"
 
 #ifdef _WIN32
 #define CLEAR system("cls")
@@ -56,6 +57,8 @@ void run() {
 
 
 int main() {
-    run();
+//    run();
+    MySmartPointer<int> a(5);
+    std::cout<<*a<<std::endl;
     return 0;
 }

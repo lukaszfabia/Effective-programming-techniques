@@ -38,22 +38,14 @@ private:
     T eval(Node<T> *node, T result);
 
 public:
-    Tree() : root(nullptr) {
-        std::cout<<"object init"<<std::endl;
-    };
+    Tree() : root(nullptr) {}
 
     explicit Tree(const std::vector<std::string> &expression) {
-        std::cout<<"object init"<<std::endl;
         int index = 0;
         root = build(expression, index);
     }
 
-    Tree(Tree&& tree) noexcept {
-        std::cout<<"object init"<<std::endl;
-        root = tree.root;
-        values = std::move(tree.values);
-        elements = std::move(tree.elements);
-
+    Tree(Tree &&tree) noexcept: root(tree.root), values(std::move(tree.values)), elements(std::move(tree.elements)) {
         tree.root = nullptr;
     }
 
@@ -72,8 +64,8 @@ public:
             delete root;
             tree.root = nullptr;
             values = std::move(tree.values);
-            int index = 0;
             elements.clear();
+            int index = 0;
             root = build(std::move(tree.elements), index);
             // 2 kopie mniej chyba
         }
@@ -308,16 +300,15 @@ Node<T> *Tree<T>::build(const std::vector<std::string> &vector, int &index) {
 
     if (IS_FUNCTION(token)) {
         elements.push_back(token);
-        Node<T> *rightChild = build(vector, index);
-        if (rightChild == nullptr) {
+        Node<T> *middleChild = build(vector, index);
+        if (middleChild == nullptr) {
             elements.emplace_back(FILL);
-            rightChild = new Node<T>(T(), nullptr, nullptr, UNDEFINED, VARIABLE, FILL);
+            middleChild = new Node<T>(T(), nullptr, nullptr, UNDEFINED, VARIABLE, FILL);
         }
 
-        return token == SINUS ? new Node<T>(T(), nullptr, rightChild, SIN, OPERATOR, EMPTY)
+        return token == SINUS ? new Node<T>(T(), middleChild, SIN, OPERATOR, EMPTY)
                               : new Node<T>(T(),
-                                            nullptr,
-                                            rightChild,
+                                            middleChild,
                                             COS,
                                             OPERATOR,
                                             EMPTY);

@@ -120,7 +120,7 @@ std::string Tools<T>::divide(const std::string &input, const std::string &sub) {
             if (input.substr(i, sub.length()) == sub) {
                 result += sub[0];
                 i += sub.length() - 1;
-            }else{
+            } else {
                 result += input[i];
             }
         } else {

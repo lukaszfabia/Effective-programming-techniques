@@ -15,24 +15,36 @@ template<class T>
 class Node {
 private:
     T value;
-    Node<T> *left;
-    Node<T> *right;
+//    Node<T> *left;
+//    Node<T> *right;
+    std::vector<Node<T> *> children;
     Operator op;
     Type type;
     std::string variable;
 public:
 
     Node(T value, Node<T> *left, Node<T> *right, Operator op, Type type, std::string newVariable) : value(value),
-                                                                                                    left(left),
-                                                                                                    right(right),
                                                                                                     op(op),
                                                                                                     type(type),
                                                                                                     variable(std::move(
-                                                                                                            newVariable)) {};
+                                                                                                            newVariable)) {
+        children.push_back(left);
+        children.push_back(right);
+    };
+
+    Node(T value, Node<T> *mid, Operator op, Type type, std::string newVariable) : value(value),
+                                                                                                    op(op),
+                                                                                                    type(type),
+                                                                                                    variable(std::move(
+                                                                                                            newVariable)) {
+        children.push_back(mid);
+    };
+
 
     ~Node() {
-        delete left;
-        delete right;
+        for (int i = 0; i < children.size(); ++i) {
+            delete children[i];
+        }
     }
 
     T getValue() const {
@@ -40,11 +52,11 @@ public:
     }
 
     Node<T> *getLeft() const {
-        return left;
+        return children[0];
     }
 
     Node<T> *getRight() const {
-        return right;
+        return children[1];
     }
 
     char getOp() const {
