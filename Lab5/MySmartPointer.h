@@ -67,15 +67,12 @@ public:
         return *element;
     }
 
-    void set_element(T new_element) {
-        if (ref_counter->release() == 0) {
+    void set_element(const T &new_element) {
+        if (ref_counter.release() == 0) {
             delete element;
-            delete ref_counter;
         }
-        this->element = new T(new_element);
-        this->ref_counter = RefCounter();
+        element = new T(new_element);
         ref_counter.add_ref();
-        PRINT;
     }
 
     MySmartPointer &operator=(const T &other) {
@@ -84,7 +81,6 @@ public:
     }
 
     MySmartPointer &operator=(MySmartPointer<T> &&other) noexcept {
-        std::cout << "Move semantics \n";
         if (this != &other) {
             delete element;
             this->element = other.element;

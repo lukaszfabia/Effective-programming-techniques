@@ -17,6 +17,7 @@
 
 #define INTERPRETED(expression) std::cout << "expression was interpreted: " << expression << std::endl
 #define WRONG_AMOUNT_OF_ARGS std::cout << "wrong amount of args" << std::endl
+#define NO_TREE std::cout << "no tree" << std::endl
 #define RESULT_(str) std::cout << "result: " << str << std::endl
 #define PREFIX(str) std::cout << "prefix expression: " << str << std::endl
 #define NORMAL(str) std::cout << "normal expression: " << str << std::endl
@@ -96,9 +97,13 @@ void Interface<T>::enter(const std::string &lane) {
 
 template<class T>
 void Interface<T>::join(const std::string &lane) {
-    subtree = new Tree<T>(createVector(lane.substr(4)));
-    *tree = std::move(*tree + *subtree);
-    INTERPRETED(tree->print());
+    if (tree != nullptr) {
+        subtree = new Tree<T>(createVector(lane.substr(4)));
+        *tree = std::move(*tree + *subtree);
+        INTERPRETED(tree->print());
+    } else {
+        NO_TREE;
+    }
 }
 
 template<class T>

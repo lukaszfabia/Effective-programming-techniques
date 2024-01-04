@@ -26,7 +26,7 @@
 
 template<class T>
 class Tree {
-protected:
+private:
     Node<T> *root;
     std::vector<std::string> elements;
     std::map<std::string, T> values;
@@ -80,7 +80,7 @@ public:
         result.elements = elements;
         result.elements.pop_back();
         result.elements.insert(result.elements.end(), other.elements.begin(), other.elements.end());
-        return result;
+        return std::move(result);
     }
 
     std::string print() {

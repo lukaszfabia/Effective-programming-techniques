@@ -57,15 +57,17 @@ void run() {
 
 
 int main() {
-//    run();
-    MySmartPointer<int> smartPointer(5);
-    std::cout<<*smartPointer<<std::endl;
-    std::cout<<&smartPointer<<std::endl;
-
-    MySmartPointer<int> smartPointer2;
-    smartPointer2 = std::move(smartPointer);
-
-    std::cout<<*smartPointer2<<std::endl;
-    std::cout<<&smartPointer2<<std::endl;
+    run();
+//    MySmartPointer<int> smartPointer(5);
+//    std::cout<<*smartPointer<<std::endl;
+//    std::cout<<&smartPointer<<std::endl;
+//    smartPointer.set_element(10);
+//    smartPointer = 12;
+//
+//    MySmartPointer<int> smartPointer2;
+//    smartPointer2 = std::move(smartPointer);
+//
+//    std::cout<<*smartPointer2<<std::endl;
+//    std::cout<<&smartPointer2<<std::endl;
     return 0;
 }
