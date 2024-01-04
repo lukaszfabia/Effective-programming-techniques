@@ -37,6 +37,8 @@
 #include <vector>
 #include "Tree.h"
 
+using namespace Tools;
+
 template<class T>
 class Interface {
 private:
@@ -88,13 +90,13 @@ bool Interface<T>::menu(const std::string &lane) {
 
 template<class T>
 void Interface<T>::enter(const std::string &lane) {
-    tree = new Tree<T>(Tools<T>::createVector(lane.substr(5)));
+    tree = new Tree<T>(createVector(lane.substr(5)));
     INTERPRETED(tree->print());
 }
 
 template<class T>
 void Interface<T>::join(const std::string &lane) {
-    subtree = new Tree<T>(Tools<T>::createVector(lane.substr(4)));
+    subtree = new Tree<T>(createVector(lane.substr(4)));
     *tree = std::move(*tree + *subtree);
     INTERPRETED(tree->print());
 }
@@ -103,16 +105,15 @@ template<class T>
 void Interface<T>::comp(const std::string &lane) {
     std::string tmp = lane.substr(4);
     std::stringstream ss;
-    int amountOfVars = Tools<T>::getAmountOfVariables(tree->vars());
+    int amountOfVars = getAmountOfVariables(tree->vars());
 
     if (tmp.empty() && amountOfVars != ZERO) {
         WRONG_AMOUNT_OF_ARGS;
     } else if (amountOfVars == ZERO) {
         ss << tree->comp();
         RESULT_(ss.str());
-    } else if (amountOfVars == Tools<T>::getAmountOfValues(lane.substr(5)) && !tmp.empty()) {
-        tree->setMap(
-                Tools<T>::createMap(lane.substr(5), tree->vars()));
+    } else if (amountOfVars == getAmountOfValues(lane.substr(5)) && !tmp.empty()) {
+        tree->setMap(createMap<T>(lane.substr(5), tree->vars()));
         ss << tree->comp();
         RESULT_(ss.str());
     }
@@ -125,7 +126,7 @@ void Interface<T>::run() {
         std::string lane;
         std::cout << CMD;
         std::getline(std::cin, lane);
-        isExit = menu(Tools<T>::removeInvalidChars(Tools<T>::toLowerCase(lane)));
+        isExit = menu(removeInvalidChars(toLowerCase(lane)));
     }
 }
 

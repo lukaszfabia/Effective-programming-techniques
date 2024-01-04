@@ -35,7 +35,7 @@ private:
 
     std::string postorder(Node<T> *node);
 
-    T eval(Node<T> *node, T result);
+//    T eval(Node<T> *node, T result);
 
 public:
     Tree() : root(NULL) {

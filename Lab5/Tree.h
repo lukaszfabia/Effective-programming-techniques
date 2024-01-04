@@ -26,7 +26,7 @@
 
 template<class T>
 class Tree {
-private:
+protected:
     Node<T> *root;
     std::vector<std::string> elements;
     std::map<std::string, T> values;
@@ -39,7 +39,7 @@ private:
 
     std::string postorder(Node<T> *node);
 
-    virtual T eval(Node<T> *node, T result);
+    T eval(Node<T> *current, T result);
 
 public:
     Tree() : root(nullptr) {}
@@ -63,7 +63,7 @@ public:
         values = newValues;
     }
 
-    Tree &operator=(Tree &&tree) noexcept {
+    Tree<T> &operator=(Tree<T> &&tree) noexcept {
         if (this != &tree) {
             delete root;
             tree.root = nullptr;
@@ -75,7 +75,7 @@ public:
         return *this;
     }
 
-    Tree operator+(const Tree &other) const {
+    Tree<T> operator+(const Tree<T> &other) const {
         Tree<T> result;
         result.elements = elements;
         result.elements.pop_back();
@@ -92,10 +92,10 @@ public:
     }
 
     std::string vars() {
-        return Tools<T>::removeDuplicates(postorder(root));
+        return Tools::removeDuplicates(postorder(root));
     }
 
-    T comp() {
+    virtual T comp() {
         return eval(root, T());
     }
 };
@@ -153,15 +153,15 @@ std::string Tree<std::string>::eval(Node<std::string> *current, std::string resu
                            REMOVE_QUOTE(eval(current->getRight(), result))
                            + QUOTE;
                 case Sub:
-                    return Tools<std::string>::substract(
+                    return Tools::substract(
                             REMOVE_QUOTE(eval(current->getLeft(), result)),
                             REMOVE_QUOTE(eval(current->getRight(), result)));
                 case Mul:
-                    return Tools<std::string>::multiply(
+                    return Tools::multiply(
                             REMOVE_QUOTE(eval(current->getLeft(), result)),
                             REMOVE_QUOTE(eval(current->getRight(), result)));
                 case Div:
-                    return Tools<std::string>::divide(REMOVE_QUOTE(eval(current->getLeft(), result)),
+                    return Tools::divide(REMOVE_QUOTE(eval(current->getLeft(), result)),
                                                       REMOVE_QUOTE(
                                                               eval(current->getRight(), result)));
                 default:
