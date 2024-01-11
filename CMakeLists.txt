@@ -19,10 +19,12 @@ set(CMAKE_CXX_STANDARD 11)
 #        Lab4/utilities/Type.h Lab4/utilities/Operators.h Lab4/Tree.h
 #        Lab4/utilities/Tools.h Lab4/Interface.h)
 
-add_executable(Effective_programming_techniques Lab5/main.cpp Lab5/MySmartPointer.h Lab5/main.cpp Lab5/Tree.h Lab4/Interface.h Lab4/utilities/Tools.h Lab5/utilities/Node.h Lab5/utilities/Tools.h Lab5/Interface.h
-        Lab5/utilities/VariableNode.h
-        Lab5/utilities/OperatorNode.h
-        Lab5/utilities/Operator.h
-        Lab5/utilities/ValueNode.h
-        Lab5/utilities/Tools.cpp
-)
+#add_executable(Effective_programming_techniques Lab5/main.cpp Lab5/MySmartPointer.h Lab5/main.cpp Lab5/Tree.h Lab4/Interface.h Lab4/utilities/Tools.h Lab5/utilities/Node.h Lab5/utilities/Tools.h Lab5/Interface.h
+#        Lab5/utilities/VariableNode.h
+#        Lab5/utilities/OperatorNode.h
+#        Lab5/utilities/Operator.h
+#        Lab5/utilities/ValueNode.h
+#        Lab5/utilities/Tools.cpp
+#)
+
+add_executable(Effective_programming_techniques MyString/main.cpp MyString/String.h MyString/String.cpp)

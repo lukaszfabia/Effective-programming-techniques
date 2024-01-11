@@ -17,7 +17,7 @@ namespace utils
          * @param rhs The right-hand side index.
          * @return true if the indices are valid, false otherwise.
          */
-        bool is_corret_index(size_t lhs, size_t rhs);
+        bool is_correct_index(size_t lhs, size_t rhs);
 
     public:
         /**
@@ -29,7 +29,7 @@ namespace utils
          * @brief Constructor that initializes the string with the given character array.
          * @param data The character array to initialize the string with.
          */
-        String(const char *data);
+        explicit String(const char *data);
 
         /**
          * @brief Copy constructor.
@@ -47,7 +47,7 @@ namespace utils
          * @brief Move constructor for character array.
          * @param string The character array to be moved.
          */
-        String(char *&&string) noexcept;
+        explicit String(char *&&string) noexcept;
 
         /**
          * @brief Destructor.
@@ -120,7 +120,7 @@ namespace utils
          * @brief Conversion operator to bool.
          * @return true if the string is not empty, false otherwise.
          */
-        operator bool() const;
+        explicit operator bool() const;
 
         /**
          * @brief Returns a substring of the string from the specified begin index to the specified last index.

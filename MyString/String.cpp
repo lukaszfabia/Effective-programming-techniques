@@ -1,11 +1,10 @@
 #include "String.h"
-#include <cstddef>
 
 using namespace utils;
 
 /**
  * @class String
- * @brief An implementation of a String class and utilis methods.
+ * @brief An implementation of a String class and utilities methods.
  */
 
 /**
@@ -214,8 +213,9 @@ String &String::operator+=(const char *string)
     res[new_len - 1] = '\0';
 
     delete[] data_;
-    data_ = res;
-
+    data_ = new char[len(res) + 1];
+    data_ = copy(res);
+    delete[] res;
     delete[] rhs;
     return *this;
 }
@@ -237,19 +237,19 @@ String::operator bool() const
  */
 const char *String::substring(size_t begin_index, size_t last_index)
 {
-    if (is_corret_index(begin_index, last_index))
+    if (is_correct_index(begin_index, last_index))
     {
-        char *tmp = new char[last_index - begin_index + 1];
+        char *tmp = new char[last_index - begin_index + 2];
         size_t index = 0;
-        for (size_t offset = begin_index; offset < last_index; offset++)
+        for (size_t offset = begin_index; offset <= last_index; ++offset)
         {
             tmp[index] = data_[offset];
-            index++;
+            ++index;
         }
-        tmp[last_index + 1] = '\0';
-        const char *result = new char[last_index - begin_index + 1];
+        tmp[index] = '\0';
+        const char *result = new char[index + 1];
         result = copy(tmp);
-        delete[] tmp;
+        delete []tmp;
         return result;
     }
     else
@@ -275,7 +275,7 @@ const char *String::substring(size_t begin_index)
  */
 char String::char_at(size_t index)
 {
-    if (index >= 0 && index < len(data_))
+    if (index < len(data_))
     {
         return data_[index];
     }
@@ -291,10 +291,10 @@ char String::char_at(size_t index)
  * @param rhs The right index.
  * @return true if the indices are valid, false otherwise.
  */
-bool String::is_corret_index(size_t lhs, size_t rhs)
+bool String::is_correct_index(size_t lhs, size_t rhs)
 {
     size_t length = len(data_);
-    return lhs >= 0 && rhs >= 0 && lhs < rhs && lhs < length && rhs <= length;
+    return rhs >= 0 && lhs < rhs && lhs < length && rhs <= length;
 }
 
 /**
@@ -302,7 +302,7 @@ bool String::is_corret_index(size_t lhs, size_t rhs)
  * @param array The C-style string.
  * @return The length of the C-style string.
  */
-size_t len(const char *array)
+inline size_t len(const char *array)
 {
     size_t length = 0;
     while (array[length] != '\0')
