@@ -1,5 +1,3 @@
 ﻿# Effective programming techniques
 
- ## Topics
- 1) Dynamic and static allocation, constructors, destructors
- 2) Operators and overloading these
+_C++ is general purpose, high level, compiler based and object oriented, programming language._ 
